@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <link href="css/jquery.mobile-1.4.5.min.css" rel="stylesheet" type="text/css" />
+    <link href="css/myapp.css" type="text/css" />
+    <script src="js/jquery-1.11.3.min.js"></script>
+  <script src="js/jquery.mobile-1.4.5.min.js"></script>
+<script src="js/myapp.js"></script>
+
+ <style type="text/css">
+ body {
+     background: url(images/bk-green.jpg);
+     background-repeat:repeat-y;
+     background-position:center center;
+     background-attachment:scroll;
+     background-size:100% 100%;
+ }
+ .ui-page {
+     background: transparent;
+ }
+
+</style>
+  <!-- Uncomment the following to include cordova in your android project -->
+  <!--<script src="http://jqmdesigner.appspot.com/platforms/android/cordova.js"></script>-->
+  <!-- GK Loader use RequireJS to load module -->
+  <script src="http://requirejs.org/docs/release/2.1.11/minified/require.js"></script>
+  <!--Plug in GK-->
+    <title>App</title>
+</head>
+<body gk-app>
+<div id="principal" data-role="page">
+  <div data-role="header" data-position="fixed" data-theme="b">
+    <h3>Parent Connect</h3>
+  </div>
+  <div role="main" class="ui-content">
+    <div is="icon" style="width:300px; height:90px; position:relative">
+      <span class="ui-li-count" style="position:absolute; display:none; z-index:1; right:0; top:6px;"></span>
+      <a href="#" class="ui-btn ui-mini ui-corner-all ui-shadow" style="display:block;margin:5px;height:50%;background-image: url(http://jqmdesigner.appspot.com/images/image.png); background-size: 95% 80%; background-position: 50% 50%; background-repeat: no-repeat no-repeat;"></a>
+      <div style="text-align:center;font-weight:bold;">Wall of Fame</div>
+    </div>
+  </div>
+  <div role="main" class="ui-content">
+  <div style="word-wrap: break-word;" id="content">fgfdgfgfgfdgdfgdfggdfgfdgdfgdgfdgdfgdfgdfgdfgfd gdfgdfg dfgdfgdfgdfgdfgdfgdfgdf gdfgdfgdfgdfgdfgdfg dfgdfgdfgdfgdfgdfgdfgdfgdfgdf gdfgdfgdfgdfgdfgfdgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfg</div>
+</div>
+  <div data-role="footer" data-position="fixed" data-theme="b">
+    <h3>Datamits</h3>
+    <a class="ui-btn ui-btn-left  ui-btn-icon-left ui-icon-gear ui-btn-icon-notext ui-corner-all" style="margin-top:0;"></a>
+    <a class="ui-btn ui-btn-right ui-btn-icon-left ui-icon-delete ui-btn-icon-notext ui-corner-all" style="margin-top:0;"></a>
+  </div>
+</div>
+</body>
+
+</html>

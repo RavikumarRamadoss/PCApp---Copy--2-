@@ -1,0 +1,71 @@
+var circularServiceURL = serviceContextURL+"/rest/circular/getCircular";
+var jsoncirculars;
+
+$(document).on("pagebeforeshow","#circularsListPage",function(){ 
+	serviceKey = localStorage.getItem('serviceKey');
+	if(null == serviceKey || "" == serviceKey)
+	{
+		alert("Invalid session. Please login again.");
+		window.location = "login.html";
+	}
+	getCircularList();
+});
+
+
+function getCircularList() {
+	
+	//var data="dhksdfskdfhkjsdhfkjsdhfkjsdj";
+	//alert("serviceKey: "+serviceKey);
+	var ajax = new XMLHttpRequest();
+	ajax.open("POST",circularServiceURL,true);
+	ajax.send(serviceKey);
+
+	ajax.onreadystatechange=function(){
+	   if (ajax.readyState === 4) {
+	     if (ajax.status === 200 || ajax.status === 0) {
+	    	 //alert("Ajax success:responseText: "+ajax.responseText);
+	    	 if(ajax.responseText == "Invalid UserId")
+    		 {
+	    		 alert("Invalid session. Please login again.");
+	    		 window.location = "login.html";
+    		 }
+	    	 else
+    		 {
+	    		 displayCircular(ajax.responseText);
+    		 }
+	       } else {
+	    	 alert("Ajax error:status: "+ajax.status);
+	     }
+	   }
+	}
+}
+
+function displayCircular(data) {
+	jsoncirculars = JSON.parse(data);
+	//alert('jsoncirculars: '+jsoncirculars);
+	$('#circularList li').remove();
+	$.each(jsoncirculars, function(index, circular) {
+		var vCircularID = circular.id;
+		var vCircularPath = circular.circularPath;
+		//alert("vCircularID: "+vCircularID);
+		$('#circularList').append('<li><a href="#" onclick="displayCircularDetails('+ vCircularID +');" data-transition="flip">' + '<h4>' + circular.circularTitle + '</h4>');
+	});
+	//alert("circularList-refresh");
+	$('#circularList').listview('refresh');
+}
+
+function displayCircularDetails(id) {
+	
+	$.each(jsoncirculars, function(index, circular) {
+		var vCircularID = circular.id;
+		var vCircularPath = circular.circularPath;
+	 	if(vCircularID == id)
+		{
+	 		//var cirDocurl = 'http://docs.google.com/viewer?url='+serviceContextURL+vCircularPath;
+	 		var cirDocurl = 'http://docs.google.com/viewer?url=http://www.datamits.com/sample123.pdf';
+	 		//alert(cirDocurl);
+	 		window.open(cirDocurl,'_system','location=yes');
+		}
+	});
+}
+

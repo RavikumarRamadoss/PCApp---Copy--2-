@@ -1,0 +1,61 @@
+var fameserviceURL = serviceContextURL+"/rest/walloffame/getLatest";
+var jsonfames;
+
+var fames;
+
+$(document).on("pagebeforeshow","#fameListPage",function(){ 
+	//alert("pagebeforeshow-fameListPage: "+fameserviceURL);
+	serviceKey = localStorage.getItem('serviceKey');
+	//alert("serviceKey: "+serviceKey);
+	if(null == serviceKey || "" == serviceKey)
+	{
+		alert("Invalid session. Please login again.");
+		window.location = "login.html";
+	}
+	getfameList();
+});
+
+
+function getfameList() {
+	
+	//var data="dhksdfskdfhkjsdhfkjsdhfkjsdj";
+	//alert("serviceKey: "+serviceKey);
+	var ajax = new XMLHttpRequest();
+	ajax.open("POST",fameserviceURL,true);
+	ajax.send(serviceKey);
+
+	ajax.onreadystatechange=function(){
+	   if (ajax.readyState === 4) {
+	     if (ajax.status === 200 || ajax.status === 0) {
+	    	 //alert(ajax.responseText);
+	    	 if(ajax.responseText == "Invalid UserId")
+    		 {
+	    		 alert("Invalid session. Please login again.");
+	    		 window.location = "login.html";
+    		 }
+	    	 else
+    		 {
+	    		 displayFame(ajax.responseText);
+    		 }
+	    	 
+	       } else {
+	    	 alert("Ajax error: "+ajax.status);
+	     }
+	   }
+	}
+	
+}
+
+function displayFame(data) {
+	jsonfames =JSON.parse(data);
+	//alert('jsonfames:'+jsonfames);
+	$('#fameList li').remove();
+	$.each(jsonfames, function(index, fame) {
+		var vfameID = fame.id;
+		$('#fameList').append('<li><a href="#detailsPage" onclick="displayFameDetails('+ vfameID +')" data-transition="flip">' +
+			'<img src="'+ serviceContextURL + fame.imagePath + '"/>' +
+			'<h4>' + fame.title + '</h4>');
+	});
+	//alert("fameList-refresh");
+	$('#fameList').listview('refresh');
+}

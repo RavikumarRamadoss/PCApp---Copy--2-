@@ -1,0 +1,565 @@
+var getEDiarySubjectURL = serviceContextURL+"/rest/subject/getClassSubjects";
+var jsonEDiarySubject;
+var vEDiarySubject;
+
+var getEDiaryClassURL = serviceContextURL+"/rest/class/getAllClasses";
+var jsonEDiaryClass;
+var vEDiaryclass;
+
+var saveEDiaryHWURL = serviceContextURL+"/rest/diary/saveHomeWork";
+
+var getEDiaryHWURL = serviceContextURL+"/rest/diary/getHomeWork";
+var jsonEDiaryHW;
+var vEDiaryHW;
+var vEditHWID;
+
+var saveEdiaryEditURL = serviceContextURL+"/rest/diary/saveHomeWork";
+var deleteEdiaryURL = serviceContextURL+"/rest/diary/deleteHomeWork";
+var vDeleteHWID;
+
+/**On Load of the main page fetch the class list for teachers**/
+$(document).on("pagebeforeshow","#eDiary",function(){ 
+	//alert("pagebeforeshow-eDiary: "+getEDiaryClassURL);
+	serviceKey = localStorage.getItem('serviceKey');
+	if(null == serviceKey || "" == serviceKey)
+	{
+		alert("Invalid session. Please login again.");
+		window.location = "login.html";
+	}
+	//clear the date on load of page ans set current date.
+	document.getElementById("idEDiaryDt").value = "";
+
+	var today = new Date();
+	var dd = today.getDate();
+	var mm = today.getMonth()+1; //January is 0!
+	var yyyy = today.getFullYear();
+
+	if(dd<10) {
+	    dd='0'+dd
+	} 
+
+	if(mm<10) {
+	    mm='0'+mm
+	} 
+
+	//today = mm+'/'+dd+'/'+yyyy;
+	document.getElementById("idEDiaryDt").value = yyyy+'-'+mm+'-'+dd;
+	role = localStorage.getItem('role');
+	if(role == 'Teacher')
+	{
+		//fetch the class drop down list
+		getEDiaryclassList();
+		document.getElementById('idEDiaryClassDropDownContainer').style.display = "block";
+	}
+	else
+	{
+		document.getElementById('idEDiaryClassDropDownContainer').style.display = "none";
+	}
+	
+});
+
+//Below function fetches the class drop down list
+function getEDiaryclassList() {
+	
+	var ajax1 = new XMLHttpRequest();
+	ajax1.open("POST",getEDiaryClassURL,true);
+	ajax1.send(serviceKey);
+
+	ajax1.onreadystatechange=function(){
+	   if (ajax1.readyState === 4) {
+	     if (ajax1.status === 200 || ajax1.status === 0) {
+	    	 //alert(ajax1.responseText);
+	    	 if(ajax1.responseText == "Invalid UserId")
+    		 {
+	    		 alert("Invalid session. Please login again.");
+	    		 window.location = "login.html";
+    		 }
+	    	 else
+    		 {
+	    		 displayEDiaryClass(ajax1.responseText);
+    		 }
+	    	 
+	       } else {
+	    	 alert("Ajax error in getclassList: "+ajax1.status);
+	     }
+	   }
+	}
+	
+}
+
+function displayEDiaryClass(data) {
+	jsonEDiaryClass =JSON.parse(data);
+	//alert('displayClass-jsonClass:'+jsonEDiaryClass);
+	$('#idEDiaryClassDropDown option').remove();
+	$('#idEDiaryClassDropDown').append('<option value="0" selected>Select</option>');
+	$.each(jsonEDiaryClass, function(index, vEDiaryclass) {
+		var vEDiaryclassID = vEDiaryclass.id;
+		var vEDiaryclassName = vEDiaryclass.classname;
+		$('#idEDiaryClassDropDown').append('<option value="'+vEDiaryclassID+'">'+vEDiaryclassName+'</option>');
+	});
+	//alert("idEDiaryClassDropDown-refresh");
+	$('#idEDiaryClassDropDown').selectmenu("refresh", true);
+}
+
+//On Opening Add HW page the below function loads the details needed. 
+$(document).on("pagebeforeshow","#eDiaryAddHW",function(){ 
+	//alert("pagebeforeshow-eDiaryAddHW: "+getEDiarySubjectURL);
+	serviceKey = localStorage.getItem('serviceKey');
+	if(null == serviceKey || "" == serviceKey)
+	{
+		alert("Invalid session. Please login again.");
+		window.location = "login.html";
+	}
+	//fetching the class drop down details for Add HW screen
+	getEDiaryAddHWclassList();
+	
+	//removing the old values
+	document.getElementById("idEDiaryAddClassDropDown").value = "";
+	$('#idEDiaryAddClassDropDown').selectmenu("refresh", true);
+	$('#idEDiarySubject option').remove();
+	$('#idEDiarySubject').selectmenu("refresh", true);
+	document.getElementById("idEDiaryDescription").value = "";
+	
+	//disabling the fields/ buttons on load, the user needs to select details accordingly to enable them
+	$('#idEDiarySubject').attr("disabled", "disabled");
+	$('#idEDiaryDescription').attr("disabled", "disabled");
+	$('#idEDiarySubmit').attr("disabled", "disabled");
+});
+
+//On selecting the class drop down in the ADD HW screen load the Subject drop down.
+function loadEDiarySubject() {
+	$("#validationMessageTitle").html('');
+	$("#validationMessageContent").html('');
+	
+	if("" == document.getElementById("idEDiaryAddClassDropDown").value || "0" == document.getElementById("idEDiaryAddClassDropDown").value)
+	{
+   		$('#idEDiarySubject').attr("disabled", "disabled");
+   		$('#idEDiaryDescription').attr("disabled", "disabled");
+   		$('#idEDiarySubmit').attr("disabled", "disabled");
+   		
+   		return false;
+	}
+	else
+	{
+		document.getElementById('validationMessage').style.display = "none";
+		document.getElementById('PopUpButton').style.display = "none";
+		
+		$("#idEDiarySubject").removeAttr("disabled");
+		$("#idEDiaryDescription").removeAttr("disabled");
+		$("#idEDiarySubmit").removeAttr("disabled");
+		
+		getEDiarySubjectList();
+	}
+}
+function getEDiarySubjectList() {
+	
+	var ajax = new XMLHttpRequest();
+	ajax.open("POST",getEDiarySubjectURL,true);
+	
+	var vString = "{'encString':'" + serviceKey
+	+ "', 'appClass':{'id':'"+ document.getElementById("idEDiaryAddClassDropDown").value +"'}}";
+	ajax.send(vString);
+	
+	ajax.onreadystatechange=function(){
+	   if (ajax.readyState === 4) {
+	     if (ajax.status === 200 || ajax.status === 0) {
+	    	 //alert(ajax.responseText);
+	    	 if(ajax.responseText == "Invalid UserId")
+    		 {
+	    		 alert("Invalid session. Please login again.");
+	    		 window.location = "login.html";
+    		 }
+	    	 else
+    		 {
+	    		 displayEDiarySubject(ajax.responseText);
+    		 }
+	    	 
+	       } else {
+	    	 alert("Ajax error in getclassList: "+ajax.status);
+	     }
+	   }
+	}
+}
+
+function displayEDiarySubject(data) {
+	jsonEDiarySubject =JSON.parse(data);
+	//alert('jsonEDiarySubject:'+jsonEDiarySubject);
+	$('#idEDiarySubject option').remove();
+	
+	$('#idEDiarySubject').append('<option value="0" selected>Select</option>');
+	$.each(jsonEDiarySubject, function(index, vEDiarySubject) {
+		var vEDiarySubjectID = vEDiarySubject.id;
+		var vEDiarySubjectName = vEDiarySubject.subjectName;
+		$('#idEDiarySubject').append('<option value="'+vEDiarySubjectID+'">'+vEDiarySubjectName+'</option>');
+	});
+	//alert("idEDiarySubject-refresh");
+	$('#idEDiarySubject').selectmenu("refresh", true);
+}
+
+//Below function fetches the class drop down details for Add HW screen
+function getEDiaryAddHWclassList() {
+	
+	var ajax1 = new XMLHttpRequest();
+	ajax1.open("POST",getEDiaryClassURL,true);
+	ajax1.send(serviceKey);
+
+	ajax1.onreadystatechange=function(){
+	   if (ajax1.readyState === 4) {
+	     if (ajax1.status === 200 || ajax1.status === 0) {
+	    	 //alert(ajax1.responseText);
+	    	 if(ajax1.responseText == "Invalid UserId")
+    		 {
+	    		 alert("Invalid session. Please login again.");
+	    		 window.location = "login.html";
+    		 }
+	    	 else
+    		 {
+	    		 displayEDiaryAddHWClass(ajax1.responseText);
+    		 }
+	    	 
+	       } else {
+	    	 alert("Ajax error in getclassList: "+ajax1.status);
+	     }
+	   }
+	}
+	
+}
+
+function displayEDiaryAddHWClass(data) {
+	jsonEDiaryClass =JSON.parse(data);
+	//alert('displayClass-jsonClass:'+jsonEDiaryClass);
+	$('#idEDiaryAddClassDropDown option').remove();
+	$('#idEDiaryAddClassDropDown').append('<option value="0" selected>Select</option>');
+	$.each(jsonEDiaryClass, function(index, vEDiaryclass) {
+		var vEDiaryclassID = vEDiaryclass.id;
+		var vEDiaryclassName = vEDiaryclass.classname;
+		$('#idEDiaryAddClassDropDown').append('<option value="'+vEDiaryclassID+'">'+vEDiaryclassName+'</option>');
+	});
+	//alert("idEDiaryAddClassDropDown-refresh");
+	$('#idEDiaryAddClassDropDown').selectmenu("refresh", true);
+}
+
+//Below function gets called on click of submit button on the Add HW screen.
+function fnEDiarySubmit() {
+	if("0" == document.getElementById("idEDiarySubject").value)
+	{
+   		$("#validationMessageTitle").append("&nbsp;<i class='fa fa-exclamation-triangle'></i>&nbsp;E-Diary.");
+   		$("#validationMessageContent").append("Please select the Subject.");
+
+   		document.getElementById('validationMessage').style.display = "block";
+   		document.getElementById('PopUpButton').style.display = "block";
+   		$( "#validationMessage" ).popup();
+   		$( "#validationMessage" ).popup( "open" );
+   		
+   		return false;
+	}
+	else if("" == document.getElementById("idEDiaryDescription").value)
+	{
+   		$("#validationMessageTitle").append("&nbsp;<i class='fa fa-exclamation-triangle'></i>&nbsp;E-Diary.");
+   		$("#validationMessageContent").append("Please enter the Description.");
+
+   		document.getElementById('validationMessage').style.display = "block";
+   		document.getElementById('PopUpButton').style.display = "block";
+   		$( "#validationMessage" ).popup();
+   		$( "#validationMessage" ).popup( "open" );
+   		
+   		return false;
+	}
+	else
+	{
+		document.getElementById('validationMessage').style.display = "none";
+		document.getElementById('PopUpButton').style.display = "none";
+		//form json string and submit
+		fnEDiaryJSONSubmit();
+	}
+}
+
+function fnEDiaryJSONSubmit() {
+	//alert("fnEDiaryJSONSubmit:saveEDiaryHWURL: "+saveEDiaryHWURL);
+	serviceKey = localStorage.getItem('serviceKey');
+	if(null == serviceKey || "" == serviceKey)
+	{
+		alert("Invalid session. Please login again.");
+		window.location = "login.html";
+	}
+	var vString = "{'content':'" + document.getElementById("idEDiaryDescription").value 
+	+ "', 'createdOn':'" + document.getElementById("idEDiaryDt").value 
+	+ "', 'encString':'" + serviceKey
+	+ "', 'appSubject':{'id':'"+ document.getElementById("idEDiarySubject").value +"'}"
+	+ ", 'appClass':{'id':'"+ document.getElementById("idEDiaryAddClassDropDown").value +"'}}";
+	
+	//alert("vString: "+vString);
+	
+	var ajax2 = new XMLHttpRequest();
+	ajax2.open("POST",saveEDiaryHWURL,true);
+	ajax2.send(vString);
+
+	ajax2.onreadystatechange=function(){
+	   if (ajax2.readyState === 4) {
+	     if (ajax2.status === 200 || ajax.status === 0) {
+	    	 //alert(ajax2.responseText);
+	    	 if(ajax2.responseText == "Invalid UserId")
+    		 {
+	    		 alert("Invalid session. Please login again.");
+	    		 window.location = "login.html";
+    		 }
+	    	 else
+    		 {
+	    		 //alert("success message to user: "+ajax2.responseText);
+	    		 navigator.notification.alert(
+		            'Home Work details created successfully.',  // message
+		            alertDismissed,         // callback
+		            'Success',            // title
+		            'OK'                  // buttonName
+		         );
+    		 }
+	       } else {
+	    	 alert("Ajax error in fnEDiaryJSONSubmit: "+ajax2.status);
+	     }
+	   }
+	}
+}
+
+function alertDismissed() {
+	$.mobile.changePage("#eDiaryViewHW");
+}
+
+/**on click of HomeWork button in ediary screen - View Home work**/
+$(document).on("pagebeforeshow","#eDiaryViewHW",function(){ 
+	//alert("pagebeforeshow-eDiaryViewHW: "+getEDiaryHWURL);
+	serviceKey = localStorage.getItem('serviceKey');
+	if(null == serviceKey || "" == serviceKey)
+	{
+		alert("Invalid session. Please login again.");
+		window.location = "login.html";
+	}
+	role = localStorage.getItem('role');
+	if(role == 'Teacher')
+	{
+		document.getElementById('addHomeWorkBtnContent').style.display = "block";
+	}
+	else
+	{
+		document.getElementById('addHomeWorkBtnContent').style.display = "none";
+	}
+	getHomeWorkList();
+});
+
+//below function fetches the HW details from DB
+function getHomeWorkList() {
+	
+	var ajax3 = new XMLHttpRequest();
+	ajax3.open("POST",getEDiaryHWURL,true);
+	var vString = "";
+
+	if("" == document.getElementById("idEDiaryClassDropDown").value)
+	{
+		vString = "{'encString':'" + serviceKey
+		+ "', 'createdOn':'" + document.getElementById("idEDiaryDt").value +"'}";
+	}
+	else
+	{
+		vString = "{'encString':'" + serviceKey
+		+ "', 'createdOn':'" + document.getElementById("idEDiaryDt").value 
+		+ "', 'appClass':{'id':'"+ document.getElementById("idEDiaryClassDropDown").value +"'}}";
+	}
+	//alert("getHomeWorkList:vString:"+vString);
+	ajax3.send(vString);
+
+	ajax3.onreadystatechange=function(){
+	   if (ajax3.readyState === 4) {
+	     if (ajax3.status === 200 || ajax3.status === 0) {
+	    	 //alert("getHomeWorkList"+ ajax3.responseText);
+	    	 if(ajax3.responseText == "Invalid UserId")
+    		 {
+	    		 alert("Invalid session. Please login again.");
+	    		 window.location = "login.html";
+    		 }
+	    	 else
+    		 {
+	    		 displayHomeWork(ajax3.responseText);
+    		 }
+	    	 
+	       } else {
+	    	 alert("Ajax error in getReminderList: "+ajax3.status);
+	     }
+	   }
+	}
+	
+}
+//below function displays the HW details on screen
+function displayHomeWork(data) {
+	jsonEDiaryHW = JSON.parse(data);
+	//alert('displayHomeWork:jsonEDiaryHW:'+jsonEDiaryHW);
+	$( '#HomeWorkset div').remove();
+	role = localStorage.getItem('role');
+	$.each(jsonEDiaryHW, function(index, vEDiaryHW) {
+		var subjectName = vEDiaryHW.subjectName;
+		var content = vEDiaryHW.content;
+		var HWid = vEDiaryHW.id;
+		if(role == 'Teacher')
+		{
+			var content = "<div data-role='collapsible' id='" + HWid + "'><h3>" + subjectName + "</h3><p>" + content + "</p> " +
+    		"<button data-theme='b' onclick ='fnEditHW("+HWid+")' data-transition='flip' data-direction='reverse'>Edit</button> " +
+    		"<button data-theme='b' onclick ='fnDeleteHWConfirmMsg("+HWid+")' data-transition='flip' data-direction='reverse'>Delete</button>" +
+    		"</div>";
+		}
+		else
+		{
+			var content = "<div data-role='collapsible' id='" + HWid + "'><h3>" + subjectName + "</h3><p>" + content + "</p> " +
+    		"</div>";
+		}
+        
+        $( "#HomeWorkset" ).append( content ).collapsibleset( "refresh" );
+	});
+}
+
+/**Below function is called on click of edit home work button**/
+function fnEditHW(id) {
+	//alert("fnEditHW - fwd to notifications: "+id);
+	vEditHWID = id;
+	$.mobile.changePage("#editHWDetails");
+	serviceKey = localStorage.getItem('serviceKey');
+	if(null == serviceKey || "" == serviceKey)
+	{
+		alert("Invalid session. Please login again.");
+		window.location = "login.html";
+	}
+	//getEditclassList();
+	getHWDetails(id);
+}
+
+function getHWDetails(vHWID) {
+	//alert("jsonEDiaryHW: "+jsonEDiaryHW);
+	$.each(jsonEDiaryHW, function(index, vEDiaryHW) {
+		//alert("vEDiaryHW.id: "+vEDiaryHW.id);
+		if(vHWID == vEDiaryHW.id)
+		{
+			//alert("vEDiaryHW.content: "+vEDiaryHW.content);
+			document.getElementById("idEDiaryEditDescription").value  = vEDiaryHW.content;
+			//vClassID = reminder.classId;
+			//$('#idEditClassDropDown').val(vClassID);
+		}
+	});
+}
+
+/**Below function is called on click of submit on the edit home work screen**/
+function fnEDiaryEditSubmit() {
+	//alert("fnEDiaryEditSubmit:vEditHWID: "+vEditHWID);
+	serviceKey = localStorage.getItem('serviceKey');
+	if(null == serviceKey || "" == serviceKey)
+	{
+		alert("Invalid session. Please login again.");
+		window.location = "login.html";
+	}
+	var vString = "{'id':'" + vEditHWID 
+	+ "', 'content':'" + document.getElementById("idEDiaryEditDescription").value
+	+ "', 'encString':'" + serviceKey  +"'}";
+	
+	var ajax4 = new XMLHttpRequest();
+	ajax4.open("POST",saveEdiaryEditURL,true);
+	ajax4.send(vString);
+
+	ajax4.onreadystatechange=function(){
+	   if (ajax4.readyState === 4) {
+	     if (ajax4.status === 200 || ajax.status === 0) {
+	    	 //alert(ajax4.responseText);
+	    	 if(ajax4.responseText == "Invalid UserId")
+    		 {
+	    		 alert("Invalid session. Please login again.");
+	    		 window.location = "login.html";
+    		 }
+	    	 else
+    		 {
+	    		 //alert("success message to user: "+ajax4.responseText);
+	    		 navigator.notification.alert(
+		            'Home Work updated successfully.',  // message
+		            alertDismissed,         // callback
+		            'Success',            // title
+		            'OK'                  // buttonName
+		         );
+    		 }
+	       } else {
+	    	 alert("Ajax error in fnEDiaryEditSubmit: "+ajax4.status);
+	     }
+	   }
+	}
+}
+
+
+/**Below function is called on click of delete home work button**/
+function fnDeleteHWConfirmMsg(id) {
+	vDeleteHWID = id;
+	navigator.notification.confirm(
+	    'Do you want to delete this home work?', // message
+	     onDeleteConfirm,	// callback to invoke with index of button pressed
+	    'Confirmation',		// title
+	    ['Yes','No']		// buttonLabels
+	);
+}
+
+function onDeleteConfirm(buttonIndex) {
+    if(buttonIndex == "1")
+    {
+    	fnDeleteHW(vDeleteHWID);
+    }
+    else
+	{
+    	vDeleteHWID = "";
+	}
+}
+
+/**Below function deletes the home work**/
+function fnDeleteHW(id) {
+	//alert("fnDeleteHW - fwd to notifications: "+id);
+	serviceKey = localStorage.getItem('serviceKey');
+	if(null == serviceKey || "" == serviceKey)
+	{
+		alert("Invalid session. Please login again.");
+		window.location = "login.html";
+	}
+	var vString = "{'id':'" + id 
+	+ "', 'encString':'" + serviceKey  +"'}";
+	
+	var ajax5 = new XMLHttpRequest();
+	ajax5.open("POST",deleteEdiaryURL,true);
+	//alert("fnDeleteHW - vString: "+vString);
+	ajax5.send(vString);
+
+	ajax5.onreadystatechange=function(){
+	   if (ajax5.readyState === 4) {
+	     if (ajax5.status === 200 || ajax.status === 0) {
+	    	 //alert(ajax5.responseText);
+	    	 if(ajax5.responseText == "Invalid UserId")
+    		 {
+	    		 alert("Invalid session. Please login again.");
+	    		 window.location = "login.html";
+    		 }
+	    	 else
+    		 {
+	    		 //alert("success message to user: "+ajax5.responseText);
+	    		 navigator.notification.alert(
+		            'Home Work deleted successfully.',  // message
+		            reloadHWList,         // callback
+		            'Success',            // title
+		            'OK'                  // buttonName
+		         );
+    		 }
+	       } else {
+	    	 alert("Ajax error in fnDeleteHW: "+ajax5.status);
+	     }
+	   }
+	}
+}
+
+//After adding or deleting the HW below function is called to reload the HW details on screen
+function reloadHWList() {
+	//$( "#HomeWorkset" ).collapsibleset( "refresh" );
+	serviceKey = localStorage.getItem('serviceKey');
+	if(null == serviceKey || "" == serviceKey)
+	{
+		alert("Invalid session. Please login again.");
+		window.location = "login.html";
+	}
+	getHomeWorkList();
+}

@@ -1,0 +1,81 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+    <title>File Transfer Example</title>
+
+    <script type="text/javascript" charset="utf-8" src="js/cordova-2.3.0.js"></script>
+    <script type="text/javascript" charset="utf-8">
+
+        // Wait for device API libraries to load
+        //
+        document.addEventListener("deviceready", onDeviceReady, false);
+
+        // device APIs are available
+        //
+        function onDeviceReady() {
+
+        }
+
+        function uploadPhoto(imageURI) {cordova.js
+            var options = new FileUploadOptions();
+            options.fileKey="file";
+            options.fileName=imageURI.substr(imageURI.lastIndexOf('/')+1);
+            options.mimeType="image/jpeg";
+
+            var params = {};
+            params.value1 = "test";
+            params.value2 = "param";
+
+            options.params = params;
+
+            var ft = new FileTransfer();
+            ft.upload(imageURI, encodeURI("http://some.server.com/upload.php"), win, fail, options);
+        }
+
+        function win(r) {
+            console.log("Code = " + r.responseCode);
+            console.log("Response = " + r.response);
+            console.log("Sent = " + r.bytesSent);
+        }
+
+        function fail(error) {
+            alert("An error has occurred: Code = " + error.code);
+            console.log("upload error source " + error.source);
+            console.log("upload error target " + error.target);
+        }
+
+
+        var fileTransfer = new FileTransfer();
+		var uri = encodeURI("http://some.server.com/download.php");
+
+		function downloadUtil() {
+		alert("DownloadUtil....");
+		fileTransfer.download(
+		    uri,
+		    filePath,
+		    function(entry) {
+		        console.log("download complete: " + entry.fullPath);
+		    },
+		    function(error) {
+		        console.log("download error source " + error.source);
+		        console.log("download error target " + error.target);
+		        console.log("upload error code" + error.code);
+		    },
+		    false,
+		    {
+		        headers: {
+		            "Authorization": "Basic dGVzdHVzZXJuYW1lOnRlc3RwYXNzd29yZA=="
+		        }
+		    }
+		);
+
+		}
+
+        </script>
+</head>
+<body>
+    <h1>Example</h1>
+    <p>Upload File</p>
+    <a id="downloadBtn" href="#" class="ui-btn ui-btn-b ui-icon-user ui-btn-icon-left" data-transition="flip" data-direction="reverse" onclick="downloadUtil();">Download</a>
+</body>
+</html>

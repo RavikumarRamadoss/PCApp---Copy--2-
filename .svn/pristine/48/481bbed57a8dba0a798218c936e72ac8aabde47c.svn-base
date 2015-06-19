@@ -1,0 +1,262 @@
+var commentDetailsID;
+var saveCommentsrURL = serviceContextURL+"/rest/communication/saveReply";
+
+//On clicking the comments in the comments list page
+function displayCommentDetails(id) {
+	commentDetailsID = id;
+	role = localStorage.getItem('role');
+	if(role == 'Teacher')
+	{
+		$.mobile.changePage("#teacherCommentDetailPage");
+	}
+	else
+	{
+		$.mobile.changePage("#parentCommentDetailPage");
+	}
+}
+
+//On Opening parent Comments details page the below function loads the details needed. 
+$(document).on("pagebeforeshow","#parentCommentDetailPage",function(){ 
+	//alert("displayCommentDetails:id: "+commentDetailsID);
+	$.each(jsoncomments, function(index, comment) {
+		var vcommentID = comment.id;
+	 	//alert("vcommentID: "+vcommentID);
+	 	if(vcommentID == commentDetailsID)
+		{
+	 		//set idParentCommentDetailPageCreatedDt - comment.date
+	 		$('#idParentCommentDetailPageCreatedDt').text(comment.date);
+	 		//set idParentCommentDetailPageCreatedBy - comment.createdBy
+	 		$('#idParentCommentDetailPageCreatedBy').text(comment.createdBy);
+
+	 		//Check if the createdbyFlag is "Y" - comment.createFlag
+	 		if("Y" == comment.createFlag)
+	 		{
+	 			//set the comment label value as "Your Comments:" - idParentCommentsLabel
+	 			$('#idParentCommentsLabel').text("Your Comments:");
+	 			//set the comment text to "comment.content" - idParentCommentsText
+	 			$('#idParentCommentsText').text(comment.content);
+	 			
+	 			//set the reply label value as "Teacher Comments:" - idParentCommentsReplyTextLabel
+	 			$('#idParentCommentsReplyTextLabel').text("Teacher Comments:");
+	 			//set the reply text to "comment.reply" - idParentCommentsReplyText
+	 			$('#idParentCommentsReplyText').text(comment.reply);
+	 			//show the reply text div; - idParentCommentsReplyTextContainer
+	 			document.getElementById('idParentCommentsReplyTextContainer').style.display = "block";
+	 			
+	 			//hide the editabe reply div; - idParentCommentsEditableReplyContainer
+	 			document.getElementById('idParentCommentsEditableReplyContainer').style.display = "none";
+	 			//hide reply button div; - idParentCommentsReplyBtnContainer
+	 			document.getElementById('idParentCommentsReplyBtnContainer').style.display = "none";
+	 		}
+	 		else
+	 		{
+	 			//set the comment label value as "Teacher Comments:" - idParentCommentsLabel
+	 			$('#idParentCommentsLabel').text("Teacher Comments:");
+	 			//set the comment text "comment.content" - idParentCommentsText
+	 			$('#idParentCommentsText').text(comment.content);
+
+	 			//Check if the ackFlag is "Y" - comment.ackFlag
+	 			if("Y" == comment.ackFlag)
+	 			{
+	 				//set the reply label value as "Your Comments:" - idParentCommentsReplyTextLabel
+	 				$('#idParentCommentsReplyTextLabel').text("Your Comments:");
+	 				//set the reply text to "comment.reply" - idParentCommentsReplyText
+	 				$('#idParentCommentsReplyText').text(comment.reply);
+	 				//show the reply text div; - idParentCommentsReplyTextContainer
+	 				document.getElementById('idParentCommentsReplyTextContainer').style.display = "block";
+	 			
+	 				//hide the editabe reply div; - idParentCommentsEditableReplyContainer
+	 				document.getElementById('idParentCommentsEditableReplyContainer').style.display = "none";
+	 				//hide reply button div; - idParentCommentsReplyBtnContainer
+	 				document.getElementById('idParentCommentsReplyBtnContainer').style.display = "none";
+	 			}
+	 			else
+	 			{
+	 				//hide the reply text div; - idParentCommentsReplyTextContainer
+	 				document.getElementById('idParentCommentsReplyTextContainer').style.display = "none";
+	 				//set the editabe reply field value to "comment.reply" - idParentCommentsEditableReply
+	 				$('#idParentCommentsEditableReply').val(comment.reply);
+	 				
+	 				//show the editabe reply div; - idParentCommentsEditableReplyContainer
+	 				document.getElementById('idParentCommentsEditableReplyContainer').style.display = "block";
+	 				//show reply button div; - idParentCommentsReplyBtnContainer
+	 				document.getElementById('idParentCommentsReplyBtnContainer').style.display = "block";
+	 			}
+	 		}
+		}
+	});
+});
+
+//On Opening Teacher Comments details page the below function loads the details needed. 
+$(document).on("pagebeforeshow","#teacherCommentDetailPage",function(){ 
+	//alert("pagebeforeshow-teacherCommentDetailPage");
+	$.each(jsoncomments, function(index, comment) {
+		var vcommentID = comment.id;
+	 	//alert("vcommentID: "+vcommentID);
+	 	if(vcommentID == commentDetailsID)
+		{
+	 		//alert("comment.createFlag: "+comment.createFlag);
+	 		//set idTeacherCommentDetailPageCreatedDt - comment.date
+	 		$('#idTeacherCommentDetailPageCreatedDt').text(comment.date);
+	 		//set idTeacherCommentDetailPageCreatedBy - comment.createdBy
+	 		$('#idTeacherCommentDetailPageCreatedBy').text(comment.createdBy);
+
+	 		//Check if the createdbyFlag is "Y" - comment.createFlag
+	 		if("Y" == comment.createFlag)
+	 		{
+	 			//set the comment label value as "Your Comments:" - idTeacherCommentsLabel
+	 			$('#idTeacherCommentsLabel').text("Your Comments:");
+	 			//set the comment text to "comment.content" - idTeacherCommentsText
+	 			$('#idTeacherCommentsText').text(comment.content);
+	 			
+	 			//set the reply label value as "Parent Comments:" - idTeacherCommentsReplyTextLabel
+	 			$('#idTeacherCommentsReplyTextLabel').text("Parent Comments:");
+	 			//set the reply text to "comment.reply" - idTeacherCommentsReplyText
+	 			$('#idTeacherCommentsReplyText').text(comment.reply);
+	 			//show the reply text div; - idTeacherCommentsReplyTextContainer
+	 			document.getElementById('idTeacherCommentsReplyTextContainer').style.display = "block";
+	 			
+	 			//hide the editabe reply div; - idTeacherCommentsEditableReplyContainer
+	 			document.getElementById('idTeacherCommentsEditableReplyContainer').style.display = "none";
+	 			//hide reply button div; - idTeacherCommentsReplyBtnContainer
+	 			document.getElementById('idTeacherCommentsReplyBtnContainer').style.display = "none";
+	 		}
+	 		else
+	 		{
+	 			//set the comment label value as "Parent Comments:" - idTeacherCommentsLabel
+	 			$('#idTeacherCommentsLabel').text("Parent Comments:");
+	 			//set the comment text "comment.content" - idTeacherCommentsText
+	 			$('#idTeacherCommentsText').text(comment.content);
+
+	 			//Check if the ackFlag is "Y" - comment.ackFlag
+	 			if("Y" == comment.ackFlag)
+	 			{
+	 				//set the reply label value as "Your Comments:" - idTeacherCommentsReplyTextLabel
+	 				$('#idTeacherCommentsReplyTextLabel').text("Your Comments:");
+	 				//set the reply text to "comment.reply" - idTeacherCommentsReplyText
+	 				$('#idTeacherCommentsReplyText').text(comment.reply);
+	 				//show the reply text div; - idTeacherCommentsReplyTextContainer
+	 				document.getElementById('idTeacherCommentsReplyTextContainer').style.display = "block";
+	 			
+	 				//hide the editabe reply div; - idTeacherCommentsEditableReplyContainer
+	 				document.getElementById('idTeacherCommentsEditableReplyContainer').style.display = "none";
+	 				//hide reply button div; - idTeacherCommentsReplyBtnContainer
+	 				document.getElementById('idTeacherCommentsReplyBtnContainer').style.display = "none";
+	 			}
+	 			else
+	 			{
+	 				//hide the reply text div; - idTeacherCommentsReplyTextContainer
+	 				document.getElementById('idTeacherCommentsReplyTextContainer').style.display = "none";
+	 				//set the editabe reply field value to "comment.reply" - idTeacherCommentsEditableReply
+	 				$('#idTeacherCommentsEditableReply').val(comment.reply);
+	 				
+	 				//show the editabe reply div; - idTeacherCommentsEditableReplyContainer
+	 				document.getElementById('idTeacherCommentsEditableReplyContainer').style.display = "block";
+	 				//show reply button div; - idTeacherCommentsReplyBtnContainer
+	 				document.getElementById('idTeacherCommentsReplyBtnContainer').style.display = "block";
+	 			}
+	 		}
+		}
+	});
+});
+
+/**Below function is called on click of submit button**/
+function fnCommentConfirmMsg() {
+	//alert("fnCommentConfirmMsg-idParentCommentsEditableReply: "+document.getElementById("idParentCommentsEditableReply").value);
+	//alert("fnCommentConfirmMsg-idTeacherCommentsEditableReply: "+document.getElementById("idTeacherCommentsEditableReply").value);
+	if("" == document.getElementById("idParentCommentsEditableReply").value && 
+			"" == document.getElementById("idTeacherCommentsEditableReply").value)
+	{
+		navigator.notification.confirm(
+		    'Do you want to acknowledge this comment without any reply?', // message
+		    fnCommentSubmitConfirm,	// callback to invoke with index of button pressed
+		    'Confirmation',		// title
+		    ['Yes','No']		// buttonLabels
+		);
+	}
+	else
+	{
+		fnCommentSubmit();
+	}
+}
+
+function fnCommentSubmitConfirm(buttonIndex) {
+	//alert("fnCommentSubmitConfirm- buttonIndex: "+buttonIndex);
+	if(buttonIndex == "1")
+    {
+		fnCommentSubmit();
+    }
+    else
+	{
+    	return false;
+	}
+}
+
+function fnCommentSubmit() {
+	//alert("fnCommentSubmit:saveCommentsrURL: "+saveCommentsrURL);
+	serviceKey = localStorage.getItem('serviceKey');
+	if(null == serviceKey || "" == serviceKey)
+	{
+		alert("Invalid session. Please login again.");
+		window.location = "login.html";
+	}
+	
+	role = localStorage.getItem('role');
+	if(role == 'Teacher')
+	{
+		var vString = "{'id':'" + commentDetailsID 
+		+ "', 'reply':'" + document.getElementById("idTeacherCommentsEditableReply").value
+		+ "', 'encString':'" + serviceKey  +"'}";
+	}
+	else
+	{
+		var vString = "{'id':'" + commentDetailsID 
+		+ "', 'reply':'" + document.getElementById("idParentCommentsEditableReply").value
+		+ "', 'encString':'" + serviceKey  +"'}";
+	}
+	
+	//alert("vString: "+vString);
+	
+	var ajax = new XMLHttpRequest();
+	ajax.open("POST",saveCommentsrURL,true);
+	ajax.send(vString);
+
+	ajax.onreadystatechange=function(){
+	   if (ajax.readyState === 4) {
+	     if (ajax.status === 200 || ajax.status === 0) {
+	    	 //alert(ajax.responseText);
+	    	 if(ajax.responseText == "Invalid UserId")
+    		 {
+	    		 alert("Invalid session. Please login again.");
+	    		 window.location = "login.html";
+    		 }
+	    	 else
+    		 {
+	    		 //alert("success message to user: "+ajax.responseText);
+	    		 navigator.notification.alert(
+		            'Reply acknowledged/posted successfully.',  // message
+		            redirectCommentViewPage,         // callback
+		            'Success',            // title
+		            'OK'                  // buttonName
+		         );
+    		 }
+	       } else {
+	    	 alert("Ajax error in fnCommentSubmit: "+ajax.status);
+	     }
+	   }
+	}
+}
+
+function redirectCommentViewPage() {
+	/*role = localStorage.getItem('role');
+	alert("redirectCommentViewPage:role: "+role);
+	if(role == 'Teacher')
+	{
+		$.mobile.changePage("#teacherCommentDetailPage");
+	}
+	else
+	{
+		$.mobile.changePage("#parentCommentDetailPage");
+	}*/
+	$.mobile.changePage("#commentsListPage");
+}

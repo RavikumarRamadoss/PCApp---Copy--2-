@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, user-scalable=no">
+<link href="css/jquery.mobile-1.4.5.min.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="css/font_awesome/css/font-awesome.min.css">
+<link href="css/myapp.css" type="text/css" />
+<script src="js/jquery-1.11.3.min.js"></script>
+<script src="js/jquery.mobile-1.4.5.min.js"></script>
+<script src="js/constants.js"></script>
+<script type="text/javascript" src="cordova.js"></script>
+<style>
+	#map, #map-canvas { width: 100%; height: 100%; padding: 0; }
+	/* #map, #map-canvas { width: 80%; height: 80%; padding: 0; text-align: center; } */
+</style>
+<!-- <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700"> -->
+<script type="text/javascript">
+ 	// Base URI of RESTful web service
+</script>
+
+ <style type="text/css">
+ html,body{
+  width:100%;
+  height:100%;
+  padding:0;
+  margin:0;
+}
+.title {
+   white-space: normal !important;
+   position:relative;
+   left:-20px;
+}
+.bookicon {
+  width:65px;
+  height:100%;
+}
+.ui-header .ui-title, .ui-footer .ui-title {
+    text-overflow: clip;
+    white-space: normal;
+}
+#login{
+  height:100%;
+  margin-top:-45px;
+  /* background:url(images/bk-green.jpg); */
+  background:url(images/133.png);
+  background-size:cover;
+  position:relative;
+  text-align:center;
+}
+#login::before{
+  content:'';
+  display:inline-block;
+  width:0;
+  height:100%;
+  vertical-align:middle;
+  position:relative;
+
+}
+@media screen and (max-width: 480px) {
+#login .ui-content{
+  position:relative;
+  text-shadow:none;
+  margin:20px 0;
+  background:rgba(0,0,0,.8);
+  width:240px;
+  height:300px;
+  display:inline-block;
+  vertical-align:middle;
+  border-radius:8px;
+  border:1px solid #000;
+  padding:25px 20px 25px;
+  box-sizing:border-box;
+  box-shadow:#000 0 5px 20px;
+}
+}
+@media screen and (min-width: 500px) {
+#login .ui-content{
+  position:relative;
+  text-shadow:none;
+  margin:20px 0;
+  background:rgba(0,0,0,.8);
+  width:500px;
+  height:200px;
+  display:inline-block;
+  vertical-align:middle;
+  border-radius:8px;
+  border:1px solid #000;
+  padding:25px 20px 25px;
+  box-sizing:border-box;
+  box-shadow:#000 0 5px 20px;
+}
+}
+#login .ui-content .ui-field-contain{
+ color:#fff;
+ margin-top:-10px;
+}
+#loginBtn{
+  margin-top:20px;
+  border-radius:5px;
+}
+
+#books h3{
+  margin-bottom:-10px;
+}
+#search{
+  margin:0;
+}
+
+label.error {
+	float: left;
+	color: red;
+	padding-top: .5em;
+	vertical-align: top;
+	font-weight:bold
+}
+
+</style>
+  <!-- Uncomment the following to include cordova in your android project -->
+  <!--<script src="http://jqmdesigner.appspot.com/platforms/android/cordova.js"></script>-->
+  <!-- GK Loader use RequireJS to load module -->
+ <!--  <script src="http://requirejs.org/docs/release/2.1.11/minified/require.js"></script> -->
+  <!--Plug in GK-->
+    <title>Parent Connect Mobile App</title>
+</head>
+<body gk-app>
+
+<div id="login" data-role="page">
+  <div data-role="header" data-position="fixed" data-theme="b">
+    <h3>Parent Connect</h3>
+  </div>
+  <div role="main" class="ui-content ui-responsive">
+    <div class="ui-field-contain">
+      <label for="UserName">Username</label>
+      <input type="text" name id="UserName" class="required">
+    </div>
+    <div class="ui-field-contain">
+      <label for="passwd">Password</label>
+      <input type="password" name id="passwd">
+    </div>
+    <a id="loginBtn" href="#" class="ui-btn ui-btn-b ui-icon-user ui-btn-icon-left" data-transition="flip" data-direction="reverse">Login</a>
+    <a id="forgotpwd" href="#">Forgot Password</a>
+  </div>
+  <div data-role="footer" data-position="fixed" data-theme="b">
+    <h3>Datamits</h3>
+    <!-- <a class="ui-btn ui-btn-left  ui-btn-icon-left ui-icon-gear ui-btn-icon-notext ui-corner-all" style="margin-top:0;"></a>
+    <a class="ui-btn ui-btn-right ui-btn-icon-left ui-icon-delete ui-btn-icon-notext ui-corner-all" style="margin-top:0;"></a> -->
+  </div>
+</div>
+
+<div data-role="popup" id="validationMessage" style="background-color:black; display:none;" data-dismissible="false" class="ui-content" data-position-to="origin" >
+  <div data-role="header">
+    <h1><label style="font: bold; color: white;" id="validationMessageTitle"></label></h1>
+  </div>
+
+  <div data-role="main" style="background-color:black; display:none;" id="PopUpButton">
+    <h2><label style="color: white;" id="validationMessageContent"></label></h2>
+    <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b ui-icon-ok ui-btn-icon-center" data-rel="back">Okay</a>
+  </div>
+</div>
+
+</body>
+<script type="text/javascript">
+
+ 	$("#loginBtn").click(function () {
+ 		//$("#loginBtn",this).attr("disabled","disabled");
+    	$('#loginBtn').attr("disabled", "disabled");
+    	//$("#forgotpwd",this).attr("disabled","disabled");
+    	$('#forgotpwd').attr("disabled", "disabled");
+    	
+    	$("#validationMessageTitle").html('');
+    	$("#validationMessageContent").html('');
+    	if("" == document.getElementById("UserName").value)
+    	{
+	   		$("#validationMessageTitle").append("&nbsp;<i class='fa fa-exclamation-triangle'></i>&nbsp;Invalid Login Details.");
+	   		$("#validationMessageContent").append("Please enter the UserName.");
+
+	   		document.getElementById('validationMessage').style.display = "block";
+	   		document.getElementById('PopUpButton').style.display = "block";
+	   		$( "#validationMessage" ).popup();
+	   		$( "#validationMessage" ).popup( "open" );
+	   		$("#loginBtn").removeAttr("disabled");
+    	  	$("#forgotpwd").removeAttr("disabled");
+	   		return false;
+ 		}
+    	else if("" == document.getElementById("passwd").value)
+    	{
+	   		$("#validationMessageTitle").append("&nbsp;<i class='fa fa-exclamation-triangle'></i>&nbsp;Invalid Login Details.");
+	   		$("#validationMessageContent").append("Please enter the Password.");
+
+	   		document.getElementById('validationMessage').style.display = "block";
+	   		document.getElementById('PopUpButton').style.display = "block";
+	   		$( "#validationMessage" ).popup();
+	   		$( "#validationMessage" ).popup( "open" );
+	   		$("#loginBtn").removeAttr("disabled");
+    	  	$("#forgotpwd").removeAttr("disabled");
+	   		return false;
+ 		}
+    	else
+   		{
+    		document.getElementById('validationMessage').style.display = "none";
+    		document.getElementById('PopUpButton').style.display = "none";
+   		}
+    	$.mobile.loading("show");
+    	/**Uncomment the below LOC and comment the hardocded values and alert**/
+    	//var data="{'username':'"+document.getElementById("UserName").value+"','password':'"+document.getElementById("passwd").value+"'}";
+    	var data="{'username':'ravi','password':'ramadoss'}";
+    	//alert("data: "+data);
+    	
+    	var ajax = new XMLHttpRequest();
+		ajax.open("POST",serviceContextURL+"/rest/auth/login",true);
+		ajax.send(data);
+
+		ajax.onreadystatechange=function(){
+          if (ajax.readyState === 4) {
+        	  $.mobile.loading("hide");
+        	  $("#loginBtn").removeAttr("disabled");
+      	  	  $("#forgotpwd").removeAttr("disabled");
+            if (ajax.status === 200 || ajax.status === 0) {
+              	localStorage.setItem('serviceKey', ajax.responseText); 
+              	window.location = "landing.html";
+            	document.getElementById('validationMessage').style.display = "none";
+            	document.getElementById('PopUpButton').style.display = "none";
+             } else {
+        		$("#validationMessageTitle").append("&nbsp;<i class='fa fa-exclamation-triangle'></i>&nbsp;Invalid Login Details.");
+        		$("#validationMessageContent").append("Please Login with the correct UserName and Password.");
+        		document.getElementById('validationMessage').style.display = "block";
+        		document.getElementById('PopUpButton').style.display = "block";
+        		$( "#validationMessage" ).popup();
+        		$( "#validationMessage" ).popup( "open" );
+        		return false;
+       	  	 }
+		  }
+		}
+    });
+ 	
+ 	document.addEventListener("backbutton", onBackKeyDown, false);
+	function onBackKeyDown() {
+	    if($.mobile.activePage.is('#login')){
+	    	navigator.app.exitApp(); // Exit app if current page is a login page
+	    }
+	    else 
+	    {
+	        navigator.app.backHistory(); // Go back in history in any other case
+	    }
+	}
+	
+	
+	$("#forgotpwd").click(function () {
+    	//alert(serviceContextURL);
+    	$("#validationMessageTitle").html('');
+    	$("#validationMessageContent").html('');
+    	if("" == document.getElementById("UserName").value)
+    	{
+	   		$("#validationMessageTitle").append("&nbsp;<i class='fa fa-exclamation-triangle'></i>&nbsp;Forgot Password.");
+	   		$("#validationMessageContent").append("Please enter the UserName and click on the forgot password link.");
+
+	   		document.getElementById('validationMessage').style.display = "block";
+	   		document.getElementById('PopUpButton').style.display = "block";
+	   		$( "#validationMessage" ).popup();
+	   		$( "#validationMessage" ).popup( "open" );
+	   		return false;
+ 		}
+    	else
+   		{
+    		document.getElementById('validationMessage').style.display = "none";
+    		document.getElementById('PopUpButton').style.display = "none";
+   		}
+    	$.mobile.loading("show");
+    	//$("#loginBtn",this).attr("disabled","disabled");
+    	$('#loginBtn').attr("disabled", "disabled");
+    	//$("#forgotpwd",this).attr("disabled","disabled");
+    	$('#forgotpwd').attr("disabled", "disabled");
+    	/* $.mobile.loading( "show", {
+		  text: "loading please wait..",
+		  textVisible: true,
+		  theme: "",
+		  //<img src='images/ajax-loaders/ajax-loader-4.gif'/>
+		  html: "<div id='jstree_loading' style='overflow: scroll; height: 350px;'><img src='images/ajax-loaders/ajax-loader-6.gif' title='loading.. Please wait.'/></div>"
+		}); */
+    	var ajaxData="{'username':'"+document.getElementById("UserName").value+"'}";
+    	//var ajaxData="{'username':'rayudu'}";
+
+    	var pwdajax = new XMLHttpRequest();
+    	pwdajax.open("POST",serviceContextURL+"/rest/auth/forgotpwd",true);
+    	pwdajax.send(ajaxData);
+
+    	pwdajax.onreadystatechange=function(){
+          if (pwdajax.readyState === 4) {
+        	$.mobile.loading("hide");
+        	$("#loginBtn").removeAttr("disabled");
+    	  	$("#forgotpwd").removeAttr("disabled");
+            if (pwdajax.status === 200 || pwdajax.status === 0) {
+            	$("#validationMessageTitle").append("&nbsp;<i class='fa fa-info-circle'></i>&nbsp;Forgot password.");
+        		$("#validationMessageContent").append("Please check your registered e-mail for new password.");
+        		document.getElementById('validationMessage').style.display = "block";
+        		document.getElementById('PopUpButton').style.display = "block";
+        		$( "#validationMessage" ).popup();
+        		$( "#validationMessage" ).popup( "open" );
+             } else {
+            	//alert(pwdajax.responseText);
+            	$("#validationMessageTitle").append("&nbsp;<i class='fa fa-exclamation-triangle'></i>&nbsp;Forgot password.");
+        		$("#validationMessageContent").append("Invalid UserName. Please check the UserName entered is correct.");
+        		document.getElementById('validationMessage').style.display = "block";
+        		document.getElementById('PopUpButton').style.display = "block";
+        		$( "#validationMessage" ).popup();
+        		$( "#validationMessage" ).popup( "open" );
+        		return false;
+       	  	 }
+		  }
+		}
+    });
+
+</script>
+</html>

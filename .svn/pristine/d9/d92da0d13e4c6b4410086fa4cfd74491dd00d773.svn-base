@@ -1,0 +1,423 @@
+var getEDiaryCommentsSubjectURL = serviceContextURL+"/rest/subject/getStudentSubjects";
+var jsonEDiaryAddCommentsSubject;
+var vEDiaryAddCommentsSubject;
+
+var getEDiaryAddCommentsClassURL = serviceContextURL+"/rest/class/getAllClasses";
+var jsonEDiaryAddCommentsClass;
+var vEDiaryAddCommentsClass;
+
+var getEDiaryAddCommentsStudentURL = serviceContextURL+"/rest/student/getStudents";
+var jsonEDiaryAddCommentsStudent;
+var vEDiaryAddCommentsStudent;
+
+var saveEDiaryAddParentCommentsURL = serviceContextURL+"/rest/communication/saveCommunication";
+var saveEDiaryAddTeacherCommentsURL = serviceContextURL+"/rest/communication/saveCommunication";
+
+//On Opening Add Parent Comments page the below function loads the details needed. 
+$(document).on("pagebeforeshow","#addParentCommentsPage",function(){ 
+	//alert("pagebeforeshow-addParentCommentsPage: "+getEDiaryCommentsSubjectURL);
+	serviceKey = localStorage.getItem('serviceKey');
+	if(null == serviceKey || "" == serviceKey)
+	{
+		alert("Invalid session. Please login again.");
+		window.location = "login.html";
+	}
+	//fetching the subject drop down details for Add comments screen
+	getEDiaryAddCommentsSubjectList();
+	
+	//removing the old values
+	document.getElementById("idAddParentCommentsSubjectDropDown").value = "";
+	$('#idAddParentCommentsSubjectDropDown').selectmenu("refresh", true);
+	document.getElementById("idAddParentComments").value = "";
+	
+	//disabling the fields/ buttons on load, the user needs to select details accordingly to enable them
+	$('#idAddParentComments').attr("disabled", "disabled");
+	$('#idAddParentCommentsSubmit').attr("disabled", "disabled");
+});
+
+//Below function fetches the subject drop down details for Parent Add Comments screen
+function getEDiaryAddCommentsSubjectList() {
+	
+	var ajax = new XMLHttpRequest();
+	ajax.open("POST",getEDiaryCommentsSubjectURL,true);
+	//ajax.send(serviceKey);
+	var vString = "{'encString':'" + serviceKey +"'}";
+	//alert("vString: "+vString);
+	ajax.send(vString);
+
+	ajax.onreadystatechange=function(){
+	   if (ajax.readyState === 4) {
+	     if (ajax.status === 200 || ajax.status === 0) {
+	    	 //alert(ajax.responseText);
+	    	 if(ajax.responseText == "Invalid UserId")
+    		 {
+	    		 alert("Invalid session. Please login again.");
+	    		 window.location = "login.html";
+    		 }
+	    	 else
+    		 {
+	    		 displayEDiaryAddCommentsSubject(ajax.responseText);
+    		 }
+	    	 
+	       } else {
+	    	 alert("Ajax error in getclassList: "+ajax.status);
+	     }
+	   }
+	}
+	
+}
+
+//Below function displays the subject drop down details for Parent Add Comments screen
+function displayEDiaryAddCommentsSubject(data) {
+	jsonEDiaryAddCommentsSubject = JSON.parse(data);
+	//alert('displayEDiaryAddCommentsSubject-:'+jsonEDiaryAddCommentsSubject);
+	$('#idAddParentCommentsSubjectDropDown option').remove();
+	$('#idAddParentCommentsSubjectDropDown').append('<option value="0" selected>Select</option>');
+	$.each(jsonEDiaryAddCommentsSubject, function(index, vEDiaryAddCommentsSubject) {
+		var vEDiaryAddCommentsSubjectID = vEDiaryAddCommentsSubject.id;
+		var vEDiaryAddCommentsSubjectName = vEDiaryAddCommentsSubject.subjectName;
+		$('#idAddParentCommentsSubjectDropDown').append('<option value="'+vEDiaryAddCommentsSubjectID+'">'+vEDiaryAddCommentsSubjectName+'</option>');
+	});
+	//alert("idAddParentCommentsSubjectDropDown-refresh");
+	$('#idAddParentCommentsSubjectDropDown').selectmenu("refresh", true);
+}
+//Below function is called on change of the subject drop down in Parent Add Comments screen
+function fnChangeAddParentCommentsSubjectDropDown() {
+	//alert("idAddParentCommentsSubjectDropDown-value"+document.getElementById("idAddParentCommentsSubjectDropDown").value);
+	if("" == document.getElementById("idAddParentCommentsSubjectDropDown").value || "0" == document.getElementById("idAddParentCommentsSubjectDropDown").value)
+	{
+		//disabling the fields/ buttons,after the user selects subject drop down
+		$('#idAddParentComments').attr("disabled", "disabled");
+		$('#idAddParentCommentsSubmit').attr("disabled", "disabled");
+		
+		return false;
+	}
+	else
+	{
+		$("#idAddParentComments").removeAttr("disabled");
+		$("#idAddParentCommentsSubmit").removeAttr("disabled");
+	}
+}
+//Below function is called on click of submit button in Parent Add Comments screen 
+function fnAddParentCommentsSubmit() {
+	//alert("fnAddParentCommentsSubmit");
+	if("0" == document.getElementById("idAddParentCommentsSubjectDropDown").value)
+	{
+   		$("#validationMessageTitle").append("&nbsp;<i class='fa fa-exclamation-triangle'></i>&nbsp;Add Comments.");
+   		$("#validationMessageContent").append("Please select the Subject.");
+
+   		document.getElementById('validationMessage').style.display = "block";
+   		document.getElementById('PopUpButton').style.display = "block";
+   		$( "#validationMessage" ).popup();
+   		$( "#validationMessage" ).popup( "open" );
+   		
+   		return false;
+	}
+	else if("" == document.getElementById("idAddParentComments").value)
+	{
+   		$("#validationMessageTitle").append("&nbsp;<i class='fa fa-exclamation-triangle'></i>&nbsp;Add Comments.");
+   		$("#validationMessageContent").append("Please enter the Comments.");
+
+   		document.getElementById('validationMessage').style.display = "block";
+   		document.getElementById('PopUpButton').style.display = "block";
+   		$( "#validationMessage" ).popup();
+   		$( "#validationMessage" ).popup( "open" );
+   		
+   		return false;
+	}
+	else
+	{
+		document.getElementById('validationMessage').style.display = "none";
+		document.getElementById('PopUpButton').style.display = "none";
+		//form json string and submit
+		fnAddParentCommentsJSONSubmit();
+	}
+}
+function fnAddParentCommentsJSONSubmit() {
+	//alert("fnEDiaryJSONSubmit:saveEDiaryAddParentCommentsURL: "+saveEDiaryAddParentCommentsURL);
+	serviceKey = localStorage.getItem('serviceKey');
+	if(null == serviceKey || "" == serviceKey)
+	{
+		alert("Invalid session. Please login again.");
+		window.location = "login.html";
+	}
+	var vString = "{'content':'" + document.getElementById("idAddParentComments").value 
+	+ "', 'createdOn':'" + document.getElementById("idEDiaryDt").value 
+	+ "', 'encString':'" + serviceKey
+	+ "', 'subjectId':'"+ document.getElementById("idAddParentCommentsSubjectDropDown").value+"'}";
+	
+	//alert("vString: "+vString);
+	
+	var ajax3 = new XMLHttpRequest();
+	ajax3.open("POST",saveEDiaryAddParentCommentsURL,true);
+	ajax3.send(vString);
+
+	ajax3.onreadystatechange=function(){
+	   if (ajax3.readyState === 4) {
+	     if (ajax3.status === 200 || ajax.status === 0) {
+	    	 //alert(ajax3.responseText);
+	    	 if(ajax3.responseText == "Invalid UserId")
+    		 {
+	    		 alert("Invalid session. Please login again.");
+	    		 window.location = "login.html";
+    		 }
+	    	 else
+    		 {
+	    		 //alert("success message to user: "+ajax3.responseText);
+	    		 navigator.notification.alert(
+		            'Comments saved successfully.',  // message
+		            commentsDismissed,         // callback
+		            'Success',            // title
+		            'OK'                  // buttonName
+		         );
+    		 }
+	       } else {
+	    	 alert("Ajax error in fnAddParentCommentsJSONSubmit: "+ajax3.status);
+	     }
+	   }
+	}
+}
+function commentsDismissed() {
+	$.mobile.changePage("#commentsListPage");
+}
+
+
+
+
+//On Opening Add Teacher Comments page the below function loads the details needed. 
+$(document).on("pagebeforeshow","#addTeacherCommentsPage",function(){ 
+	//alert("pagebeforeshow-addTeacherCommentsPage: "+getEDiaryAddCommentsClassURL);
+	serviceKey = localStorage.getItem('serviceKey');
+	if(null == serviceKey || "" == serviceKey)
+	{
+		alert("Invalid session. Please login again.");
+		window.location = "login.html";
+	}
+	//fetching the class drop down details for Teacher Add comments screen
+	getEDiaryAddCommentsClassList();
+	
+	//removing the old values
+	document.getElementById("idAddTeacherCommentsClassDropDown").value = "";
+	$('#idAddTeacherCommentsClassDropDown').selectmenu("refresh", true);
+	$('#idAddTeacherCommentsStudentDropDown option').remove();
+	$('#idAddTeacherCommentsStudentDropDown').selectmenu("refresh", true);
+	document.getElementById("idAddTeacherComments").value = "";
+	
+	//disabling the fields/ buttons on load, the user needs to select details accordingly to enable them
+	$('#idAddTeacherCommentsStudentDropDown').attr("disabled", "disabled");
+	$('#idAddTeacherComments').attr("disabled", "disabled");
+	$('#idAddTeacherCommentsSubmit').attr("disabled", "disabled");
+});
+
+
+//Below function fetches the class drop down details for Teacher Add Comments screen
+function getEDiaryAddCommentsClassList() {
+	
+	var ajax1 = new XMLHttpRequest();
+	ajax1.open("POST",getEDiaryAddCommentsClassURL,true);
+	ajax1.send(serviceKey);
+	/*var vString = "{'encString':'" + serviceKey +"'}";
+	alert("vString: "+vString);
+	ajax1.send(vString);*/
+
+	ajax1.onreadystatechange=function(){
+	   if (ajax1.readyState === 4) {
+	     if (ajax1.status === 200 || ajax1.status === 0) {
+	    	 //alert(ajax1.responseText);
+	    	 if(ajax1.responseText == "Invalid UserId")
+    		 {
+	    		 alert("Invalid session. Please login again.");
+	    		 window.location = "login.html";
+    		 }
+	    	 else
+    		 {
+	    		 displayEDiaryAddCommentsClass(ajax1.responseText);
+    		 }
+	    	 
+	       } else {
+	    	 alert("ajax error in getEDiaryAddCommentsClassList: "+ajax1.status);
+	     }
+	   }
+	}
+	
+}
+
+//Below function displays the class drop down details for Teacher Add Comments screen
+function displayEDiaryAddCommentsClass(data) {
+	jsonEDiaryAddCommentsClass = JSON.parse(data);
+	//alert('displayEDiaryAddCommentsClass-:'+jsonEDiaryAddCommentsClass);
+	$('#idAddTeacherCommentsClassDropDown option').remove();
+	$('#idAddTeacherCommentsClassDropDown').append('<option value="0" selected>Select</option>');
+	$.each(jsonEDiaryAddCommentsClass, function(index, vEDiaryAddCommentsClass) {
+		var vEDiaryAddCommentsClassID = vEDiaryAddCommentsClass.id;
+		var vEDiaryAddCommentsClassName = vEDiaryAddCommentsClass.classname;
+		$('#idAddTeacherCommentsClassDropDown').append('<option value="'+vEDiaryAddCommentsClassID+'">'+vEDiaryAddCommentsClassName+'</option>');
+	});
+	//alert("idAddTeacherCommentsClassDropDown-refresh");
+	$('#idAddTeacherCommentsClassDropDown').selectmenu("refresh", true);
+}
+
+//Below function fetches the student drop down details for Teacher Add Comments screen
+function getEDiaryAddCommentsStudentList() {
+	
+	if("0" == document.getElementById("idAddTeacherCommentsClassDropDown").value)
+	{
+   		$("#validationMessageTitle").append("&nbsp;<i class='fa fa-exclamation-triangle'></i>&nbsp;Add Comments.");
+   		$("#validationMessageContent").append("Please select the class.");
+
+   		document.getElementById('validationMessage').style.display = "block";
+   		document.getElementById('PopUpButton').style.display = "block";
+   		$( "#validationMessage" ).popup();
+   		$( "#validationMessage" ).popup( "open" );
+   		
+   		return false;
+	}
+	else
+	{
+		document.getElementById('validationMessage').style.display = "none";
+		document.getElementById('PopUpButton').style.display = "none";
+		//enable the fields
+		$("#idAddTeacherCommentsStudentDropDown").removeAttr("disabled");
+		$("#idAddTeacherComments").removeAttr("disabled");
+		$("#idAddTeacherCommentsSubmit").removeAttr("disabled");
+	}
+	
+	var ajax2 = new XMLHttpRequest();
+	ajax2.open("POST",getEDiaryAddCommentsStudentURL,true);
+	//ajax2.send(serviceKey);
+	var vString = "{'encString':'" + serviceKey
+	+ "', 'appClass':{'id':'"+ document.getElementById("idAddTeacherCommentsClassDropDown").value +"'}}";
+	//alert("vString: "+vString);
+	ajax2.send(vString);
+
+	ajax2.onreadystatechange=function(){
+	   if (ajax2.readyState === 4) {
+	     if (ajax2.status === 200 || ajax2.status === 0) {
+	    	 //alert(ajax2.responseText);
+	    	 if(ajax2.responseText == "Invalid UserId")
+    		 {
+	    		 alert("Invalid session. Please login again.");
+	    		 window.location = "login.html";
+    		 }
+	    	 else
+    		 {
+	    		 displayEDiaryAddCommentsStudent(ajax2.responseText);
+    		 }
+	    	 
+	       } else {
+	    	 alert("ajax error in getEDiaryAddCommentsStudentList: "+ajax2.status);
+	     }
+	   }
+	}
+	
+}
+
+//Below function displays the student drop down details for Teacher Add Comments screen
+function displayEDiaryAddCommentsStudent(data) {
+	jsonEDiaryAddCommentsStudent = JSON.parse(data);
+	//alert('displayEDiaryAddCommentsStudent-:'+jsonEDiaryAddCommentsStudent);
+	$('#idAddTeacherCommentsStudentDropDown option').remove();
+	$('#idAddTeacherCommentsStudentDropDown').append('<option value="0" selected>Select</option>');
+	$.each(jsonEDiaryAddCommentsStudent, function(index, vEDiaryAddCommentsStudent) {
+		var vEDiaryAddCommentsStudentID = vEDiaryAddCommentsStudent.id;
+		var vEDiaryAddCommentsStudentName = vEDiaryAddCommentsStudent.studentName;
+		$('#idAddTeacherCommentsStudentDropDown').append('<option value="'+vEDiaryAddCommentsStudentID+'">'+vEDiaryAddCommentsStudentName+'</option>');
+	});
+	//alert("idAddTeacherCommentsStudentDropDown-refresh");
+	$('#idAddTeacherCommentsStudentDropDown').selectmenu("refresh", true);
+}
+//Below function is called on click of submit button in Parent Add Comments screen 
+function fnAddTeacherCommentsSubmit() {
+	//alert("fnAddTeacherCommentsSubmit");
+	if("0" == document.getElementById("idAddTeacherCommentsClassDropDown").value)
+	{
+   		$("#validationMessageTitle").append("&nbsp;<i class='fa fa-exclamation-triangle'></i>&nbsp;Add Comments.");
+   		$("#validationMessageContent").append("Please select the class.");
+
+   		document.getElementById('validationMessage').style.display = "block";
+   		document.getElementById('PopUpButton').style.display = "block";
+   		$( "#validationMessage" ).popup();
+   		$( "#validationMessage" ).popup( "open" );
+   		
+   		return false;
+	}
+	else if("0" == document.getElementById("idAddTeacherCommentsStudentDropDown").value)
+	{
+   		$("#validationMessageTitle").append("&nbsp;<i class='fa fa-exclamation-triangle'></i>&nbsp;Add Comments.");
+   		$("#validationMessageContent").append("Please select the student.");
+
+   		document.getElementById('validationMessage').style.display = "block";
+   		document.getElementById('PopUpButton').style.display = "block";
+   		$( "#validationMessage" ).popup();
+   		$( "#validationMessage" ).popup( "open" );
+   		
+   		return false;
+	}
+	else if("" == document.getElementById("idAddTeacherComments").value)
+	{
+   		$("#validationMessageTitle").append("&nbsp;<i class='fa fa-exclamation-triangle'></i>&nbsp;Add Comments.");
+   		$("#validationMessageContent").append("Please enter the Comments.");
+
+   		document.getElementById('validationMessage').style.display = "block";
+   		document.getElementById('PopUpButton').style.display = "block";
+   		$( "#validationMessage" ).popup();
+   		$( "#validationMessage" ).popup( "open" );
+   		
+   		return false;
+	}
+	else
+	{
+		document.getElementById('validationMessage').style.display = "none";
+		document.getElementById('PopUpButton').style.display = "none";
+		//form json string and submit
+		fnAddTeacherCommentsJSONSubmit();
+	}
+}
+function fnAddTeacherCommentsJSONSubmit() {
+	//alert("fnAddTeacherCommentsJSONSubmit:saveEDiaryAddTeacherCommentsURL: "+saveEDiaryAddTeacherCommentsURL);
+	serviceKey = localStorage.getItem('serviceKey');
+	if(null == serviceKey || "" == serviceKey)
+	{
+		alert("Invalid session. Please login again.");
+		window.location = "login.html";
+	}
+	var vString = "{'content':'" + document.getElementById("idAddTeacherComments").value 
+	+ "', 'createdOn':'" + document.getElementById("idEDiaryDt").value 
+	+ "', 'encString':'" + serviceKey
+	+ "', 'classId':'" + document.getElementById("idAddTeacherCommentsClassDropDown").value 
+	+ "', 'appStudent':{'id':'"+ document.getElementById("idAddTeacherCommentsStudentDropDown").value +"'}}";
+	
+	//alert("vString: "+vString);
+	
+	var ajax3 = new XMLHttpRequest();
+	ajax3.open("POST",saveEDiaryAddTeacherCommentsURL,true);
+	ajax3.send(vString);
+
+	ajax3.onreadystatechange=function(){
+	   if (ajax3.readyState === 4) {
+	     if (ajax3.status === 200 || ajax.status === 0) {
+	    	 //alert(ajax3.responseText);
+	    	 if(ajax3.responseText == "Invalid UserId")
+    		 {
+	    		 alert("Invalid session. Please login again.");
+	    		 window.location = "login.html";
+    		 }
+	    	 else
+    		 {
+	    		 //alert("success message to user: "+ajax3.responseText);
+	    		 navigator.notification.alert(
+		            'Comments saved successfully.',  // message
+		            commentsDismissed,         // callback
+		            'Success',            // title
+		            'OK'                  // buttonName
+		         );
+    		 }
+	       } else {
+	    	 alert("Ajax error in fnAddParentCommentsJSONSubmit: "+ajax3.status);
+	     }
+	   }
+	}
+}
+function commentsDismissed() {
+	$.mobile.changePage("#commentsListPage");
+}

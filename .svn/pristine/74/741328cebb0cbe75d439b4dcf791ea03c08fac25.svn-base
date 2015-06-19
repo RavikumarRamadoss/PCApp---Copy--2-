@@ -1,0 +1,87 @@
+var commentserviceURL = serviceContextURL+"/rest/communication/getCommunication";
+var jsoncomments;
+var comment;
+
+$(document).on("pagebeforeshow","#commentsListPage",function(){ 
+	//alert("pagebeforeshow-commentsListPage: "+commentserviceURL);
+	serviceKey = localStorage.getItem('serviceKey');
+	if(null == serviceKey || "" == serviceKey)
+	{
+		alert("Invalid session. Please login again.");
+		window.location = "login.html";
+	}
+	getCommentList();
+});
+
+
+function getCommentList() {
+	//var data="dhksdfskdfhkjsdhfkjsdhfkjsdj";
+	var ajax = new XMLHttpRequest();
+	ajax.open("POST",commentserviceURL,true);
+	//ajax.send(serviceKey);
+	
+	var vString = "{'createdOn':'" + document.getElementById("idEDiaryDt").value 
+	+ "', 'encString':'" + serviceKey+"'}";
+	//alert("vString: "+vString);
+	
+	ajax.send(vString);
+
+	ajax.onreadystatechange=function(){
+	   if (ajax.readyState === 4) {
+	     if (ajax.status === 200 || ajax.status === 0) {
+	    	 //alert(ajax.responseText);
+	    	 if(ajax.responseText == "Invalid UserId")
+    		 {
+	    		 alert("Invalid session. Please login again.");
+	    		 window.location = "login.html";
+    		 }
+	    	 else
+    		 {
+	    		 displayComment(ajax.responseText);
+    		 }
+	    	 
+	       } else {
+	    	 alert("Ajax error: "+ajax.status);
+	     }
+	   }
+	}
+	
+}
+
+function displayComment(data) {
+	jsoncomments =JSON.parse(data);
+	//alert('jsoncomments:'+jsoncomments);
+	$('#commentsList li').remove();
+	
+	var today = new Date();
+	var dd = today.getDate();
+	var mm = today.getMonth()+1; //January is 0!
+	var yyyy = today.getFullYear();
+	
+	if(dd<10) {
+	    dd='0'+dd
+	} 
+
+	if(mm<10) {
+	    mm='0'+mm
+	} 
+
+	today = yyyy+'-'+mm+'-'+dd;
+	//alert("today: "+today);
+	$.each(jsoncomments, function(index, comment) {
+		//alert("comment.date: "+comment.date +", comment.ackFlag: "+comment.ackFlag+", comment.createFlag: "+comment.createFlag);
+		if(today != comment.date && "Y" != comment.ackFlag && "Y" != comment.createFlag)
+		{
+			//alert("add style to this id: "+comment.id);
+			$('#commentsList').append('<li><a href="#" onclick="displayCommentDetails('+ comment.id +')" data-transition="flip">' +
+					'<h4><span style="color:red;">' + comment.date + '</span></h4>');
+		}
+		else
+		{
+			$('#commentsList').append('<li><a href="#" onclick="displayCommentDetails('+ comment.id +')" data-transition="flip">' +
+					'<h4>' + comment.date + '</h4>');
+		}
+	});
+	//alert("commentsList-refresh");
+	$('#commentsList').listview('refresh');
+}

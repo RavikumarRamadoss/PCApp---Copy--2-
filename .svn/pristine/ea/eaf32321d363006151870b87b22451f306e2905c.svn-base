@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="C:\JHRRRPTV\+DATAMITS+\ParentConnectApp\PCApp\platforms\android\build\intermediates\exploded-aar\android\CordovaLib\unspecified\debug\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="c05740800158f1bf0907aecd9efd680396c2348d">
+        <dex dex="C:\JHRRRPTV\+DATAMITS+\ParentConnectApp\PCApp\platforms\android\build\intermediates\pre-dexed\debug\classes-1f072a942fc965592f2399dfe00f2d2f43ad2486.jar" />
+    </item>
+
+</items>

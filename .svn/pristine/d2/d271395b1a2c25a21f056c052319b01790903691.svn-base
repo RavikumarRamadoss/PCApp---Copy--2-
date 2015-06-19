@@ -1,0 +1,322 @@
+var getAttendanceClassURL = serviceContextURL+"/rest/class/getAllClasses";
+var jsonAttendanceClass;
+var vAttendanceClass
+
+function getTimeTableDetails() {
+	//alert("getTimeTableDetails-timeTableServiceURL: "+timeTableServiceURL);
+	var ajax = new XMLHttpRequest();
+	ajax.open("POST",timeTableServiceURL,true);
+	ajax.send(serviceKey);
+	
+	ajax.onreadystatechange=function(){
+	   if (ajax.readyState === 4) {
+	     if (ajax.status === 200 || ajax.status === 0) {
+	    	 //alert("Ajax success:responseText: "+ajax.responseText);
+	    	 if(ajax.responseText == "Invalid UserId")
+    		 {
+	    		 alert("Invalid session. Please login again.");
+	    		 window.location = "login.html";
+    		 }
+	    	 else
+    		 {
+	    		 displayTimeTable(ajax.responseText);
+    		 }
+	       } else {
+	    	 alert("Ajax error:status: "+ajax.status);
+	     }
+	   }
+	}
+}
+
+function displayTimeTable(data) 
+{
+	//timeTableURL = timeTableURLPT1 + data + timeTableURLPT2;
+	window.open(timeTableURL,'_system','location=yes');
+}
+
+function onConfirm(buttonIndex) {
+    if(buttonIndex == "1")
+    {
+    	localStorage.removeItem('serviceKey');
+    	localStorage.removeItem('role');
+    	window.location = "login.html";
+    }
+}
+
+
+function draftEmail(subject, message) {
+	navigator.notification.confirm(
+		    'Assuming you have Email Apps to send Emails, If not, Click NO and install the same. Click yes to continue', // message
+		     onEmailConfirm, // callback to invoke with index of button pressed
+		    'Confirmation',  // title
+		    ['Yes','No']     // buttonLabels
+ 	);
+}
+
+function onEmailConfirm(buttonIndex) {
+    if(buttonIndex == "1")
+    {
+    	window.open('mailto:parentconnect@school.com?subject=love your app', '_system'); return false;
+    }
+ }
+function fnChangePasswordSubmit() {
+	$("#validationMessageTitle").html('');
+	$("#validationMessageContent").html('');
+	
+	if("" == document.getElementById("idNewPassword").value)
+	{
+   		$("#validationMessageTitle").append("&nbsp;<i class='fa fa-exclamation-triangle'></i>&nbsp;Change Password.");
+   		$("#validationMessageContent").append("Please enter the New password.");
+
+   		document.getElementById('validationMessage').style.display = "block";
+   		document.getElementById('PopUpButton').style.display = "block";
+   		$( "#validationMessage" ).popup();
+   		$( "#validationMessage" ).popup( "open" );
+   		return false;
+	}
+	else if("" == document.getElementById("idReEnterNewPassword").value)
+	{
+   		$("#validationMessageTitle").append("&nbsp;<i class='fa fa-exclamation-triangle'></i>&nbsp;Change Password.");
+   		$("#validationMessageContent").append("Please re-enter the New password.");
+
+   		document.getElementById('validationMessage').style.display = "block";
+   		document.getElementById('PopUpButton').style.display = "block";
+   		$( "#validationMessage" ).popup();
+   		$( "#validationMessage" ).popup( "open" );
+   		return false;
+	}
+	else if(document.getElementById("idNewPassword").value != document.getElementById("idReEnterNewPassword").value)
+	{
+   		$("#validationMessageTitle").append("&nbsp;<i class='fa fa-exclamation-triangle'></i>&nbsp;Change Password.");
+   		$("#validationMessageContent").append("The entered the passwords are not same or matching.");
+
+   		document.getElementById('validationMessage').style.display = "block";
+   		document.getElementById('PopUpButton').style.display = "block";
+   		$( "#validationMessage" ).popup();
+   		$( "#validationMessage" ).popup( "open" );
+   		return false;
+	}
+	else
+	{
+		document.getElementById('validationMessage').style.display = "none";
+		document.getElementById('PopUpButton').style.display = "none";
+	}
+	$.mobile.loading("show");
+	//$("#changePassSubmitButton",this).attr("disabled","disabled");
+	$('#changePassSubmitButton').attr("disabled", "disabled");
+	//$("#changePassSubmitButton").addAttr("disabled");
+
+	serviceKey = localStorage.getItem('serviceKey');
+	if(null == serviceKey || "" == serviceKey)
+	{
+		alert("Invalid session. Please login again.");
+		window.location = "login.html";
+	}
+	var vString = "{" 
+	+ "'chgPassword':'" + document.getElementById("idNewPassword").value 
+	+ "', 'encString':'" + serviceKey
+	+ "'}";
+	
+	//alert("vString: "+vString);
+	
+	var ajax1 = new XMLHttpRequest();
+	ajax1.open("POST",changePassURL,true);
+	ajax1.send(vString);
+
+	ajax1.onreadystatechange=function(){
+	   if (ajax1.readyState === 4) {
+		  //alert("status: "+ajax1.status); 
+		 $.mobile.loading("hide");
+		 $("#changePassSubmitButton").removeAttr("disabled");
+	     if (ajax1.status === 200 || ajax1.status === 0) {
+	    	 if(ajax1.responseText == "Invalid UserId")
+    		 {
+	    		 alert("Invalid session. Please login again.");
+	    		 window.location = "login.html";
+    		 }
+	    	 else
+    		 {
+	    		 //alert("success message to user: "+ajax1.responseText);
+	    		 navigator.notification.alert(
+		            'Password changed successfully. Please login with your new password.',  // message
+		            passChangeCallback,         // callback
+		            'Success',            // title
+		            'OK'                  // buttonName
+		         );
+    		 }
+	       } else {
+	    	 alert("Ajax error in fnChangePasswordSubmit: "+ajax1.status);
+	     }
+	   }
+	}
+}
+
+function passChangeCallback() {
+	localStorage.removeItem('serviceKey');
+    window.location = "login.html";
+}
+
+function fnMonthlyReports() {
+	$.mobile.changePage("#monthlytrackerReports");
+}
+
+function fnWeeklyReports() {
+	$.mobile.changePage("#weeklyReport");
+}
+
+function fnComments() {
+	$("#validationMessageTitle").html('');
+	$("#validationMessageContent").html('');
+	
+	if("" == document.getElementById("idEDiaryDt").value)
+	{
+   		$("#validationMessageTitle").append("&nbsp;<i class='fa fa-exclamation-triangle'></i>&nbsp;E-Diary.");
+   		$("#validationMessageContent").append("Please select the date.");
+
+   		document.getElementById('validationMessage').style.display = "block";
+   		document.getElementById('PopUpButton').style.display = "block";
+   		$( "#validationMessage" ).popup();
+   		$( "#validationMessage" ).popup( "open" );
+   		return false;
+	}
+	else
+	{
+		document.getElementById('validationMessage').style.display = "none";
+		document.getElementById('PopUpButton').style.display = "none";
+		$.mobile.changePage("#commentsListPage");
+	}
+}
+
+function fnEDiaryHW() {
+	$("#validationMessageTitle").html('');
+	$("#validationMessageContent").html('');
+	
+	if("" == document.getElementById("idEDiaryDt").value)
+	{
+   		$("#validationMessageTitle").append("&nbsp;<i class='fa fa-exclamation-triangle'></i>&nbsp;E-Diary.");
+   		$("#validationMessageContent").append("Please select the date.");
+
+   		document.getElementById('validationMessage').style.display = "block";
+   		document.getElementById('PopUpButton').style.display = "block";
+   		$( "#validationMessage" ).popup();
+   		$( "#validationMessage" ).popup( "open" );
+   		return false;
+	}
+	else
+	{
+		document.getElementById('validationMessage').style.display = "none";
+		document.getElementById('PopUpButton').style.display = "none";
+		$.mobile.changePage("#eDiaryViewHW");
+	}
+}
+function fnTeacherAttendance() {
+	$("#validationMessageTitle").html('');
+	$("#validationMessageContent").html('');
+	
+	if("" == document.getElementById("idAttendanceDt").value)
+	{
+   		$("#validationMessageTitle").append("&nbsp;<i class='fa fa-exclamation-triangle'></i>&nbsp;Attendance.");
+   		$("#validationMessageContent").append("Please select the date.");
+
+   		document.getElementById('validationMessage').style.display = "block";
+   		document.getElementById('PopUpButton').style.display = "block";
+   		$( "#validationMessage" ).popup();
+   		$( "#validationMessage" ).popup( "open" );
+   		return false;
+	}
+	else if("0" == document.getElementById("idAttendanceClassDropDown").value ||
+			"" == document.getElementById("idAttendanceClassDropDown").value)
+	{
+   		$("#validationMessageTitle").append("&nbsp;<i class='fa fa-exclamation-triangle'></i>&nbsp;Attendance.");
+   		$("#validationMessageContent").append("Please select any class.");
+
+   		document.getElementById('validationMessage').style.display = "block";
+   		document.getElementById('PopUpButton').style.display = "block";
+   		$( "#validationMessage" ).popup();
+   		$( "#validationMessage" ).popup( "open" );
+   		return false;
+	}
+	else
+	{
+		document.getElementById('validationMessage').style.display = "none";
+		document.getElementById('PopUpButton').style.display = "none";
+		//alert("changePage-teacherViewAttendancePage");
+		$.mobile.changePage("#teacherViewAttendancePage");
+	}
+}
+
+/**On Load of the main page fetch the class list for teachers attendance**/
+$(document).on("pagebeforeshow","#teacherAttendancePage",function(){ 
+	serviceKey = localStorage.getItem('serviceKey');
+	if(null == serviceKey || "" == serviceKey)
+	{
+		alert("Invalid session. Please login again.");
+		window.location = "login.html";
+	}
+	//clear the date on load of page ans set current date.
+	document.getElementById("idAttendanceDt").value = "";
+
+	var today = new Date();
+	var dd = today.getDate();
+	var mm = today.getMonth()+1; //January is 0!
+	var yyyy = today.getFullYear();
+
+	if(dd<10) {
+	    dd='0'+dd
+	} 
+
+	if(mm<10) {
+	    mm='0'+mm
+	} 
+
+	//today = mm+'/'+dd+'/'+yyyy;
+	document.getElementById("idAttendanceDt").value = yyyy+'-'+mm+'-'+dd;
+	
+	//fetch the class drop down list
+	getAttendanceClassList();
+	document.getElementById('idAttendanceClassDropDownContainer').style.display = "block";
+});
+
+//Below function fetches the class drop down list
+function getAttendanceClassList() {
+	
+	var ajax2 = new XMLHttpRequest();
+	ajax2.open("POST",getAttendanceClassURL,true);
+	//alert("getAttendanceClassList-serviceKey: "+serviceKey);
+	ajax2.send(serviceKey);
+
+	ajax2.onreadystatechange=function(){
+	   if (ajax2.readyState === 4) {
+	     if (ajax2.status === 200 || ajax2.status === 0) {
+	    	 //alert(ajax2.responseText);
+	    	 if(ajax2.responseText == "Invalid UserId")
+    		 {
+	    		 alert("Invalid session. Please login again.");
+	    		 window.location = "login.html";
+    		 }
+	    	 else
+    		 {
+	    		 displayAttendanceClass(ajax2.responseText);
+    		 }
+	    	 
+	       } else {
+	    	 alert("Ajax error in getAttendanceClassList: "+ajax2.status);
+	     }
+	   }
+	}
+	
+}
+
+function displayAttendanceClass(data) {
+	jsonAttendanceClass = JSON.parse(data);
+	//alert('displayAttendanceClass-jsonClass:'+jsonAttendanceClass);
+	$('#idAttendanceClassDropDown option').remove();
+	$('#idAttendanceClassDropDown').append('<option value="0" selected>Select</option>');
+	$.each(jsonAttendanceClass, function(index, vAttendanceClass) {
+		var vAttendanceClassID = vAttendanceClass.id;
+		var vAttendanceClassName = vAttendanceClass.classname;
+		$('#idAttendanceClassDropDown').append('<option value="'+vAttendanceClassID+'">'+vAttendanceClassName+'</option>');
+	});
+	//alert("idAttendanceClassDropDown-refresh");
+	$('#idAttendanceClassDropDown').selectmenu("refresh", true);
+}

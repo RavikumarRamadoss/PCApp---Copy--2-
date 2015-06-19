@@ -1,0 +1,8 @@
+var serviceContextURL = "http://192.168.1.102/ParentConnect";
+//var serviceContextURL = "http://192.168.43.2/ParentConnect";
+var serviceKey = "";
+var displayUserList;
+var type="POST";
+var changePassURL = serviceContextURL+"/rest/auth/changepwd";
+//localStorage.getItem('serviceKey');
+//localStorage.removeItem('serviceKey');

@@ -1,0 +1,145 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Yearly Holiday List Calendar developed using jQuery, Ajax, XML and CSS3</title>
+<script type="text/javascript" src="js/jquery-1.11.3.min.js" language="javascript"></script>
+<link href="css/calendar.css" type="text/css" rel="stylesheet" />
+</head>
+<body>
+<h2>Yearly Holiday List Calendar developed using jQuery, Ajax, XML and CSS3</h2>
+<div id="header">
+	<p></p>
+</div>
+<div id="calendar-container">
+    <div class="nav-container">
+    	<span>Year<br/><select id="selectYear"></select></span> <span class="last">Month<br /><a href="#" id="prevBtn" class="button gray">&lt;</a>&nbsp;<select id="selectMonth"></select>&nbsp;<a href="#" id="nextBtn" class="button gray">&gt;</a></span>
+    </div>
+    <div class="data-container"></div>
+</div>
+
+<div id="footer">
+<!--<p>By: <a href="http://www.developersnippets.com/about/">Vivek</a> [Founder of Developer Snippets] <a href="#" title="Yearly Holiday List Calendar developed using jQuery, Ajax, XML and CSS3">Back to Article</a></p>-->
+</div>
+<div class="ad">
+<!-- Google 728x90 -->
+<!-- Google 728x90 -->
+</div>
+
+	<script language="javascript">
+		$(document).ready(function(){
+			alert(1);
+			function runAjax(selYearOptVal, selMonthOptVal){alert(selYearOptVal);alert(selMonthOptVal);
+				$.ajax({
+					type: 'GET',
+					url: "http://192.168.1.102/ParentConnect/xml/calendar.xml",
+					dataType: "xml",
+					success: function(xml){alert(xml);
+						// For Year
+						var optYearValue;
+						if($('#selectYear option').length == 0){
+							var select = $('#selectYear');
+							$(xml).find('year').each(function(){
+								optYearValue = $(this).attr('whichyear');
+								if(optYearValue==selYearOptVal){
+									select.append("<option value='"+ optYearValue +"' selected=\"selected\">"+optYearValue+"</option>");
+								}else{
+									select.append("<option value='"+ optYearValue +"'>"+optYearValue+"</option>");
+								}
+							});
+						}
+						alert(3);
+					    // For Month
+						var optValue, optText;
+						if($('#selectMonth option').length == 0){
+							var select = $('#selectMonth');
+							$(xml).find('month').each(function(){
+								optValue = $(this).attr('id');
+								optText = $(this).attr('name');
+								if(optValue==selMonthOptVal){
+									select.append("<option value='"+ optValue +"' selected=\"selected\">"+optText+"</option>");
+								}else{
+									select.append("<option value='"+ optValue +"'>"+optText+"</option>");
+								}
+							});
+						}
+						alert(4);
+						if(selMonthOptVal==1){
+							$('#prevBtn').removeClass().addClass("button grayDis"); 
+							$('#nextBtn').removeClass().addClass("button gray");
+						}else if(selMonthOptVal==12){
+							$('#prevBtn').removeClass().addClass("button gray"); 
+							$('#nextBtn').removeClass().addClass("button grayDis");
+						}else{
+							$('#prevBtn, #nextBtn').removeClass().addClass("button gray"); 
+						}
+						
+						$('.data-container').html('');
+						$('.data-container').append('<ul class="holiday-lists"></ul>');
+						
+						$(xml).find('year').each(function(){
+							if($(this).attr('whichyear')==selYearOptVal)
+							{
+								//Current Year
+								var whichYear = $(this).attr('whichyear');
+								//children means 'month' tag
+								$(this).children().each(function(){
+									if($(this).attr('id')==selMonthOptVal)
+									{
+										$(this).find('country').each(function(){
+											$('.holiday-lists').append('<li class="list-header"><strong>'+$(this).attr('name')+' Holiday List - '+whichYear+'</strong></li>');
+											if($(this).find('holidayList').length){
+												$(this).find('holidayList').each(function(){
+													$('.holiday-lists').append('<li class="padding-left-10px"><strong>'+$(this).attr('date')+' ['+$(this).attr('day')+']:</strong> '+$(this).text()+'</li>');
+												}); //HolidayList Close
+											}else{
+												$('.holiday-lists').append('<li class="padding-left-10px"><strong><img src="smiley_sad.png" border="0"/> No Holidays This Month!</strong></li>');
+											}
+										}); //Country Close
+										return false; //To Break for..each loop
+									} //If Condition [close]
+								}); // month tag [close]
+							}//If Condition [close]
+						}); //xml close
+						alert(5);}//success [close]
+				});
+			}
+			
+			$('#selectMonth, #selectYear').change(function(){
+				var selectedYear=$('#selectYear :selected').val();
+				runAjax(selectedYear, $('#selectMonth').val());
+			});
+			
+			$('#prevBtn').click(function(){
+				var selectedYear=$('#selectYear :selected').val();
+				var sel=$('#selectMonth').val()-1;
+				$("#selectMonth option[value="+sel+"]").attr("selected",true);
+				if(sel>=1){
+					$('#prevBtn, #nextBtn').removeClass().addClass("button gray");
+					runAjax(selectedYear, sel);
+				}else{
+					$(this).removeClass().addClass("button grayDis");
+				}
+			});
+			
+			$('#nextBtn').click(function(){
+				var selectedYear=$('#selectYear :selected').val();
+				var sel=parseInt($('#selectMonth').val())+1;
+				$("#selectMonth option[value="+sel+"]").attr("selected",true);
+				if(sel<=12){
+					$('#nextBtn, #prevBtn').removeClass().addClass("button gray"); 
+					runAjax(selectedYear, sel);
+				}else{
+					$(this).removeClass().addClass("button grayDis");
+				}
+			});
+			
+			//get current month
+			var getCurrDate=new Date();
+			var CurrMonth=(getCurrDate.getMonth())+1;
+			var CurrYear=getCurrDate.getFullYear();
+			runAjax(CurrYear,CurrMonth);
+		}); //document.ready close
+	 </script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, user-scalable=no">
+	<link rel="stylesheet" href="css/owl.carousel/owl.carousel.min.css">
+    <link rel="stylesheet" href="css/owl.carousel/owl.theme.default.min.css">
+	<link rel="stylesheet" href="css/owl.carousel/animate.css">
+	
+	<script src="js/owlcarousel/jquery.min.js"></script>
+    <script src="js/owlcarousel/owl.carousel.js"></script>
+
+    <title>Parent Connect Mobile App</title>
+</head>
+<body>
+Please wait while loading...
+
+<script src="js/owlcarousel/highlight.js"></script>
+    <script src="js/owlcarousel/appHallOfFame.js"></script>
+    
+    <script>
+//jQuery(document).ready(function($) {
+$(document).ready(function(){
+	//alert("dummy page ready...");
+	window.location.replace("walloffame.html");
+});
+</script>
+</body>
+
+</html>

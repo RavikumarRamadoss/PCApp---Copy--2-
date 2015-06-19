@@ -1,0 +1,209 @@
+//alert("serviceContextURL: "+serviceContextURL);
+var formserviceURL = serviceContextURL+"/rest/formdownload/getforms";
+var jsonforms;
+
+var form;
+
+$(document).on("pagebeforeshow","#pdfforms",function(){
+	//alert("pagebeforeshow-pdfforms: "+formserviceURL);
+	serviceKey = localStorage.getItem('serviceKey');
+	if(null == serviceKey || "" == serviceKey)
+	{
+		alert("Invalid session. Please login again.");
+		window.location = "login.html";
+	}
+	getformList();
+});
+
+
+function getformList() {
+
+	//var data="dhksdfskdfhkjsdhfkjsdhfkjsdj";
+	//alert("serviceKey: "+serviceKey);
+	var ajax = new XMLHttpRequest();
+	ajax.open("POST",formserviceURL,true);
+	ajax.send(serviceKey);
+
+	ajax.onreadystatechange=function(){
+	   if (ajax.readyState === 4) {
+	     if (ajax.status === 200 || ajax.status === 0) {
+	    	 //alert("Ajax success: "+ajax.responseText);
+	    	 if(ajax.responseText == "Invalid UserId")
+    		 {
+	    		 alert("Invalid session. Please login again.");
+	    		 window.location = "login.html";
+    		 }
+	    	 else
+    		 {
+	    		 displayForm(ajax.responseText);
+    		 }
+	       } else {
+	    	 alert("Ajax error: "+ajax.status);
+	     }
+	   }
+	}
+
+}
+
+function displayForm(data) {
+	jsonforms =JSON.parse(data);
+	//alert('jsonforms:'+jsonforms);
+	$('#formList li').remove();
+	$.each(jsonforms, function(index, form) {
+		var vformId = form.id;
+		$('#formList').append('<li><a href="#" onclick="downlaodForm('+ vformId +')" data-transition="flip">' +
+			'<h4>' + form.formName + '</h4>');
+	});
+	$('#formList').listview('refresh');
+}
+
+function downlaodForm(vformId) {
+	//alert("downlaodForm-vformId: "+vformId);
+
+	$.each(jsonforms, function(index, form) {
+		var formDownloadURLTemp = form.formPath;
+	 	if(vformId == form.id)
+		{
+	 		var fileNameIndex = formDownloadURLTemp.lastIndexOf("/") + 1;
+	 		//alert("fileNameIndex: "+fileNameIndex);
+	 		formDownloadURL = formDownloadURLTemp;
+	 		formDownloadName = formDownloadURLTemp.substr(fileNameIndex);
+	 		//alert("formDownloadURL: "+formDownloadURL)
+	 		//alert("formDownloadName: "+formDownloadName);
+	 		navigator.notification.confirm(
+ 			    'Do you want to download this form?', // message
+ 			     onDownloadConfirm,            // callback to invoke with index of button pressed
+ 			    'Confirmation',           // title
+ 			    ['Yes','No']     // buttonLabels
+ 			);
+
+		}
+	});
+
+}
+
+
+function onDownloadConfirm(buttonIndex) {
+    //alert('You selected button ' + buttonIndex);
+    if(buttonIndex == "1")
+    {
+    	//alert("trigger download cick event..");
+    	//$( "#download" ).trigger( "click" );
+    	dowloadPDFForms();
+    	//emailTrigger();
+    }
+    else
+	{
+    	formDownloadURL = "";
+    	formDownloadName = "";
+	}
+}
+
+function dowloadPDFForms() {
+		//alert("Coming Inside");
+		var filePath = "";
+		var uri = "";
+		var fileName = "";
+		var folderName ="ParentConnect";
+		getFilesystemForms(
+					function(fileSystem) {
+						//alert("formDownloadURL: "+formDownloadURL);
+						//alert("formDownloadName: "+formDownloadName);
+						console.log("gotFS");
+						uri = encodeURI(formDownloadURL);
+						fileName = formDownloadName;
+						if (device.platform === "Android") {
+							getFolderForms(fileSystem, folderName, function(folder) {
+								filePath = folder.toURL() + "\/" + fileName;
+								transferFileForms(uri, filePath)
+							}, function() {
+								console.log("failed to get folder");
+								//alert("inside click:failed to get folder");
+							});
+						} else {
+							var filePath;
+							var urlPath = fileSystem.root.toURL();
+							if (device.platform == "Win32NT") {
+								urlPath = fileSystem.root.fullPath;
+							}
+							if (parseFloat(device.cordova) <= 3.2) {
+								filePath = urlPath.substring(urlPath.indexOf("/var")) + "\/" + fileName;
+							} else {
+								filePath = urlPath + "\/" + fileName;
+							}
+							transferFileForms(uri, filePath)
+						}
+					},
+					function() {
+						console.log("failed to get filesystem");
+						//alert("inside click:failed to get filesystem");
+					}
+			);
+	}
+
+function getFilesystemForms (success, fail) {
+	//alert("inside getFilesystem1..");
+	window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
+	window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, success, fail);
+}
+
+function getFolderForms(fileSystem, folderName, success, fail) {
+	//alert("inside getFolder1..");
+	fileSystem.root.getDirectory(folderName, {create: true, exclusive: false}, success, fail)
+}
+
+function transferFileForms(uri, filePath) {
+	//alert("inside transferFile1..");
+	var transfer = new FileTransfer();
+	uri = serviceContextURL + uri;
+	/*alert("In Transfer File URI Is:"+uri);
+	alert("In Transfer File Path Is:"+filePath);*/
+	transfer.download(
+		uri,
+		filePath,
+		function(entry) {
+			var targetPath = entry.toURL();
+			//alert("Target Path Is:"+targetPath);
+
+			if (device.platform == "Win32NT") {
+				targetPath = entry.fullPath;
+			}
+			formDownloadURL = "";
+	    	formDownloadName = "";
+			//alert("Download Success. File saved to: " + targetPath);
+			navigator.notification.alert(
+			    'File saved to: '+ targetPath,  // message
+			    alertDismissedForms,         // callback
+			    'Success',            // title
+			    'Done'                  // buttonName
+			);
+
+			//document.getElementById("result").innerHTML = "File saved to: " + targetPath;
+			//resetting the path and name of the download file.
+		},
+		function(error) {
+			//document.getElementById("result").innerHTML = "An error has occurred: Code = " + error.code;
+			/*alert("download error source " + error.source);
+			alert("download error target " + error.target);
+			alert("upload error code" + error.code);
+			alert("Error while download");*/
+			formDownloadURL = "";
+	    	formDownloadName = "";
+			navigator.notification.alert(
+			    'An error has occurred! please try later',  // message
+			    alertDismissedForms,         // callback
+			    'Success',            // title
+			    'Done'                  // buttonName
+			);
+		}
+		);
+}
+
+function alertDismissedForms() {
+    // do something
+}
+
+
+
+
+

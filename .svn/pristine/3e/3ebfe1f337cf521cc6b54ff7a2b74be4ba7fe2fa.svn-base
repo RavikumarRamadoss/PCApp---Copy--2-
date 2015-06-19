@@ -1,0 +1,434 @@
+var getClassURL = serviceContextURL+"/rest/class/getAllClasses";
+var saveReminderURL = serviceContextURL+"/rest/reminder/saveReminder";
+var getReminderURL = serviceContextURL+"/rest/reminder/getMyReminders";
+var jsonClass;
+var vclass;
+var jsonReminder;
+var reminder;
+var vEditReminderID;
+
+function fnEditReminder(id) {
+	//alert("fnEditReminder - fwd to notifications: "+id);
+	vEditReminderID = id;
+	$.mobile.changePage("#editnotifications");
+	serviceKey = localStorage.getItem('serviceKey');
+	if(null == serviceKey || "" == serviceKey)
+	{
+		alert("Invalid session. Please login again.");
+		window.location = "login.html";
+	}
+	//getEditclassList();
+	getNotificationDetails(vEditReminderID);
+}
+
+
+function getEditclassList(vClassID) {
+	//alert("getEditclassList:serviceKey: "+serviceKey+", vClassID: "+vClassID);
+	var ajax = new XMLHttpRequest();
+	ajax.open("POST",getClassURL,true);
+	ajax.send(serviceKey);
+
+	ajax.onreadystatechange=function(){
+	   if (ajax.readyState === 4) {
+	     if (ajax.status === 200 || ajax.status === 0) {
+	    	 //alert(ajax.responseText);
+	    	 if(ajax.responseText == "Invalid UserId")
+    		 {
+	    		 alert("Invalid session. Please login again.");
+	    		 window.location = "login.html";
+    		 }
+	    	 else
+    		 {
+	    		 displayEditClass(ajax.responseText, vClassID);
+    		 }
+	    	 
+	       } else {
+	    	 alert("Ajax error in getclassList: "+ajax.status);
+	     }
+	   }
+	}
+	
+}
+
+function displayEditClass(data, vClassID) {
+	jsonClass =JSON.parse(data);
+	//alert("displayEditClass:jsonClass: "+jsonClass+", vClassID: "+vClassID);
+	$('#idEditClassDropDown option').remove();
+	//$('#idEditClassDropDown').append('<option value="0">Select</option>');
+	$.each(jsonClass, function(index, vclass) {
+		var vclassID = vclass.id;
+		var vclassName = vclass.classname;
+		if(vClassID == vclassID)
+		{
+			$('#idEditClassDropDown').append('<option value="'+vclassID+'" selected>'+vclassName+'</option>');
+		}
+		else
+		{
+			$('#idEditClassDropDown').append('<option value="'+vclassID+'">'+vclassName+'</option>');
+		}
+		
+	});
+	//alert("idEditClassDropDown-refresh");
+	$('#idEditClassDropDown').selectmenu("refresh", true);
+	//$('#idEditClassDropDown').listview('refresh');
+}
+
+function getNotificationDetails(vReminderID) {
+	var vClassID = "";
+	//alert("jsonReminder: "+jsonReminder);
+	$.each(jsonReminder, function(index, reminder) {
+		if(vReminderID == reminder.id)
+		{
+			document.getElementById("idEditRemindertitle").value = reminder.reminderTitle;
+			document.getElementById("idEditReminderDescription").value  = reminder.reminderContent;
+			document.getElementById("idEditReminderDt").value  = reminder.expiryDate;
+			//document.getElementById("idEditClassDropDown").value  = reminder.classId;
+			//$('#idEditClassDropDown').val("2");
+			vClassID = reminder.classId;
+			//alert("vClassID: "+vClassID);
+			$('#idEditClassDropDown').val(vClassID);
+		}
+	});
+	
+	getEditclassList(vClassID);
+}
+
+$(document).on("pagebeforeshow","#notificationsView",function(){ 
+	//alert("pagebeforeshow-notificationsView: "+getReminderURL);
+	serviceKey = localStorage.getItem('serviceKey');
+	role = localStorage.getItem('role');
+	//alert("role: "+role);
+	if(null == serviceKey || "" == serviceKey)
+	{
+		alert("Invalid session. Please login again.");
+		window.location = "login.html";
+	}
+	if(role == 'Teacher')
+	{
+		document.getElementById('addRemindersBtnContent').style.display = "block";
+	}
+	else
+	{
+		document.getElementById('addRemindersBtnContent').style.display = "none";
+	}
+	getReminderList();
+});
+
+function getReminderList() {
+	
+	var ajax = new XMLHttpRequest();
+	ajax.open("POST",getReminderURL,true);
+	ajax.send(serviceKey);
+
+	ajax.onreadystatechange=function(){
+	   if (ajax.readyState === 4) {
+	     if (ajax.status === 200 || ajax.status === 0) {
+	    	 //alert("getReminderList"+ ajax.responseText);
+	    	 if(ajax.responseText == "Invalid UserId")
+    		 {
+	    		 alert("Invalid session. Please login again.");
+	    		 window.location = "login.html";
+    		 }
+	    	 else
+    		 {
+	    		 displayReminder(ajax.responseText);
+    		 }
+	    	 
+	       } else {
+	    	 alert("Ajax error in getReminderList: "+ajax.status);
+	     }
+	   }
+	}
+	
+}
+
+function displayReminder(data) {
+	jsonReminder = JSON.parse(data);
+	//alert('jsonReminder:'+jsonReminder);
+	var nextId = 0;
+	$( '#set div').remove();
+	role = localStorage.getItem('role');
+	$.each(jsonReminder, function(index, reminder) {
+		var reminderTitle = reminder.reminderTitle;
+		//alert('reminderTitle:'+reminderTitle);
+		var reminderContent = reminder.reminderContent;
+		//alert('reminderContent:'+reminderContent);
+		nextId++;
+		if(role == 'Teacher')
+		{
+			var content = "<div data-role='collapsible' id='set" + nextId + "'><h3>" + reminderTitle + "</h3><p>" + reminderContent + "</p> <button data-theme='b' onclick ='fnEditReminder("+reminder.id+")' data-transition='flip' data-direction='reverse'>Edit Reminder</button></div>";
+		}
+		else
+		{
+			var content = "<div data-role='collapsible' id='set" + nextId + "'><h3>" + reminderTitle + "</h3><p>" + reminderContent + "</p></div>";
+		}
+        $( "#set" ).append( content ).collapsibleset( "refresh" );
+	});
+}
+
+$(document).on("pagebeforeshow","#addNotifications",function(){ 
+	//alert("pagebeforeshow-addNotifications: "+getClassURL);
+	serviceKey = localStorage.getItem('serviceKey');
+	if(null == serviceKey || "" == serviceKey)
+	{
+		alert("Invalid session. Please login again.");
+		window.location = "login.html";
+	}
+	getclassList();
+});
+
+function getclassList() {
+	
+	var ajax = new XMLHttpRequest();
+	ajax.open("POST",getClassURL,true);
+	ajax.send(serviceKey);
+
+	ajax.onreadystatechange=function(){
+	   if (ajax.readyState === 4) {
+	     if (ajax.status === 200 || ajax.status === 0) {
+	    	 //alert(ajax.responseText);
+	    	 if(ajax.responseText == "Invalid UserId")
+    		 {
+	    		 alert("Invalid session. Please login again.");
+	    		 window.location = "login.html";
+    		 }
+	    	 else
+    		 {
+	    		 displayClass(ajax.responseText);
+    		 }
+	    	 
+	       } else {
+	    	 alert("Ajax error in getclassList: "+ajax.status);
+	     }
+	   }
+	}
+	
+}
+
+function displayClass(data) {
+	jsonClass =JSON.parse(data);
+	//alert('displayClass-jsonClass:'+jsonClass);
+	$('#idClassDropDown option').remove();
+	$('#idClassDropDown').append('<option value="0" selected>Select</option>');
+	$.each(jsonClass, function(index, vclass) {
+		var vclassID = vclass.id;
+		var vclassName = vclass.classname;
+		$('#idClassDropDown').append('<option value="'+vclassID+'">'+vclassName+'</option>');
+	});
+	//alert("idClassDropDown-refresh");
+	$('#idClassDropDown').selectmenu("refresh", true);
+	//$('#idClassDropDown').listview('refresh');
+}
+
+
+function fnNotificationSubmit() {
+	//alert("fnNotificationSubmit:saveReminderURL: "+saveReminderURL);
+	$("#validationMessageTitle").html('');
+	$("#validationMessageContent").html('');
+	if("0" == document.getElementById("idClassDropDown").value || "" == document.getElementById("idClassDropDown").value)
+	{
+   		$("#validationMessageTitle").append("&nbsp;<i class='fa fa-exclamation-triangle'></i>&nbsp;Add Notification.");
+   		$("#validationMessageContent").append("Please select the class.");
+
+   		document.getElementById('validationMessage').style.display = "block";
+   		document.getElementById('PopUpButton').style.display = "block";
+   		$( "#validationMessage" ).popup();
+   		$( "#validationMessage" ).popup( "open" );
+   		
+   		return false;
+	}
+	else if("" == document.getElementById("idReminderDt").value)
+	{
+   		$("#validationMessageTitle").append("&nbsp;<i class='fa fa-exclamation-triangle'></i>&nbsp;Add Notification.");
+   		$("#validationMessageContent").append("Please enter the Reminder Expiry Date.");
+
+   		document.getElementById('validationMessage').style.display = "block";
+   		document.getElementById('PopUpButton').style.display = "block";
+   		$( "#validationMessage" ).popup();
+   		$( "#validationMessage" ).popup( "open" );
+   		
+   		return false;
+	}
+	else if("" == document.getElementById("idRemindertitle").value)
+	{
+   		$("#validationMessageTitle").append("&nbsp;<i class='fa fa-exclamation-triangle'></i>&nbsp;Add Notification.");
+   		$("#validationMessageContent").append("Please enter the Reminder title.");
+
+   		document.getElementById('validationMessage').style.display = "block";
+   		document.getElementById('PopUpButton').style.display = "block";
+   		$( "#validationMessage" ).popup();
+   		$( "#validationMessage" ).popup( "open" );
+   		
+   		return false;
+	}
+	else if("" == document.getElementById("idReminderDescription").value)
+	{
+   		$("#validationMessageTitle").append("&nbsp;<i class='fa fa-exclamation-triangle'></i>&nbsp;Add Notification.");
+   		$("#validationMessageContent").append("Please enter the Reminder description.");
+
+   		document.getElementById('validationMessage').style.display = "block";
+   		document.getElementById('PopUpButton').style.display = "block";
+   		$( "#validationMessage" ).popup();
+   		$( "#validationMessage" ).popup( "open" );
+   		
+   		return false;
+	}
+	else
+	{
+		document.getElementById('validationMessage').style.display = "none";
+		document.getElementById('PopUpButton').style.display = "none";
+	}
+	
+	serviceKey = localStorage.getItem('serviceKey');
+	if(null == serviceKey || "" == serviceKey)
+	{
+		alert("Invalid session. Please login again.");
+		window.location = "login.html";
+	}
+	var vString = "{'expiresOn':'" + document.getElementById("idReminderDt").value 
+	+ "', 'reminderTitle':'" + document.getElementById("idRemindertitle").value 
+	+ "', 'reminderContent':'" + document.getElementById("idReminderDescription").value
+	+ "', 'encString':'" + serviceKey
+	+ "', 'appClass':{'id':'"+ document.getElementById("idClassDropDown").value +"'}}";
+	
+	//alert("vString: "+vString);
+	//var vJsonString = JSON.stringify(vString);
+	/*var vJsonString = JSON.parse(vString);
+	alert("vJsonString: "+vJsonString);*/
+	
+	var ajax1 = new XMLHttpRequest();
+	ajax1.open("POST",saveReminderURL,true);
+	ajax1.send(vString);
+
+	ajax1.onreadystatechange=function(){
+	   if (ajax1.readyState === 4) {
+	     if (ajax1.status === 200 || ajax.status === 0) {
+	    	 //alert(ajax1.responseText);
+	    	 if(ajax1.responseText == "Invalid UserId")
+    		 {
+	    		 alert("Invalid session. Please login again.");
+	    		 window.location = "login.html";
+    		 }
+	    	 else
+    		 {
+	    		 //displayClass(ajax.responseText);
+	    		 //alert("success message to user: "+ajax1.responseText);
+	    		 navigator.notification.alert(
+		            'Notification created successfully.',  // message
+		            redirectNotificationViewPage,         // callback
+		            'Success',            // title
+		            'OK'                  // buttonName
+		         );
+    		 }
+	       } else {
+	    	 alert("Ajax error in fnNotificationSubmit: "+ajax1.status);
+	     }
+	   }
+	}
+}
+
+function redirectNotificationViewPage() {
+	$.mobile.changePage("#notificationsView");
+}
+
+function fnEditNotificationSubmit() {
+	//alert("fnNotificationSubmit:vEditReminderID: "+vEditReminderID);
+	$("#validationMessageTitle").html('');
+	$("#validationMessageContent").html('');
+	if("0" == document.getElementById("idEditClassDropDown").value || "" == document.getElementById("idEditClassDropDown").value)
+	{
+   		$("#validationMessageTitle").append("&nbsp;<i class='fa fa-exclamation-triangle'></i>&nbsp;Edit Notification.");
+   		$("#validationMessageContent").append("Please select the class.");
+
+   		document.getElementById('validationMessage').style.display = "block";
+   		document.getElementById('PopUpButton').style.display = "block";
+   		$( "#validationMessage" ).popup();
+   		$( "#validationMessage" ).popup( "open" );
+   		
+   		return false;
+	}
+	else if("" == document.getElementById("idEditReminderDt").value)
+	{
+   		$("#validationMessageTitle").append("&nbsp;<i class='fa fa-exclamation-triangle'></i>&nbsp;Edit Notification.");
+   		$("#validationMessageContent").append("Please enter the Reminder Expiry Date.");
+
+   		document.getElementById('validationMessage').style.display = "block";
+   		document.getElementById('PopUpButton').style.display = "block";
+   		$( "#validationMessage" ).popup();
+   		$( "#validationMessage" ).popup( "open" );
+   		
+   		return false;
+	}
+	else if("" == document.getElementById("idEditRemindertitle").value)
+	{
+   		$("#validationMessageTitle").append("&nbsp;<i class='fa fa-exclamation-triangle'></i>&nbsp;Edit Notification.");
+   		$("#validationMessageContent").append("Please enter the Reminder title.");
+
+   		document.getElementById('validationMessage').style.display = "block";
+   		document.getElementById('PopUpButton').style.display = "block";
+   		$( "#validationMessage" ).popup();
+   		$( "#validationMessage" ).popup( "open" );
+   		
+   		return false;
+	}
+	else if("" == document.getElementById("idEditReminderDescription").value)
+	{
+   		$("#validationMessageTitle").append("&nbsp;<i class='fa fa-exclamation-triangle'></i>&nbsp;Edit Notification.");
+   		$("#validationMessageContent").append("Please enter the Reminder description.");
+
+   		document.getElementById('validationMessage').style.display = "block";
+   		document.getElementById('PopUpButton').style.display = "block";
+   		$( "#validationMessage" ).popup();
+   		$( "#validationMessage" ).popup( "open" );
+   		
+   		return false;
+	}
+	else
+	{
+		document.getElementById('validationMessage').style.display = "none";
+		document.getElementById('PopUpButton').style.display = "none";
+	}
+	
+	serviceKey = localStorage.getItem('serviceKey');
+	if(null == serviceKey || "" == serviceKey)
+	{
+		alert("Invalid session. Please login again.");
+		window.location = "login.html";
+	}
+	var vString = "{'expiresOn':'" + document.getElementById("idEditReminderDt").value 
+	+ "', 'id':'" + vEditReminderID 
+	+ "', 'reminderTitle':'" + document.getElementById("idEditRemindertitle").value 
+	+ "', 'reminderContent':'" + document.getElementById("idEditReminderDescription").value
+	+ "', 'encString':'" + serviceKey
+	+ "', 'appClass':{'id':'"+ document.getElementById("idEditClassDropDown").value +"'}}";
+	
+	var ajax2 = new XMLHttpRequest();
+	ajax2.open("POST",saveReminderURL,true);
+	ajax2.send(vString);
+
+	ajax2.onreadystatechange=function(){
+	   if (ajax2.readyState === 4) {
+	     if (ajax2.status === 200 || ajax.status === 0) {
+	    	 //alert(ajax2.responseText);
+	    	 if(ajax2.responseText == "Invalid UserId")
+    		 {
+	    		 alert("Invalid session. Please login again.");
+	    		 window.location = "login.html";
+    		 }
+	    	 else
+    		 {
+	    		 //displayClass(ajax.responseText);
+	    		 //alert("success message to user: "+ajax2.responseText);
+	    		 navigator.notification.alert(
+		            'Notification updated successfully.',  // message
+		            redirectNotificationViewPage,         // callback
+		            'Success',            // title
+		            'OK'                  // buttonName
+		         );
+    		 }
+	       } else {
+	    	 alert("Ajax error in fnEditNotificationSubmit: "+ajax2.status);
+	     }
+	   }
+	}
+}

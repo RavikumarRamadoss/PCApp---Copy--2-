@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, user-scalable=no">
+<link href="css/jquery.mobile-1.4.5.min.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="css/font_awesome/css/font-awesome.min.css">
+<link href="css/myapp.css" type="text/css" />
+<script src="js/jquery-1.11.3.min.js"></script>
+<script src="js/jquery.mobile-1.4.5.min.js"></script>
+<link rel="stylesheet" href="css/jqm-datebox-1.4.5.min.css" />
+<link rel="stylesheet" href="css/swstyle.css" />
+<style>
+	#map, #map-canvas { width: 100%; height: 100%; padding: 0; }
+</style>
+<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
+<!-- NOTE: Script for date widget -->
+<script type="text/javascript" src="js/jquery.mousewheel.min.js"></script>
+<script type="text/javascript" src="js/jqm-datebox-1.4.5.core.min.js"></script>
+<script type="text/javascript" src="js/jqm-datebox-1.4.5.mode.flipbox.min.js"></script>
+<script type="text/javascript" src="js/jqm-datebox.lang.utf8.js"></script>
+<script src="http://maps.google.com/maps/api/js?sensor=false"></script>
+
+<script type="text/javascript">
+ 	// Base URI of RESTful web service
+</script>
+<script src="js/constants.js"></script>
+<script type="text/javascript" src="cordova.js"></script>
+<script type="text/javascript" src="js/index.js"></script>
+<script src="js/famelist.js"></script>
+<script src="js/famedetails.js"></script>
+<script src="js/principalPage.js"></script>
+<script src="js/circularlist.js"></script>
+<script src="js/formlist.js"></script>
+<script src="js/charts.js"></script>
+<script src="js/highcharts.js"></script>
+<script src="js/exporting.js"></script>  
+<script src="js/stopwatch.js"></script>
+<script src="js/notification.js"></script>
+<script src="js/edairy.js"></script>
+ <style type="text/css">
+ html,body{
+  width:100%;
+  height:100%;
+  padding:0;
+  margin:0;
+}
+.title {
+   white-space: normal !important;
+   position:relative;
+   left:-20px;
+}
+.bookicon {
+  width:65px;
+  height:100%;
+}
+.ui-header .ui-title, .ui-footer .ui-title {
+    text-overflow: clip;
+    white-space: normal;
+}
+
+#landingpage{
+  height:100%;
+  margin-top:-45px;
+  /* background:url(images/bk-green.jpg); */
+  background:url(images/133.png);
+  background-size:cover;
+  position:relative;
+  text-align:center;
+}
+
+label.error {
+	float: left;
+	color: red;
+	padding-top: .5em;
+	vertical-align: top;
+	font-weight:bold
+}
+
+#extras, #changePasswordPage, #fameListPage, #detailsPage, #principalPage, #eDairy, #circularsListPage, #notifications, 
+#notificationsView, #editnotifications, #reports, #timeTable, #pdfforms, #weeklytrackerReports, #monthlytrackerReports, 
+#stopwatch, #weeklyReport, #eDairyTeacher {
+    background-color: black;
+    color: white;
+    padding: 0;
+    margin: 0;
+    background-image: url(images/133.png);
+    height: 100%;
+}
+
+#container{
+    background:#000;
+    display:block;
+    padding:5px;
+    clear:both;
+    height:30px;
+    margin-bottom:22px;
+    padding-left:5px;
+    padding-right:5px;
+    padding-top:5px;
+    width:100%;
+    overflow-x:auto;
+}
+</style>
+  <!-- Uncomment the following to include cordova in your android project -->
+  <!--<script src="http://jqmdesigner.appspot.com/platforms/android/cordova.js"></script>-->
+  <!-- GK Loader use RequireJS to load module -->
+  <script src="http://requirejs.org/docs/release/2.1.11/minified/require.js"></script>
+  <!--Plug in GK-->
+    <title>Parent Connect Mobile App</title>
+</head>
+<body gk-app>
+
+<div id="landingpage" data-role="page">
+  <div data-role="header" data-position="fixed" data-theme="b">
+    <h3>Parent Connect</h3>
+    <a href="#" class="ui-btn ui-btn-right ui-corner-all SignOutBtn" style="margin-top:0;">Sign out</a>
+  </div>
+  <div role="main" class="ui-content" style="margin-top:30px;">
+
+    <div class="ui-grid-b" style="height:110px">
+      <div class="ui-block-a" style="height:100%">
+        <div is="icon" style="width:85px; height:90px; position:relative">
+           <span class="ui-li-count" style="position:absolute; display:none; z-index:1; right:0; top:6px;"></span>
+           <a href="#principalPage" class="ui-btn ui-mini ui-corner-all ui-shadow" data-transition="flip" style="display:block;margin:5px;height:50%;background-image: url(images/podcast_icon.png); background-size: 95% 80%; background-position: 50% 50%; background-repeat: no-repeat no-repeat;"></a>
+           <div style="text-align:center; margin-top:-5px; color:black; text-shadow:none;">Principal<br>Page</div>
+        </div>
+        
+      </div>
+      <div class="ui-block-b" style="height:100%">
+        <div is="icon" style="width:85px; height:90px; position:relative">
+          <span class="ui-li-count" style="position:absolute; display:none; z-index:1; right:0; top:6px;"></span>
+          <a href="#fameListPage" class="ui-btn ui-mini ui-corner-all ui-shadow" data-transition="flip" data-direction="reverse" id="idWallofFame"
+           style="display:block;margin:5px;height:50%;background-image: url(images/walloffame.png); background-size: 95% 80%;
+           background-position: 50% 50%; background-repeat: no-repeat no-repeat;"></a>
+           <div style="text-align:center; margin-top:-5px; color:black; text-shadow:none;">Wall of<br> Fame</div>
+        </div>
+      </div>
+      <div class="ui-block-c" style="height:100%">
+       <div is="icon" style="width:85px; height:90px; position:relative">
+             <span class="ui-li-count" style="position:absolute; display:none; z-index:1; right:0; top:6px;"></span>
+             <a href="#stopwatch" id="idTracker" class="ui-btn ui-mini ui-corner-all ui-shadow" data-transition="flip" style="display:block;margin:5px;height:50%;background-image: url(images/tracker.png); background-size: 95% 80%; background-position: 50% 50%; background-repeat: no-repeat no-repeat;"></a>
+              <div style="text-align:center;margin-top:-5px; color:black; text-shadow:none;">Study <br>Tracker</div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="ui-grid-b" style="height:95px">
+      <div class="ui-block-a" style="height:100%">
+       <div is="icon" style="width:85px; height:90px; position:relative">
+                <span class="ui-li-count" style="position:absolute; display:none; z-index:1; right:0; top:6px;"></span>
+                <!-- <a href="#holidays" class="ui-btn ui-mini ui-corner-all ui-shadow" data-transition="flip" style="display:block;margin:5px;height:50%;background-image: url(images/calendar_icon.png); background-size: 95% 80%; background-position: 50% 50%; background-repeat: no-repeat no-repeat;"></a>
+                 --><a href="#" id="idHolidays" class="ui-btn ui-mini ui-corner-all ui-shadow" data-transition="flip" style="display:block;margin:5px;height:50%;background-image: url(images/calendar_icon.png); background-size: 95% 80%; background-position: 50% 50%; background-repeat: no-repeat no-repeat;"></a>
+                <div style="text-align:center; color:black; text-shadow:none;">Holidays</div>
+        </div>
+      </div>
+      <div class="ui-block-b" style="height:100%">
+       <div is="icon" style="width:85px; height:90px; position:relative">
+                      <span class="ui-li-count" style="position:absolute; display:none; z-index:1; right:0; top:6px;"></span>
+                      <a href="#notificationsView" class="ui-btn ui-mini ui-corner-all ui-shadow" data-transition="flip" style="display:block;margin:5px;height:50%;background-image: url(images/announcements.png); background-size: 95% 80%; background-position: 50% 50%; background-repeat: no-repeat no-repeat;"></a>
+                      <div style="text-align:center; color:black; text-shadow:none;">Notifications</div>
+              </div>
+      </div>
+      <div class="ui-block-c" style="height:100%">
+       <div is="icon" style="width:85px; height:90px; position:relative">
+          <span class="ui-li-count" style="position:absolute; display:none; z-index:1; right:0; top:6px;"></span>
+          <a href="#circularsListPage" class="ui-btn ui-mini ui-corner-all ui-shadow" data-transition="flip" data-direction="reverse"
+          style="display:block;margin:5px;height:50%;background-image: url(images/circulars.png); background-size: 95% 80%;
+          background-position: 50% 50%; background-repeat: no-repeat no-repeat;"></a>
+          <div style="text-align:center; color:black; text-shadow:none;">Circulars</div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="ui-grid-b" style="height:95px">
+      <div class="ui-block-a" style="height:100%">
+       <div is="icon" style="width:85px; height:90px; position:relative">
+                <span class="ui-li-count" style="position:absolute; display:none; z-index:1; right:0; top:6px;"></span>
+                <a href="#reports" class="ui-btn ui-mini ui-corner-all ui-shadow" data-transition="flip" style="display:block;margin:5px;height:50%;background-image: url(images/graph.png); background-size: 95% 80%; background-position: 50% 50%; background-repeat: no-repeat no-repeat;"></a>
+                <div style="text-align:center; color:black; text-shadow:none;">Reports</div>
+        </div>
+      </div>
+      <div class="ui-block-b" style="height:100%">
+       <div is="icon" style="width:85px; height:90px; position:relative">
+                <span class="ui-li-count" style="position:absolute; display:none; z-index:1; right:0; top:6px;"></span>
+                <a href="#eDairy" class="ui-btn ui-mini ui-corner-all ui-shadow" data-transition="flip" style="display:block;margin:5px;height:50%;background-image: url(images/Diary.png); background-size: 95% 80%; background-position: 50% 50%; background-repeat: no-repeat no-repeat;"></a>
+                <div style="text-align:center; color:black; text-shadow:none;">E-Dairy</div>
+          </div>
+	</div>
+      <div class="ui-block-c" style="height:100%">
+       <div is="icon" style="width:85px; height:90px; position:relative">
+                <span class="ui-li-count" style="position:absolute; display:none; z-index:1; right:0; top:6px;"></span>
+                <a href="#pdfforms" id="idDownload" class="ui-btn ui-mini ui-corner-all ui-shadow" data-transition="flip" style="display:block;margin:5px;height:50%;background-image: url(images/forms.png); background-size: 95% 80%; background-position: 50% 50%; background-repeat: no-repeat no-repeat;"></a>
+                 <div style="text-align:center; color:black; text-shadow:none;">PDF Forms download</div>
+        </div>
+      </div>
+      
+    </div>
+
+
+     <div class="ui-grid-b" style="height:95px">
+      <div class="ui-block-a" style="height:100%">
+       <div is="icon" style="width:85px; height:90px; position:relative">
+                <span class="ui-li-count" style="position:absolute; display:none; z-index:1; right:0; top:6px;"></span>
+                <a href="#" onclick="draftEmail();" class="ui-btn ui-mini ui-corner-all ui-shadow" data-transition="flip" style="display:block;margin:5px;height:50%;background-image: url(images/email.png); background-size: 95% 80%; background-position: 50% 50%; background-repeat: no-repeat no-repeat;"></a>
+                <div style="text-align:center; color:black; text-shadow:none;">Email</div>
+        </div>
+      </div>
+     <div class="ui-block-b" style="height:100%">
+       <div is="icon" style="width:85px; height:90px; position:relative">
+                <span class="ui-li-count" style="position:absolute; display:none; z-index:1; right:0; top:6px;"></span>
+                <a href="#extras" class="ui-btn ui-mini ui-corner-all ui-shadow" data-transition="flip" style="display:block;margin:5px;height:50%;background-image: url(images/extras.png); background-size: 95% 80%; background-position: 50% 50%; background-repeat: no-repeat no-repeat;"></a>
+                <div style="text-align:center; color:black; text-shadow:none;">Extras</div>
+          </div>
+	</div>
+    <div class="ui-block-c" style="height:100%">
+       <div is="icon" style="width:85px; height:90px; position:relative">
+                <span class="ui-li-count" style="position:absolute; display:none; z-index:1; right:0; top:6px;"></span>
+                <a href="#" id="idTimeTable" class="ui-btn ui-mini ui-corner-all ui-shadow" data-transition="flip" style="display:block;margin:5px;height:50%;background-image: url(images/timetable.png); background-size: 95% 80%; background-position: 50% 50%; background-repeat: no-repeat no-repeat;"></a>
+                <div style="text-align:center; color:black; text-shadow:none;">Time Table</div>
+          </div>
+	</div>
+      
+    </div>
+
+  </div>
+
+  <div data-role="footer" data-position="fixed" data-theme="b">
+      <h3>&copy; Datamits</h3>
+  </div>
+</div>
+
+
+<div id="extras" data-role="page" >
+
+	<div data-role="header" data-position="fixed" data-theme="b">
+	    <h3>Extras</h3>
+	    <a href="#" class="ui-btn ui-btn-right ui-corner-all SignOutBtn" style="margin-top:0;">Sign out</a>
+	    <a href="#landingpage" class="ui-btn ui-btn-left ui-corner-all" style="margin-top:0;">Home</a>
+  	</div>
+
+	<div data-role="content">
+      <div class="ui-grid-b" style="height:110px">
+	      <div class="ui-block-a" style="height:100%">
+	        <div is="icon" style="width:85px; height:90px; position:relative">
+	           <span class="ui-li-count" style="position:absolute; display:none; z-index:1; right:0; top:6px;"></span>
+	           <a href="#map" class="ui-btn ui-mini ui-corner-all ui-shadow" data-transition="flip" style="display:block;margin:5px;height:50%;background-image: url(images/location.png); background-size: 95% 80%; background-position: 50% 50%; background-repeat: no-repeat no-repeat;"></a>
+	           <div style="text-align:center; color:black; text-shadow:none;">Map</div>
+	        </div>
+	      </div>
+	      <div class="ui-block-b" style="height:100%">
+	        <div is="icon" style="width:85px; height:90px; position:relative">
+	          <span class="ui-li-count" style="position:absolute; display:none; z-index:1; right:0; top:6px;"></span>
+	          <a href="#changePasswordPage" class="ui-btn ui-mini ui-corner-all ui-shadow" data-transition="flip" data-direction="reverse" id="idWallofFame"
+	           style="display:block;margin:5px;height:50%;background-image: url(images/changePass1.png); background-size: 95% 80%;
+	           background-position: 50% 50%; background-repeat: no-repeat no-repeat;"></a>
+	           <div style="text-align:center; margin-top:-5px; color:black; text-shadow:none;">Change<br> Password</div>
+	        </div>
+	      </div>
+	      <div class="ui-block-c" style="height:100%">
+	       <div is="icon" style="width:85px; height:90px; position:relative">
+	           <span class="ui-li-count" style="position:absolute; display:none; z-index:1; right:0; top:6px;"></span>
+	           <a href="#" id="idWebsite" class="ui-btn ui-mini ui-corner-all ui-shadow" data-transition="flip" style="display:block;margin:5px;height:50%;background-image: url(images/website-icon.png); background-size: 95% 80%; background-position: 50% 50%; background-repeat: no-repeat no-repeat;"></a>
+	           <div style="text-align:center;margin-top:-5px; color:black; text-shadow:none;">School <br>Website</div>
+	        </div>
+	      </div>
+      </div>
+    </div>
+    
+    <div data-role="footer" data-position="fixed" data-theme="b">
+      <h3>&copy; Datamits</h3>
+      <!-- <a href="#" class="ui-btn ui-btn-right ui-corner-all" style="margin-top:0;">Home</a> -->
+    </div>
+
+</div>
+
+<div id="changePasswordPage" data-role="page" >
+
+	<div data-role="header" data-position="fixed" data-theme="b">
+	    <h3>Change Password</h3>
+	    <a href="#" class="ui-btn ui-btn-right ui-corner-all SignOutBtn" style="margin-top:0;">Sign out</a>
+	    <a href="#landingpage" class="ui-btn ui-btn-left ui-corner-all" style="margin-top:0;">Home</a>
+  	</div>
+   <!-- <div class="ui-field-contain ui-body ui-br" data-role="fieldcontain">
+		<label for="idReminderDescription">Old Password:</label>
+		<div class="ui-select" style="width: 200px;">
+		<div>
+		<input type="password" name="currentPassword" id="idCurrentPassword">
+		</div>
+		</div>
+	</div> -->
+	
+	<div class="ui-field-contain ui-body ui-br" data-role="fieldcontain">
+		<label for="idReminderDescription">New Password:</label>
+		<div class="ui-select" style="width: 200px;">
+		<div>
+		<input type="password" name="newPassword" id="idNewPassword">
+		</div>
+		</div>
+	</div>
+	
+	<div class="ui-field-contain ui-body ui-br" data-role="fieldcontain">
+		<label for="idReminderDescription">Re-enter New Password:</label>
+		<div class="ui-select" style="width: 200px;">
+		<div>
+		<input type="password" name="reEnterNewPassword" id="idReEnterNewPassword">
+		</div>
+		</div>
+	</div>
+    
+    <div data-role="content" align="center">
+	 <div class="ui-block-b"><button data-theme="b" onclick="fnChangePasswordSubmit();" id="changePassSubmitButton">Submit</button></div>
+	 </div>
+	
+    <!-- <div data-role="footer" data-position="fixed" data-theme="b">
+      <h3>&copy; Datamits</h3>
+    </div> -->
+
+</div>
+
+<div id="fameListPage" data-role="page" >
+
+	<div data-role="header" data-position="fixed" data-theme="b">
+	    <h3>Wall Of Fame</h3>
+	    <a href="#" class="ui-btn ui-btn-right ui-corner-all SignOutBtn" style="margin-top:0;">Sign out</a>
+	    <a href="#landingpage" class="ui-btn ui-btn-left ui-corner-all" style="margin-top:0;">Home</a>
+  	</div>
+
+	<div data-role="content">
+         <ul id="fameList" data-role="listview" data-filter="true"></ul>
+    </div>
+
+    <div data-role="footer" data-position="fixed" data-theme="b">
+      <h3>&copy; Datamits</h3>
+      <!-- <a href="#" class="ui-btn ui-btn-right ui-corner-all" style="margin-top:0;">Home</a> -->
+    </div>
+
+</div>
+
+<div id="detailsPage" data-role="page" data-add-back-btn="true">
+
+	<div data-role="header" data-position="fixed" data-theme="b">
+	    <h3>Wall Of Fame Details</h3>
+	    <a href="#" class="ui-btn ui-btn-right ui-corner-all SignOutBtn" style="margin-top:0;">Sign out</a>
+	    <a href="#landingpage" class="ui-btn ui-btn-left ui-corner-all" style="margin-top:0;">Home</a>
+  	</div>
+  <div data-role="content" align="center">
+	<b><p align="center" id="fameTitle"></p></b>
+  	<img id="famePic" align="center"/>
+	<div id="fameDetails">
+       <!-- <h3 id="fullName"></h3> -->
+       <p id="fameDesc"></p>
+   	</div>
+    <!-- <ul id="actionList" data-role="listview" data-inset="true"></ul> -->
+  </div>
+
+  <div data-role="footer" data-position="fixed" data-theme="b">
+     <h3>&copy; Datamits</h3>
+   </div>
+
+</div>
+
+
+<div id="principalPage" data-role="page" data-add-back-btn="true">
+
+	<div data-role="header" data-position="fixed" data-theme="b">
+	  <h3>Principal's Message</h3>
+	  <a href="#" class="ui-btn ui-btn-right ui-corner-all SignOutBtn" style="margin-top:0;">Sign out</a>
+	  <a href="#landingpage" class="ui-btn ui-btn-left ui-corner-all" style="margin-top:0;">Home</a>
+	</div>
+
+	<div data-role="content" align="center">
+		<b><p align="center" id="PrincipalMsgTitle"></p></b>
+	 	<img id="PrincipalMsgPic" align="center"/>
+		<div id="PrincipalMsgDetails">
+	    <p id="PrincipalMsgDesc"></p>
+	  	</div>
+	</div>
+
+	<div data-role="footer" data-position="fixed" data-theme="b">
+	  <h3>&copy; Datamits</h3>
+	</div>
+</div>
+
+
+<div data-role="page" id="eDairy">
+	<div data-role="header" data-position="fixed" data-theme="b">
+	  <h3>E-Dairy</h3>
+	  <a href="#" class="ui-btn ui-btn-right ui-corner-all SignOutBtn" style="margin-top:0;">Sign out</a>
+	  <a href="#landingpage" class="ui-btn ui-btn-left ui-corner-all" style="margin-top:0;">Home</a>
+	</div>
+
+	<div data-role="content" align="center">
+	Please select a date below and click E-Dairy / Comments to view the details.
+	</div>
+	<div style="width:150px; margin: 0 auto;">
+	<input align="center" name="eDairyDt" id="idEDairyDt" style="text-align:center;" type="text" data-role="datebox" data-options='{"mode":"flipbox","afterToday":"true","overrideDateFormat":"%Y-%m-%d","useFocus":true,"overrideDateFieldOrder": "ymd"}' placeholder="Date here"/>
+	</div>
+	<div data-role="content" align="center" style="margin: 0 auto;">
+		 <div class="ui-block-b"  style="margin: 0 auto;">
+		 <button data-theme="b" onclick="fnEDairy();" id="eDairyBtn" data-transition="flip" data-direction="reverse">E-Dairy</button>
+		 <button data-theme="b" onclick="fnComments();" id="commentsBtn" data-transition="flip" data-direction="reverse">Comments</button>
+		 </div>
+	</div>
+
+	<div data-role="footer" data-position="fixed" data-theme="b">
+	  <h3>&copy; Datamits</h3>
+	</div>
+</div>
+
+<div data-role="page" id="eDairyTeacher">
+		<div data-role="header" data-position="fixed" data-theme="b">
+	    <h3>E-Dairy</h3>
+	    <a href="#" class="ui-btn ui-btn-right ui-corner-all SignOutBtn" style="margin-top:0;">Sign out</a>
+	    <a href="#landingpage" class="ui-btn ui-btn-left ui-corner-all" style="margin-top:0;">Home</a>
+  	</div>
+   <div class="ui-field-contain ui-body" data-role="fieldcontain">
+		<label for="idEDairyClassDropDown" class="select ui-select">Choose Class:</label>
+		<div class="ui-select">
+		<div style="width: 200px;">
+		<select name="eDairyClass" id="idEDairyClassDropDown" data-mini="true">
+	    </select>
+		</div>
+		</div>
+	</div>
+	
+	<div class="ui-field-contain ui-body" data-role="fieldcontain">
+		<label for="idEDairySubject" class="select ui-select">Choose Subject:</label>
+		<div class="ui-select">
+		<div style="width: 200px;">
+		<select name="eDairysubject" id="idEDairySubject" data-mini="true"></select>
+		</div>
+		</div>
+	</div>
+	
+	<div class="ui-field-contain ui-body ui-br" data-role="fieldcontain">
+		<label for="idEDairyDescription">Description / detail:</label>
+		<div class="ui-select">
+		<div>
+		<textarea rows="5" cols="5" name="eDairyDescription" id="idEDairyDescription" data-mini="true"></textarea>
+		</div>
+		</div>
+	</div>
+    
+    <div data-role="content" align="center">
+	 <div class="ui-block-b"><button data-theme="b" onclick="fnEDairySubmit();">Submit</button></div>
+	 </div>
+	
+    <!-- <div data-role="footer" data-position="fixed" data-theme="b">
+      <h3>&copy; Datamits</h3>
+    </div> -->
+
+</div>
+
+<div id="circularsListPage" data-role="page" >
+
+	<div data-role="header" data-position="fixed" data-theme="b">
+	    <h3>Circulars</h3>
+	    <a href="#" class="ui-btn ui-btn-right ui-corner-all SignOutBtn" style="margin-top:0;">Sign out</a>
+	    <a href="#landingpage" class="ui-btn ui-btn-left ui-corner-all" style="margin-top:0;">Home</a>
+  	</div>
+
+	<div data-role="content">
+         <ul id="circularList" data-role="listview" data-filter="true"></ul>
+    </div>
+
+    <div data-role="footer" data-position="fixed" data-theme="b">
+      <h3>&copy; Datamits</h3>
+    </div>
+
+</div>
+
+<div id="notificationsView" data-role="page" >
+	<div data-role="header" data-position="fixed" data-theme="b">
+	    <h3>Notifications</h3>
+	    <a href="#" class="ui-btn ui-btn-right ui-corner-all SignOutBtn" style="margin-top:0;">Sign out</a>
+	    <a href="#landingpage" class="ui-btn ui-btn-left ui-corner-all" style="margin-top:0;">Home</a>
+  	</div>
+	
+	<div data-role="collapsible-set" data-content-theme="a" data-iconpos="right" id="set">
+	</div>
+	
+	<div data-role="content" align="center">
+	<div class="ui-block-b">
+		 <button data-theme="b" id="addRemindersBtn" data-transition="flip" data-direction="reverse">Add Reminders</button>
+	</div>
+	</div>
+
+		
+	<div data-role="footer" data-position="fixed" data-theme="b">
+      <h3>&copy; Datamits</h3>
+    </div>
+</div>
+
+<div id="notifications" data-role="page" >
+
+	<div data-role="header" data-position="fixed" data-theme="b">
+	    <h3>Notifications</h3>
+	    <a href="#" class="ui-btn ui-btn-right ui-corner-all SignOutBtn" style="margin-top:0;">Sign out</a>
+	    <a href="#landingpage" class="ui-btn ui-btn-left ui-corner-all" style="margin-top:0;">Home</a>
+  	</div>
+   <div class="ui-field-contain ui-body" data-role="fieldcontain">
+		<label for="idClassDropDown" class="select ui-select">Choose Class:</label>
+		<div class="ui-select">
+		<div style="width: 200px;">
+		<select name="Class" id="idClassDropDown" data-mini="true">
+	    </select>
+		</div>
+		</div>
+	</div>
+	
+	<div class="ui-field-contain ui-body" data-role="fieldcontain">
+		<label for="idReminderDt">Reminder expiry dt:</label>
+		<div class="ui-select">
+		<div style="width:140px;">
+		<input align="center" name="reminderDt" id="idReminderDt" style="text-align:center;" type="text" data-role="datebox" data-options='{"mode":"flipbox","afterToday":"true","overrideDateFormat":"%Y-%m-%d","useFocus":true,"overrideDateFieldOrder": "ymd"}' placeholder="Expiry Date"/>
+		</div>
+		</div>
+	</div>
+	
+	<div class="ui-field-contain ui-body ui-br" data-role="fieldcontain">
+		<label for="idRemindertitle">Reminder title:</label>
+		<div class="ui-select" style="width: 200px;">
+		<div>
+		<input type="text" name="remindertitle" id="idRemindertitle">
+		</div>
+		</div>
+	</div>
+	
+	<div class="ui-field-contain ui-body ui-br" data-role="fieldcontain">
+		<label for="idReminderDescription">Reminder description / detail:</label>
+		<div class="ui-select">
+		<div>
+		<textarea rows="5" cols="5" name="reminderDescription" id="idReminderDescription" data-mini="true"></textarea>
+		</div>
+		</div>
+	</div>
+    
+    <div data-role="content" align="center">
+	 <div class="ui-block-b"><button data-theme="b" onclick="fnNotificationSubmit();">Submit</button></div>
+	 </div>
+	
+    <!-- <div data-role="footer" data-position="fixed" data-theme="b">
+      <h3>&copy; Datamits</h3>
+    </div> -->
+
+</div>
+
+<div id="editnotifications" data-role="page" >
+
+	<div data-role="header" data-position="fixed" data-theme="b">
+	    <h3>Notifications</h3>
+	    <a href="#" class="ui-btn ui-btn-right ui-corner-all SignOutBtn" style="margin-top:0;">Sign out</a>
+	    <a href="#landingpage" class="ui-btn ui-btn-left ui-corner-all" style="margin-top:0;">Home</a>
+  	</div>
+   <div class="ui-field-contain ui-body" data-role="fieldcontain">
+		<label for="idEditClassDropDown" class="select ui-select">Choose Class:</label>
+		<div class="ui-select">
+		<div style="width: 200px;">
+		<select name="Class" id="idEditClassDropDown" data-mini="true">
+	    </select>
+		</div>
+		</div>
+	</div>
+	
+	<div class="ui-field-contain ui-body" data-role="fieldcontain">
+		<label for="idEditReminderDt">Reminder expiry dt:</label>
+		<div class="ui-select">
+		<div style="width:140px;">
+		<input align="center" name="reminderDt" id="idEditReminderDt" style="text-align:center;" type="text" data-role="datebox" data-options='{"mode":"flipbox","afterToday":"true","overrideDateFormat":"%Y-%m-%d","useFocus":true,"overrideDateFieldOrder": "ymd"}' placeholder="Expiry Date"/>
+		</div>
+		</div>
+	</div>
+	
+	<div class="ui-field-contain ui-body ui-br" data-role="fieldcontain">
+		<label for="idEditRemindertitle">Reminder title:</label>
+		<div class="ui-select" style="width: 200px;">
+		<div>
+		<input type="text" name="remindertitle" id="idEditRemindertitle">
+		</div>
+		</div>
+	</div>
+	
+	<div class="ui-field-contain ui-body ui-br" data-role="fieldcontain">
+		<label for="idEditReminderDescription">Reminder description / detail:</label>
+		<div class="ui-select">
+		<div>
+		<textarea rows="5" cols="5" name="reminderDescription" id="idEditReminderDescription" data-mini="true"></textarea>
+		</div>
+		</div>
+	</div>
+    
+    <div data-role="content" align="center">
+	 <div class="ui-block-b"><button data-theme="b" onclick="fnEditNotificationSubmit();">Submit</button></div>
+	 </div>
+	
+    <!-- <div data-role="footer" data-position="fixed" data-theme="b">
+      <h3>&copy; Datamits</h3>
+    </div> -->
+
+</div>
+
+<div id="reports" data-role="page" >
+
+	<div data-role="header" data-position="fixed" data-theme="b">
+	    <h3>Reports</h3>
+	    <a href="#" class="ui-btn ui-btn-right ui-corner-all SignOutBtn" style="margin-top:0;">Sign out</a>
+	    <a href="#landingpage" class="ui-btn ui-btn-left ui-corner-all" style="margin-top:0;">Home</a>
+  	</div>
+
+	<div data-role="content">
+         <!-- <ul id="circularList" data-role="listview" data-filter="true"></ul> -->
+    </div>
+
+    <div data-role="footer" data-position="fixed" data-theme="b">
+      <h3>&copy; Datamits</h3>
+    </div>
+
+</div>
+
+
+<div id="map" data-role="page" >
+
+	<div data-role="header" data-position="fixed" data-theme="b">
+	    <h3>Map</h3>
+	    <a href="#" class="ui-btn ui-btn-right ui-corner-all SignOutBtn" style="margin-top:0;">Sign out</a>
+	    <a href="#landingpage" class="ui-btn ui-btn-left ui-corner-all" style="margin-top:0;">Home</a>
+  	</div>
+
+	<div data-role="content" class="ui-content" id="map-canvas">
+        <!-- map loads here... -->
+    </div>
+
+    <div data-role="footer" data-position="fixed" data-theme="b">
+      <h3>&copy; Datamits</h3>
+    </div>
+
+</div>
+
+
+<div id="timeTable" data-role="page" >
+
+	<div data-role="header" data-position="fixed" data-theme="b">
+	    <h3>TimeTable</h3>
+	    <a href="#" class="ui-btn ui-btn-right ui-corner-all SignOutBtn" style="margin-top:0;">Sign out</a>
+	    <a href="#landingpage" class="ui-btn ui-btn-left ui-corner-all" style="margin-top:0;">Home</a>
+  	</div>
+
+	<div data-role="content">
+         <!-- <ul id="circularList" data-role="listview" data-filter="true"></ul> -->
+    </div>
+
+    <div data-role="footer" data-position="fixed" data-theme="b">
+      <h3>&copy; Datamits</h3>
+    </div>
+
+</div>
+
+
+<div id="pdfforms" data-role="page" >
+
+	<div data-role="header" data-position="fixed" data-theme="b">
+	    <h3>PDF forms</h3>
+	    <a href="#" class="ui-btn ui-btn-right ui-corner-all SignOutBtn" style="margin-top:0;">Sign out</a>
+	    <a href="#landingpage" class="ui-btn ui-btn-left ui-corner-all" style="margin-top:0;">Home</a>
+  	</div>
+
+	<div data-role="content">
+         <ul id="formList" data-role="listview" data-filter="true"></ul>
+     </div>
+         <!-- <a href="#" onclick="draftEmail()">Mail me</a> -->
+    <div data-role="footer" data-position="fixed" data-theme="b">
+      <h3>&copy; Datamits</h3>
+    </div>
+
+</div>
+
+<div data-role="page" id="weeklytrackerReports">
+     <div data-role="header" data-position="fixed" data-theme="b">
+	    <h3>Study Tracker Reports</h3>
+	    <a href="#" class="ui-btn ui-btn-right ui-corner-all SignOutBtn" style="margin-top:0;">Sign out</a>
+	    <a href="#landingpage" class="ui-btn ui-btn-left ui-corner-all" style="margin-top:0;">Home</a>
+  	</div>
+
+     <div data-role="content">
+         <div id="container" style="height: 450px;"></div>
+     </div>
+</div>     
+
+<div data-role="page" id="monthlytrackerReports">
+     <div data-role="header" data-position="fixed" data-theme="b">
+	    <h3>Study Tracker Reports</h3>
+	    <a href="#" class="ui-btn ui-btn-right ui-corner-all SignOutBtn" style="margin-top:0;">Sign out</a>
+	    <a href="#landingpage" class="ui-btn ui-btn-left ui-corner-all" style="margin-top:0;">Home</a>
+  	</div>
+
+     <div data-role="content">
+         <div id="containerYear" style="min-width: 400px; height: 450px; margin: 0 auto"></div>
+     </div>
+</div>
+    
+<div data-role="page" id="stopwatch">
+     <div data-role="header" data-position="fixed" data-theme="b">
+	    <h3>Study Stopwatch</h3>
+	    <a href="#" class="ui-btn ui-btn-right ui-corner-all SignOutBtn" style="margin-top:0;">Sign out</a>
+	    <a href="#landingpage" class="ui-btn ui-btn-left ui-corner-all" style="margin-top:0;">Home</a>
+  	</div>
+		<div style="width:200px; margin: 0 auto;">
+		<br>
+		    <label for="idSubject" style="text-align: center;">Subject:</label>
+		    <select name="subject" id="idSubject" data-mini="true"></select>
+		</div>
+		<br>
+        <div style="width:250px; margin: 0 auto; border: 2px; border-color: black;">
+        <label for="timer" style="text-align: center;">Timer:</label>
+        <div id="timer" style="margin: 0 auto; text-align:center; ">
+            <img src="images/figure-0.png" class="figure" />
+            <img src="images/figure-0.png" class="figure" />
+            <img src="images/figure-colon.png" class="colon" />
+            <img src="images/figure-0.png" class="figure" />
+            <img src="images/figure-0.png" class="figure" />
+            <img src="images/figure-colon.png" class="colon" />
+            <img src="images/figure-0.png" class="figure" />
+            <img src="images/figure-0.png" class="figure" />
+       	</div>
+       	</div>
+       	<div id="totalTime" style="text-align: center; margin: 0 auto;"></div>
+        <br/>
+        <br/>
+        <br/>
+        <!-- <br/>
+        <br/> -->
+		<div data-role="content" align="center">
+		 <div class="ui-block-b">
+		 <button data-theme="b" onclick="fnStart();" id="StartBtn">Start</button>
+		 <button data-theme="b" onclick="fnStop();" id="StopBtn"  style="display: none;">Stop</button>
+		 <button data-theme="b" onclick="fnWeeklyReports();" id="ReportsBtn">Weekly Reports</button>
+		 <button data-theme="b" onclick="fnMonthlyReports();" id="ReportsBtn">Monthly Reports</button>
+		 </div>
+		 </div>	
+</div>
+
+<div data-role="page" id="weeklyReport">
+     <div data-role="header" data-position="fixed" data-theme="b">
+	    <h3>Weekly Reports</h3>
+	    <a href="#" class="ui-btn ui-btn-right ui-corner-all SignOutBtn" style="margin-top:0;">Sign out</a>
+	    <a href="#landingpage" class="ui-btn ui-btn-left ui-corner-all" style="margin-top:0;">Home</a>
+  	</div>
+  	
+  	<div class="ui-field-contain ui-body ui-br" data-role="fieldcontain">
+		<label for="idMonth">Month:</label>
+		<div class="ui-select" style="width: 150px;">
+		<div>
+		<select name="month" id="idMonth" data-mini="true">
+		    <option value="select" selected>Select</option>
+		    <option value="0">Jan</option>
+		    <option value="1">Feb</option>
+		    <option value="2">Mar</option>
+		    <option value="3">Apr</option>
+		    <option value="4">May</option>
+		    <option value="5">Jun</option>
+		    <option value="6">Jul</option>
+		    <option value="7">Aug</option>
+		    <option value="8">Sep</option>
+		    <option value="9">Oct</option>
+		    <option value="10">Nov</option>
+		    <option value="11">Dec</option>
+		</select>
+		</div>
+		</div>
+	</div>
+	
+	<div class="ui-field-contain ui-body ui-br" data-role="fieldcontain">
+		<label for="idWeek">Week:</label>
+		<div class="ui-select" style="width: 150px;">
+		<div>
+		<select name="week" id="idWeek" data-mini="true">
+		    <option value="select" selected>Select</option>
+		    <option value="1">Week-1</option>
+		    <option value="2">Week-2</option>
+		    <option value="3">Week-3</option>
+		    <option value="4">Week-4</option>
+		</select>
+		</div>
+		</div>
+	</div>
+		
+        <div data-role="content" align="center">
+		 <div class="ui-block-b">
+		 <button data-theme="b" onclick="fnWeeklyReportSubmit();" id="StartBtn">Submit</button>
+		 <!-- <button data-theme="b" onclick="fnStop();" id="StopBtn"  style="display: none;">Stop</button> -->
+		 </div>
+		 </div>	
+</div>
+    
+<div data-role="popup" id="validationMessage" style="background-color:black; display:none;" data-dismissible="false" class="ui-content" data-position-to="origin" >
+  <div data-role="header">
+    <h1><label style="font: bold; color: white;" id="validationMessageTitle"></label></h1>
+  </div>
+
+  <div data-role="main" style="background-color:black; display:none;" id="PopUpButton">
+    <h2><label style="color: white;" id="validationMessageContent"></label></h2>
+    <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b ui-icon-ok ui-btn-icon-center" data-rel="back">Okay</a>
+  </div>
+
+  <!-- <div data-role="footer">
+    <h1>Footer Text</h1>
+  </div> -->
+</div>
+
+</body>
+<script type="text/javascript">
+
+	$(document).on("pagebeforeshow","#landingpage",function(){
+		serviceKey = localStorage.getItem('serviceKey');
+		if(null == serviceKey || "" == serviceKey)
+		{
+			window.location = "login.html";
+		}
+	});
+	
+	document.addEventListener("backbutton", onBackKeyDown, false);
+	function onBackKeyDown() {
+	    if($.mobile.activePage.is('#landingpage')){
+	    	// Show Signout confirmation message if active page is landing page.
+	    	navigator.notification.confirm(
+    		    'Do you want to Sign Out?', // message
+    		     onConfirm,            		// callback to invoke with index of button pressed
+    		    'Confirmation',        		// title
+    		    ['Yes','No']           		// buttonLabels
+    		);
+	    }
+	    else 
+	    {
+	    	//alert("backbutton pressed..");
+	    	if($.mobile.activePage.is('#notificationsView')){
+	    		$.mobile.changePage("#landingpage");
+	    	}
+	    	else if($.mobile.activePage.is('#notifications')){
+	    		$.mobile.changePage("#notificationsView");
+	    	}
+	    	else if($.mobile.activePage.is('#editnotifications')){
+	    		$.mobile.changePage("#notificationsView");
+	    	}
+	    	else{
+	    		navigator.app.backHistory(); // Go back in history in any other case
+	    	}
+	    }
+	}
+	
+   	$("#idWebsite").click(function () {
+    	window.open('http://www.datamits.com/', '_system');
+    });
+   	
+	$("#idHolidays").click(function () {
+		serviceKey = localStorage.getItem('serviceKey');
+		//alert("idHolidays click: serviceKey: "+serviceKey);
+		if(null == serviceKey || "" == serviceKey)
+		{
+			alert("Invalid session. Please login again.");
+			window.location = "login.html";
+		}
+		var holidayURL = 'http://docs.google.com/viewer?url='+serviceContextURL+"/uploadFiles/holiday/Holiday_Calendar.pdf";
+    	//alert("holidayURL: "+holidayURL);
+    	//Temp url to test - to be commented later
+    	holidayURL = 'http://docs.google.com/viewer?url=http://datamits.com/uploadFiles/holiday/Holiday_Calendar.pdf';
+ 		window.open(holidayURL,'_system','location=yes');
+    });
+   	
+	$("#idTimeTable").click(function () {
+		serviceKey = localStorage.getItem('serviceKey');
+		//alert("idTimeTable click: serviceKey: "+serviceKey);
+		if(null == serviceKey || "" == serviceKey)
+		{
+			alert("Invalid session. Please login again.");
+			window.location = "login.html";
+		}
+		getTimeTableDetails();
+    });
+	
+	function getTimeTableDetails() {
+		
+		var timeTableServiceURL = serviceContextURL+"/rest/timetable/getTimeTable";
+		//alert("getTimeTableDetails-timeTableServiceURL: "+timeTableServiceURL);
+		var ajax = new XMLHttpRequest();
+		ajax.open("POST",timeTableServiceURL,true);
+		ajax.send(serviceKey);
+		
+		ajax.onreadystatechange=function(){
+		   if (ajax.readyState === 4) {
+		     if (ajax.status === 200 || ajax.status === 0) {
+		    	 //alert("Ajax success:responseText: "+ajax.responseText);
+		    	 if(ajax.responseText == "Invalid UserId")
+	    		 {
+		    		 alert("Invalid session. Please login again.");
+		    		 window.location = "login.html";
+	    		 }
+		    	 else
+	    		 {
+		    		 displayTimeTable(ajax.responseText);
+	    		 }
+		       } else {
+		    	 alert("Ajax error:status: "+ajax.status);
+		     }
+		   }
+		}
+	}
+	
+	function displayTimeTable(data) 
+	{
+		//alert("displayTimeTable-data: "+data);
+		var timeTableURL = 'http://docs.google.com/viewer?url='+serviceContextURL+"/uploadFiles/holiday/"+data+"_Time_Table.pdf";
+		//Temp url to test - to be commented later
+		timeTableURL = 'http://docs.google.com/viewer?url=http://datamits.com/uploadFiles/timetable/First Class_Time_Table.pdf';
+		window.open(timeTableURL,'_system','location=yes');
+	}
+   	
+   	$(".SignOutBtn").click(function () {
+    	//alert("1-show confirmation dialogue with yes no button, on click of yes logout and go to login screen");
+    	navigator.notification.confirm(
+		    'Do you want to Sign Out?', // message
+		     onConfirm,            		// callback to invoke with index of button pressed
+		    'Confirmation',           	// title
+		    ['Yes','No']     			// buttonLabels
+		);
+    });
+   	
+   	function onConfirm(buttonIndex) {
+   	    //alert('You selected button ' + buttonIndex);
+   	    if(buttonIndex == "1")
+   	    {
+   	    	localStorage.removeItem('serviceKey');
+   	    	window.location = "login.html";
+   	    }
+   	}
+ 	/*
+ 	 * Google Maps documentation: http://code.google.com/apis/maps/documentation/javascript/basics.html
+ 	 * Geolocation documentation: http://dev.w3.org/geo/api/spec-source.html
+ 	 */
+ 	//$( document ).on( "pageinit", "#map-page", function() { = pagebeforeshow
+ 	$(document).on("pagebeforeshow","#map",function(){
+ 		//alert ("pagebeforeshow-#map");
+ 	    var defaultLatLng = new google.maps.LatLng(34.0983425, -118.3267434);  // Default to Hollywood, CA when no geolocation support
+ 	   	drawMap(defaultLatLng);
+
+ 	    function drawMap(latlng) {
+ 	    	//alert ("drawMap: "+latlng);
+ 	        var myOptions = {
+ 	            zoom: 10,
+ 	            center: latlng,
+ 	            mapTypeId: google.maps.MapTypeId.ROADMAP
+ 	        };
+ 	        var map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
+ 	        // Add an overlay to the map of current lat/lng
+ 	        var marker = new google.maps.Marker({
+ 	            position: latlng,
+ 	            map: map,
+ 	            title: "Greetings!"
+ 	        });
+ 	        //alert ("End drawMap");
+ 	    }
+ 	});
+
+
+
+ 	function draftEmail(subject, message) {
+ 		navigator.notification.confirm(
+ 			    'Assuming you have Email Apps to send Emails, If not, Click NO and install the same. Click yes to continue', // message
+ 			     onEmailConfirm, // callback to invoke with index of button pressed
+ 			    'Confirmation',  // title
+ 			    ['Yes','No']     // buttonLabels
+ 	 	);
+ 	}
+
+ 	function onEmailConfirm(buttonIndex) {
+ 	    //alert('You selected button ' + buttonIndex);
+ 	    if(buttonIndex == "1")
+ 	    {
+ 	    	//alert("trigger email..");
+ 	    	window.open('mailto:parentconnect@school.com?subject=love your app', '_system'); return false;
+ 	    }
+ 	 }
+ 	function fnChangePasswordSubmit() {
+ 		$("#validationMessageTitle").html('');
+    	$("#validationMessageContent").html('');
+    	
+    	if("" == document.getElementById("idNewPassword").value)
+    	{
+	   		$("#validationMessageTitle").append("&nbsp;<i class='fa fa-exclamation-triangle'></i>&nbsp;Change Password.");
+	   		$("#validationMessageContent").append("Please enter the New password.");
+
+	   		document.getElementById('validationMessage').style.display = "block";
+	   		document.getElementById('PopUpButton').style.display = "block";
+	   		$( "#validationMessage" ).popup();
+	   		$( "#validationMessage" ).popup( "open" );
+	   		return false;
+ 		}
+    	else if("" == document.getElementById("idReEnterNewPassword").value)
+    	{
+	   		$("#validationMessageTitle").append("&nbsp;<i class='fa fa-exclamation-triangle'></i>&nbsp;Change Password.");
+	   		$("#validationMessageContent").append("Please re-enter the New password.");
+
+	   		document.getElementById('validationMessage').style.display = "block";
+	   		document.getElementById('PopUpButton').style.display = "block";
+	   		$( "#validationMessage" ).popup();
+	   		$( "#validationMessage" ).popup( "open" );
+	   		return false;
+ 		}
+    	else if(document.getElementById("idNewPassword").value != document.getElementById("idReEnterNewPassword").value)
+    	{
+	   		$("#validationMessageTitle").append("&nbsp;<i class='fa fa-exclamation-triangle'></i>&nbsp;Change Password.");
+	   		$("#validationMessageContent").append("The entered the passwords are not same or matching.");
+
+	   		document.getElementById('validationMessage').style.display = "block";
+	   		document.getElementById('PopUpButton').style.display = "block";
+	   		$( "#validationMessage" ).popup();
+	   		$( "#validationMessage" ).popup( "open" );
+	   		return false;
+ 		}
+    	else
+   		{
+    		document.getElementById('validationMessage').style.display = "none";
+    		document.getElementById('PopUpButton').style.display = "none";
+   		}
+    	$.mobile.loading("show");
+    	$("#changePassSubmitButton",this).attr("disabled","disabled");
+    	//$("#changePassSubmitButton").addAttr("disabled");
+
+    	serviceKey = localStorage.getItem('serviceKey');
+ 		if(null == serviceKey || "" == serviceKey)
+ 		{
+ 			alert("Invalid session. Please login again.");
+ 			window.location = "login.html";
+ 		}
+ 		var vString = "{" 
+ 		+ "'chgPassword':'" + document.getElementById("idNewPassword").value 
+ 		+ "', 'encString':'" + serviceKey
+ 		+ "'}";
+ 		
+ 		//alert("vString: "+vString);
+ 		
+ 		var ajax1 = new XMLHttpRequest();
+ 		ajax1.open("POST",changePassURL,true);
+ 		ajax1.send(vString);
+
+ 		ajax1.onreadystatechange=function(){
+ 		   if (ajax1.readyState === 4) {
+ 			  //alert("status: "+ajax1.status); 
+ 			 $.mobile.loading("hide");
+ 			 $("#changePassSubmitButton").removeAttr("disabled");
+ 		     if (ajax1.status === 200 || ajax.status === 0) {
+ 		    	 if(ajax1.responseText == "Invalid UserId")
+ 	    		 {
+ 		    		 alert("Invalid session. Please login again.");
+ 		    		 window.location = "login.html";
+ 	    		 }
+ 		    	 else
+ 	    		 {
+ 		    		 //alert("success message to user: "+ajax1.responseText);
+ 		    		 navigator.notification.alert(
+ 			            'Password changed successfully. Please login with your new password.',  // message
+ 			            passChangeCallback,         // callback
+ 			            'Success',            // title
+ 			            'OK'                  // buttonName
+ 			         );
+ 	    		 }
+ 		       } else {
+ 		    	 alert("Ajax error in fnChangePasswordSubmit: "+ajax1.status);
+ 		     }
+ 		   }
+ 		}
+ 	}
+
+ 	function passChangeCallback() {
+ 		//alert("passChangeCallback..");
+ 		localStorage.removeItem('serviceKey');
+	    window.location = "login.html";
+ 	}
+ 	
+ 	$("#addRemindersBtn").click(function () {
+    	//alert("addRemindersBtn clicked - fwd to notifications");
+    	$.mobile.changePage("#notifications");
+    });
+ 	
+ 	
+ 	function fnMonthlyReports() {
+ 		$.mobile.changePage("#monthlytrackerReports");
+ 	}
+ 	
+ 	function fnWeeklyReports() {
+ 		$.mobile.changePage("#weeklyReport");
+ 	}
+ 	
+ 	function fnComments() {
+ 		//alert("fnComments..");
+ 		//$.mobile.changePage("#trackerReports");
+ 		$("#validationMessageTitle").html('');
+    	$("#validationMessageContent").html('');
+    	
+    	if("" == document.getElementById("idEDairyDt").value)
+    	{
+	   		$("#validationMessageTitle").append("&nbsp;<i class='fa fa-exclamation-triangle'></i>&nbsp;E-Dairy.");
+	   		$("#validationMessageContent").append("Please select the date.");
+
+	   		document.getElementById('validationMessage').style.display = "block";
+	   		document.getElementById('PopUpButton').style.display = "block";
+	   		$( "#validationMessage" ).popup();
+	   		$( "#validationMessage" ).popup( "open" );
+	   		return false;
+ 		}
+    	else
+   		{
+    		document.getElementById('validationMessage').style.display = "none";
+    		document.getElementById('PopUpButton').style.display = "none";
+   		}
+ 	}
+ 	
+ 	function fnEDairy() {
+ 		//alert("fnEDairy..");
+ 		$("#validationMessageTitle").html('');
+    	$("#validationMessageContent").html('');
+    	
+    	if("" == document.getElementById("idEDairyDt").value)
+    	{
+	   		$("#validationMessageTitle").append("&nbsp;<i class='fa fa-exclamation-triangle'></i>&nbsp;E-Dairy.");
+	   		$("#validationMessageContent").append("Please select the date.");
+
+	   		document.getElementById('validationMessage').style.display = "block";
+	   		document.getElementById('PopUpButton').style.display = "block";
+	   		$( "#validationMessage" ).popup();
+	   		$( "#validationMessage" ).popup( "open" );
+	   		return false;
+ 		}
+    	else
+   		{
+    		document.getElementById('validationMessage').style.display = "none";
+    		document.getElementById('PopUpButton').style.display = "none";
+    		$.mobile.changePage("#eDairyTeacher");
+   		}
+ 	}
+ 	
+ 	function fnWeeklyReportSubmit() {
+ 		//alert("fnWeeklyReportSubmit..");
+ 		$.mobile.changePage("#weeklytrackerReports");
+ 	}
+ 	
+ 	
+ 	
+</script>
+</html>

@@ -1,0 +1,186 @@
+document.addEventListener("deviceready", onDeviceReady, false);
+var formDownloadURL = "";
+var formDownloadName = "";
+var isAvailable = false;
+function onDeviceReady() {
+	//alert("On Device Ready");
+
+
+	//alert("App Run Successful");
+
+}
+
+/*var downloadApp = function() {
+}*/
+
+/*downloadApp.prototype = {
+	run: function(uri, fileName, folderName) {
+		var that = this,
+			filePath = "";
+		document.getElementById("download").addEventListener("click", downloadFile1);
+		document.getElementById("upload").addEventListener("click", that.uploadFile);
+	},
+	uploadFile: function() {
+		//alert("Inside uploadFile function");
+		navigator.camera.getPicture(
+			uploadPhoto,
+			function(message) {
+				alert('Failed to get a picture');
+			}, {
+				quality         : 50,
+				destinationType : navigator.camera.DestinationType.FILE_URI,
+				sourceType      : navigator.camera.PictureSourceType.PHOTOLIBRARY
+			});
+
+		function uploadPhoto(fileURI) {
+			var options = new FileUploadOptions();
+			options.fileKey = "file";
+			options.fileName = fileURI.substr(fileURI.lastIndexOf('/') + 1);
+
+			if (cordova.platformId == "android") {
+				options.fileName += ".jpg"
+			}
+
+			options.mimeType = "image/jpeg";
+			options.params = {}; // if we need to send parameters to the server request
+			options.headers = {
+				Connection: "Close"
+			};
+			options.chunkedMode = false;
+
+			var ft = new FileTransfer();
+			ft.upload(
+				fileURI,
+				encodeURI("http://www.filedropper.com"),
+				onFileUploadSuccess,
+				onFileTransferFail,
+				options);
+
+			function onFileUploadSuccess (result) {
+				console.log("FileTransfer.upload");
+				console.log("Code = " + result.responseCode);
+				console.log("Response = " + result.response);
+				console.log("Sent = " + result.bytesSent);
+				console.log("Link to uploaded file: http://www.filedropper.com" + result.response);
+				var response = result.response;
+				var destination = "http://www.filedropper.com/" + response.substr(response.lastIndexOf('=') + 1);
+				document.getElementById("result").innerHTML = "File uploaded to: " +
+															  destination +
+															  "</br><button onclick=\"window.open('" + destination + "', '_blank', 'location=yes')\">Open Location</button>";
+				document.getElementById("downloadedImage").style.display="none";
+			}
+
+			function onFileTransferFail (error) {
+				console.log("FileTransfer Error:");
+				console.log("Code: " + error.code);
+				console.log("Source: " + error.source);
+				console.log("Target: " + error.target);
+			}
+		}
+	}
+}*/
+
+
+function downloadFile1() {
+	//alert("inside download1 click");
+	var filePath = "";
+	var uri = "";
+	var fileName = "";
+	var folderName ="ParentConnect";
+	getFilesystem1(
+			function(fileSystem) {
+				/*alert("formDownloadURL: "+formDownloadURL);
+				alert("formDownloadName: "+formDownloadName);*/
+				console.log("gotFS");
+				uri = encodeURI(formDownloadURL);
+				fileName = formDownloadName;
+				if (device.platform === "Android") {
+					getFolder1(fileSystem, folderName, function(folder) {
+						filePath = folder.toURL() + "\/" + fileName;
+						transferFile1(uri, filePath)
+					}, function() {
+						console.log("failed to get folder");
+						alert("inside click:failed to get folder");
+					});
+				} else {
+					var filePath;
+					var urlPath = fileSystem.root.toURL();
+					if (device.platform == "Win32NT") {
+						urlPath = fileSystem.root.fullPath;
+					}
+					if (parseFloat(device.cordova) <= 3.2) {
+						filePath = urlPath.substring(urlPath.indexOf("/var")) + "\/" + fileName;
+					} else {
+						filePath = urlPath + "\/" + fileName;
+					}
+					transferFile1(uri, filePath)
+				}
+			},
+			function() {
+				console.log("failed to get filesystem");
+				alert("inside click:failed to get filesystem");
+			}
+			);
+	}
+
+function getFilesystem1 (success, fail) {
+	//alert("inside getFilesystem1..");
+	window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
+	window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, success, fail);
+}
+
+function getFolder1(fileSystem, folderName, success, fail) {
+	//alert("inside getFolder1..");
+	fileSystem.root.getDirectory(folderName, {create: true, exclusive: false}, success, fail)
+}
+
+function transferFile1(uri, filePath) {
+	//alert("inside transferFile1..");
+	var transfer = new FileTransfer();
+	uri = serviceContextURL + uri;
+	/*alert("In Transfer File URI Is:"+uri);
+	alert("In Transfer File Path Is:"+filePath);*/
+	transfer.download(
+		uri,
+		filePath,
+		function(entry) {
+			var targetPath = entry.toURL();
+			//alert("Target Path Is:"+targetPath);
+
+			if (device.platform == "Win32NT") {
+				targetPath = entry.fullPath;
+			}
+			formDownloadURL = "";
+	    	formDownloadName = "";
+			//alert("Download Success. File saved to: " + targetPath);
+			navigator.notification.alert(
+			    'File saved to: '+ targetPath,  // message
+			    alertDismissed,         // callback
+			    'Success',            // title
+			    'Done'                  // buttonName
+			);
+
+			//document.getElementById("result").innerHTML = "File saved to: " + targetPath;
+			//resetting the path and name of the download file.
+		},
+		function(error) {
+			//document.getElementById("result").innerHTML = "An error has occurred: Code = " + error.code;
+			/*alert("download error source " + error.source);
+			alert("download error target " + error.target);
+			alert("upload error code" + error.code);
+			alert("Error while download");*/
+			formDownloadURL = "";
+	    	formDownloadName = "";
+			navigator.notification.alert(
+			    'An error has occurred! please try later',  // message
+			    alertDismissed,         // callback
+			    'Success',            // title
+			    'Done'                  // buttonName
+			);
+		}
+		);
+}
+
+function alertDismissed() {
+    // do something
+}

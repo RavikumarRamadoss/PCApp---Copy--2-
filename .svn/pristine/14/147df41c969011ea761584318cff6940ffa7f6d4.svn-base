@@ -1,0 +1,196 @@
+var trackerServiceURL = serviceContextURL+"/rest/tracker/getWeeklydata";
+var trackerYearServiceURL = serviceContextURL+"/rest/tracker/getYearlydata";
+var jsonData; 
+var chart;
+var yearChart
+
+function fnGetGraphData()
+{
+	serviceKey = localStorage.getItem('serviceKey');
+	if(null == serviceKey || "" == serviceKey)
+	{
+		alert("Invalid session. Please login again.");
+		window.location = "login.html";
+	}
+	var ajax = new XMLHttpRequest();
+	ajax.open("POST",trackerServiceURL,true);
+	
+	/*var vString = "{'month':'" + 5 
+	+ "', 'week':'" + 2 
+	+ "', 'encString':'" + serviceKey + "'}";*/
+	var vString = "{'month':'" + document.getElementById("idMonth").value 
+	+ "', 'week':'" + document.getElementById("idWeek").value  
+	+ "', 'encString':'" + serviceKey + "'}";
+	
+	ajax.send(vString);
+	//alert(vString);
+	ajax.onreadystatechange=function(){
+	   if (ajax.readyState === 4) {
+	     if (ajax.status === 200 || ajax.status === 0) {
+	    	 //alert("Ajax success:responseText: "+ajax.responseText);
+	    	 if(ajax.responseText == "Invalid UserId")
+    		 {
+	    		 alert("Invalid session. Please login again.");
+	    		 window.location = "login.html";
+    		 }
+	    	 else
+    		 {
+	    		 jsonData = JSON.parse(ajax.responseText);
+	    		 //alert(jsonData);
+	    		 drawGraph();
+    		 }
+	       } else {
+	    	 alert("Ajax error:status: "+ajax.status);
+	     }
+	   }
+	}
+}
+
+function fnGetYearGraphData()
+{
+	serviceKey = localStorage.getItem('serviceKey');
+	if(null == serviceKey || "" == serviceKey)
+	{
+		alert("Invalid session. Please login again.");
+		window.location = "login.html";
+	}
+	var ajax = new XMLHttpRequest();
+	ajax.open("POST",trackerYearServiceURL,true);
+	
+	var vString = "{'encString':'" + serviceKey + "'}";
+	
+	ajax.send(vString);
+	//alert(vString);
+	ajax.onreadystatechange=function(){
+	   if (ajax.readyState === 4) {
+	     if (ajax.status === 200 || ajax.status === 0) {
+	    	 //alert("Ajax success:responseText: "+ajax.responseText);
+	    	 if(ajax.responseText == "Invalid UserId")
+    		 {
+	    		 alert("Invalid session. Please login again.");
+	    		 window.location = "login.html";
+    		 }
+	    	 else
+    		 {
+	    		 jsonData = JSON.parse(ajax.responseText);
+	    		 //alert(jsonData);
+	    		 drawYearGraph();
+    		 }
+	       } else {
+	    	 alert("Ajax error:status: "+ajax.status);
+	     }
+	   }
+	}
+}
+
+function drawGraph()
+{
+	var graphcat = jsonData.graphCategories;
+    //alert(graphcat);
+    var catArr = graphcat.split(",");
+    //var data = [{"data":[20,5,16,8,35,45,32],"name":"English"},{"data":[14,42,12,10,25,5,22],"name":"Tamil"},{"data":[30,120,102,9,13,24,42],"name":"Physics"},{"data":[22,34,116,23,15,24,29],"name":"Drawing"},{"data":[31,55,106,38,45,53,39],"name":"Algebra"}];
+    var data = jsonData.graphSeries;
+
+    chart = new Highcharts.Chart({
+        chart: {
+            renderTo: 'container',
+            type: 'line',
+            marginRight: 130,
+            marginBottom: 40
+        },
+        title: {
+            text: 'weekly Subject Study Time chart',
+            x: -20 //center
+        },
+        xAxis: {
+            categories: [catArr[0], catArr[1], catArr[2], catArr[3], catArr[4], catArr[5], catArr[6]],
+            breakSize:1
+        },
+        yAxis: {
+            title: {
+                text: 'Time (mins)'
+            },
+            plotLines: [{
+                value: 0,
+                width: 1,
+                color: '#808080'
+            }]
+        },
+        tooltip: {
+            formatter: function() {
+                    return '<b>'+ this.series.name +'</b><br/>'+
+                    this.x +': '+ this.y +'mins';
+            }
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'top',
+            x: 0,
+            y: 100,
+            borderWidth: 0
+        },
+        series: data
+    });
+
+}
+
+
+function drawYearGraph()
+{
+	var graphcat = jsonData.graphCategories;
+    var catArr = graphcat.split(",");
+    var data = jsonData.graphSeries;
+
+    yearChart = new Highcharts.Chart({
+        chart: {
+            renderTo: 'containerYear',
+            type: 'line',
+            marginRight: 130,
+            marginBottom: 40
+        },
+        title: {
+            text: 'Monthly Subject Study Time chart',
+            x: -20 //center
+        },
+        xAxis: {
+            categories: catArr,
+            breakSize:1
+        },
+        yAxis: {
+            title: {
+                text: 'Time (mins)'
+            },
+            plotLines: [{
+                value: 0,
+                width: 1,
+                color: '#808080'
+            }]
+        },
+        tooltip: {
+            formatter: function() {
+                    return '<b>'+ this.series.name +'</b><br/>'+
+                    this.x +': '+ this.y +'mins';
+            }
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'top',
+            x: 0,
+            y: 100,
+            borderWidth: 0
+        },
+        series: data
+    });
+
+}
+
+
+$(document).on('pagebeforeshow', '#weeklytrackerReports', function(){ 
+	fnGetGraphData();
+});
+
+$(document).on('pagebeforeshow', '#monthlytrackerReports', function(){ 
+	fnGetYearGraphData();
+});

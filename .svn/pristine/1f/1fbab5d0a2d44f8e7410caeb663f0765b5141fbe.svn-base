@@ -1,0 +1,50 @@
+var principalPageserviceURL = serviceContextURL+"/rest/principalpage/getLatest";
+var jsonprincipalPage;
+
+$(document).on("pagebeforeshow","#principalPage",function(){ 
+	serviceKey = localStorage.getItem('serviceKey');
+	if(null == serviceKey || "" == serviceKey)
+	{
+		alert("Invalid session. Please login again.");
+		window.location = "login.html";
+	}
+	getprincipalPage();
+});
+
+
+function getprincipalPage() {
+	//var data="dhksdfskdfhkjsdhfkjsdhfkjsdj";
+	//alert("serviceKey: "+serviceKey);
+	var ajax = new XMLHttpRequest();
+	ajax.open("POST",principalPageserviceURL,true);
+	ajax.send(serviceKey);
+
+	ajax.onreadystatechange=function(){
+	   if (ajax.readyState === 4) {
+	     if (ajax.status === 200 || ajax.status === 0) {
+	    	 //alert(ajax.responseText);
+	    	 if(ajax.responseText == "Invalid UserId")
+    		 {
+	    		 alert("Invalid session. Please login again.");
+	    		 window.location = "login.html";
+    		 }
+	    	 else
+    		 {
+	    		 displayprincipalPage(ajax.responseText);
+    		 }
+	       } else {
+	    	 alert("Ajax error: "+ajax.status);
+	     }
+	   }
+	}
+	
+}
+
+function displayprincipalPage(data) {
+	jsonprincipalPage =JSON.parse(data);
+	//alert('jsonprincipalPage:'+jsonprincipalPage);
+	$('#PrincipalMsgPic').attr('src',serviceContextURL + jsonprincipalPage.imagePath);
+	$('#PrincipalMsgTitle').text(jsonprincipalPage.title);
+	//alert("content: "+jsonprincipalPage.content);
+	$('#PrincipalMsgDesc').text(jsonprincipalPage.content);
+}

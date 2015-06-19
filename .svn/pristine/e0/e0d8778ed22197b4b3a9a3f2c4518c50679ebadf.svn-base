@@ -1,0 +1,34 @@
+var serviceContextURL = "http://192.168.1.102/ParentConnect";
+//var serviceContextURL = "http://192.168.43.2/ParentConnect";
+
+var serviceKey = "";
+var role = "";
+var displayUserList;
+var type="POST";
+
+//Change Password url
+var changePassURL = serviceContextURL+"/rest/auth/changepwd";
+
+//School map location coordinates to be given here
+var vLatLng = new google.maps.LatLng(10.750073, 79.112395);
+
+//Holiday pdf url which is maintained via school web site
+var holidayURL = 'http://docs.google.com/viewer?url='+serviceContextURL+"/uploadFiles/holiday/Holiday_Calendar.pdf";
+//Temp url to test - to be commented later
+holidayURL = 'http://docs.google.com/viewer?url=http://datamits.com/uploadFiles/holiday/Holiday_Calendar.pdf';
+
+//TimeTable url to fetch the data needed to fetch the class time table for the logged in student
+var timeTableServiceURL = serviceContextURL+"/rest/timetable/getTimeTable";
+
+//time Table pdf url which is maintained via school web site
+var timeTableURLPT1 = 'http://docs.google.com/viewer?url='+serviceContextURL+"/uploadFiles/holiday/";
+var timeTableURLPT2 = "_Time_Table.pdf";
+var timeTableURL = "";
+//Temp url to test - to be commented later and the dynamic url in landingPage.js - displayTimeTable needs to be uncommented
+timeTableURL = 'http://docs.google.com/viewer?url=http://datamits.com/uploadFiles/timetable/First Class_Time_Table.pdf';
+
+//School Website URL
+var vWebsiteURL = 'http://www.datamits.com/';
+
+//localStorage.getItem('serviceKey');
+//localStorage.removeItem('serviceKey');

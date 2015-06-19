@@ -1,0 +1,1860 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, user-scalable=no">
+<link href="css/jquery.mobile-1.4.5.min.css" rel="stylesheet" type="text/css" />
+<!-- <link rel="stylesheet" href="css/themes/my-custom-theme.min.css" />
+<link rel="stylesheet" href="css/themes/jquery.mobile.icons.min.css" /> -->
+<link rel="stylesheet" href="css/font_awesome/css/font-awesome.min.css">
+<link href="css/myapp.css" type="text/css" />
+<link rel="stylesheet" href="css/jw-jqm-cal.css" />
+<script src="js/jquery-1.11.3.min.js"></script>
+<script src="js/jquery.mobile-1.4.5.min.js"></script>
+<link rel="stylesheet" href="css/jqm-datebox-1.4.5.min.css" />
+<link rel="stylesheet" href="css/swstyle.css" />
+<style>
+	#map, #map-canvas { width: 100%; height: 100%; padding: 0; }
+</style>
+<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
+<!-- NOTE: Script for date widget -->
+<script type="text/javascript" src="js/jquery.mousewheel.min.js"></script>
+<script type="text/javascript" src="js/jqm-datebox-1.4.5.core.min.js"></script>
+<script type="text/javascript" src="js/jqm-datebox-1.4.5.mode.flipbox.min.js"></script>
+<script type="text/javascript" src="js/jqm-datebox.lang.utf8.js"></script>
+<script src="http://maps.google.com/maps/api/js?sensor=false"></script>
+<script type="text/javascript" src="js/jw-jqm-cal.js"></script>
+
+<script type="text/javascript">
+ 	// Base URI of RESTful web service
+</script>
+<script src="js/constants.js"></script>
+<script type="text/javascript" src="cordova.js"></script>
+<script src="js/landingPage.js"></script>
+<script type="text/javascript" src="js/index.js"></script>
+<script src="js/famelist.js"></script>
+<script src="js/famedetails.js"></script>
+<script src="js/principalPage.js"></script>
+<script src="js/circularlist.js"></script>
+<script src="js/formlist.js"></script>
+<script src="js/charts.js"></script>
+<script src="js/highcharts.js"></script>
+<script src="js/Chart.min.js"></script>
+<script src="js/exporting.js"></script>  
+<script src="js/stopwatch.js"></script>
+<script src="js/notification.js"></script>
+<script src="js/ediary.js"></script>
+<script src="js/commentslist.js"></script>
+<script src="js/commentdetails.js"></script>
+<script src="js/comments.js"></script>
+ <style type="text/css">
+ html,body{
+  width:100%;
+  height:100%;
+  padding:0;
+  margin:0;
+}
+.title {
+   white-space: normal !important;
+   position:relative;
+   left:-20px;
+}
+.bookicon {
+  width:65px;
+  height:100%;
+}
+.ui-header .ui-title, .ui-footer .ui-title {
+    text-overflow: clip;
+    white-space: normal;
+}
+
+#landingpage{
+  height:100%;
+  margin-top:-45px;
+  /* background:url(images/bk-green.jpg); */
+  background:url(images/133.png);
+  background-size:cover;
+  position:relative;
+  text-align:center;
+}
+
+label.error {
+	float: left;
+	color: red;
+	padding-top: .5em;
+	vertical-align: top;
+	font-weight:bold
+}
+
+#extras, #changePasswordPage, #fameListPage, #detailsPage, #principalPage, #eDiary, #circularsListPage, #addNotifications, 
+#notificationsView, #editnotifications, #reports, #timeTable, #pdfforms, #weeklytrackerReports, #monthlytrackerReports, 
+#stopwatch, #weeklyReport, #eDiaryAddHW , #eDiaryViewHW, #editHWDetails, #commentsListPage, #addTeacherCommentsPage, 
+#addParentCommentsPage, #parentCommentDetailPage, #teacherCommentDetailPage{
+   /*  background-color: black;
+    color: white;
+    padding: 0;
+    margin: 0;
+    background-image: url(images/133.png);
+    height: 100%; */
+  height:100%;
+  /* margin-top:-45px; */
+  background:url(images/133.png);
+  background-size:cover;
+  position:relative;
+  color: white;
+  /* text-align:center; */
+}
+
+#container{
+    background:#000;
+    display:block;
+    padding:5px;
+    clear:both;
+    height:30px;
+    margin-bottom:22px;
+    padding-left:5px;
+    padding-right:5px;
+    padding-top:5px;
+    width:100%;
+    overflow-x:auto;
+}
+
+
+.ui-selectmenu.ui-popup .ui-input-search {
+    margin-left: .5em;
+    margin-right: .5em;
+}
+.ui-selectmenu.ui-dialog .ui-content {
+    padding-top: 0;
+}
+.ui-selectmenu.ui-dialog .ui-selectmenu-list {
+    margin-top: 0;
+}
+.ui-selectmenu.ui-popup .ui-selectmenu-list li.ui-first-child .ui-btn {
+    border-top-width: 1px;
+    -webkit-border-radius: 0;
+    border-radius: 0;
+}
+.ui-selectmenu.ui-dialog .ui-header {
+    border-bottom-width: 1px;
+}
+
+table {
+  border: 1px solid #666;   
+    width: 100%;
+}
+th {
+  /* background: #f8f8f8;  */ /* 000000 */
+  font-weight: bold;    
+    padding: 2px;
+}
+
+/* input[type="checkbox"]{
+  width: 40px; 
+  height: 40px; 
+  min-width: 40px; 
+  min-height: 40px;
+  background-color: white;
+  color: white;
+} */
+
+input[type="radio"]
+{
+  width: 20px; 
+  height: 20px; 
+  min-width: 20px; 
+  min-height: 20px; 
+  /* background-color: white;
+  color: white; */
+}
+
+</style>
+
+<script type="text/javascript">
+var vAttendanceURL = serviceContextURL+"/rest/attendance/getAttendance";
+var jsonAttendance;
+var attendance;
+//Create an array that will contain the events
+var eventsArray = [];
+
+$(document).on('pageshow', "#view-calendar", function(event, ui) {
+   	serviceKey = localStorage.getItem('serviceKey');
+	if(null == serviceKey || "" == serviceKey)
+	{
+		alert("Invalid session. Please login again.");
+		window.location = "login.html";
+	}
+	
+	var ajax = new XMLHttpRequest();
+	ajax.open("POST",vAttendanceURL,true);
+	
+	var vString = "{'encString':'" + serviceKey+"'}";
+	//alert("vString: "+vString);
+	
+	ajax.send(vString);
+
+	ajax.onreadystatechange=function(){
+	   if (ajax.readyState === 4) {
+	     if (ajax.status === 200 || ajax.status === 0) {
+	    	 //alert(ajax.responseText);
+	    	 if(ajax.responseText == "Invalid UserId")
+    		 {
+	    		 alert("Invalid session. Please login again.");
+	    		 window.location = "login.html";
+    		 }
+	    	 else
+    		 {
+	    		 jsonAttendance = JSON.parse(ajax.responseText);
+	    		 $.each(jsonAttendance, function(index, attendance) {
+    				// Dynamically add events to the array (this can be done later on as well)
+    				eventsArray.push({ "summary" : "Test event", "begin" : new Date(attendance.begin), "end" : new Date(attendance.begin), "bg": attendance.summary.toLowerCase() }); 
+    			});
+	    		 $("#calendar").jqmCalendar({
+    		        events: eventsArray,
+    		        months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+    		        days: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
+    		        startOfWeek: 0
+
+    		    });
+	    		// Trigger refresh
+	    		 $('#calendar').trigger('refresh');
+    		 }
+	    	 
+	       } else {
+	    	 alert("Ajax error: "+ajax.status);
+	     }
+	   }
+	}
+	
+});
+
+$(document).on('pageshow', "#teacherViewAttendancePage", function(event, ui) {
+	//alert("pageshow-teacherViewAttendancePage..");
+	
+	var studentAttendanceServiceURL = serviceContextURL+"/rest/attendance/getClassAttendance";
+	var ajax1 = new XMLHttpRequest();
+	ajax1.open("POST",studentAttendanceServiceURL,true);
+	
+	var vString = "{'createdOn':'" + document.getElementById("idAttendanceDt").value 
+	+ "', 'encString':'" + serviceKey
+	+ "', 'appClass':{'id':'"+ document.getElementById("idAttendanceClassDropDown").value +"'}}";
+	
+	//alert("vString: "+vString);
+	ajax1.send(vString);
+
+	ajax1.onreadystatechange=function(){
+	   if (ajax1.readyState === 4) {
+	     if (ajax1.status === 200 || ajax1.status === 0) {
+	    	 //alert("teacherViewAttendancePage-responseText: "+ajax1.responseText);
+	    	 if(ajax1.responseText == "Invalid UserId")
+    		 {
+	    		 alert("Invalid session. Please login again.");
+	    		 window.location = "login.html";
+    		 }
+	    	 else
+    		 {
+	    		 drawTable(ajax1.responseText);
+    		 }
+	    	 
+	       } else {
+	    	 alert("Ajax error: "+ajax1.status);
+	     }
+	   }
+	}
+	
+});
+function drawTable(data) {
+	var jsonObjs = JSON.parse(data);
+	var vjsonObj;
+	var vCount = 0;
+	//alert("drawTable:jsonObjs: "+jsonObjs);
+	
+	$("#table-Attendance").find("tr:gt(0)").remove();
+	
+	$.each(jsonObjs, function(index, vjsonObj) {
+		var vAttendanceID ="";
+		if(vjsonObj.hasOwnProperty('id')){
+			vAttendanceID = vjsonObj.id;
+		}
+
+		var vStudentID = "";
+		if(vjsonObj.hasOwnProperty('studentId')){
+			vStudentID = vjsonObj.studentId;
+		}
+
+		var vRegNo = vjsonObj.regNo;
+		var vStudentName = vjsonObj.studentName;
+		
+		var vStatus = "";
+		if(vjsonObj.hasOwnProperty('status')){
+			vStatus = vjsonObj.status;
+		}
+		
+		//alert("vRegNo: "+vRegNo+", vStudentName: "+vStudentName+", vStatus: "+vStatus+ ", vAttendanceID: "+vAttendanceID+ ", vStudentID: "+vStudentID);
+		var row = $("<tr />")
+	   
+		var vFieldName = "radio"+vCount;
+		
+    	$("#table-Attendance").append(row); //this will append tr element to table... keep its reference for a while since we will add cels into it
+	    row.append($("<td>" + vRegNo + "</td>"));
+	    row.append($("<td>" + vStudentName +"</td>"));
+	    if("A" == vStatus)
+    	{
+	    	row.append($("<td> <input name="+vFieldName+" id = 'radioPresent"+vCount+"'  value='P' type='radio' style='margin-top: 1px; width: 20px; height: 20px; min-width: 20px; min-width: 20px;' data-theme='b'> </td>"));
+	    	row.append($("<td> <input name="+vFieldName+" id = 'radioAbsent"+vCount+"' value='A' type='radio' style='margin-top: 1px; width: 20px; height: 20px; min-width: 20px; min-width: 20px;' checked='checked' data-theme='b'> </td>"));
+	    	row.append($("<td> <input name="+vFieldName+" id = 'radioTardy"+vCount+"' value='T' type='radio' style='margin-top: 1px; width: 20px; height: 20px; min-width: 20px; min-width: 20px;' data-theme='b'> </td>"));
+    	}
+	    else if("T" == vStatus)
+    	{
+	    	row.append($("<td> <input name="+vFieldName+" id = 'radioPresent"+vCount+"' value='P' type='radio' style='margin-top: 1px; width: 20px; height: 20px; min-width: 20px; min-width: 20px;' data-theme='b'> </td>"));
+	    	row.append($("<td> <input name="+vFieldName+" id = 'radioAbsent"+vCount+"' value='A' type='radio' style='margin-top: 1px; width: 20px; height: 20px; min-width: 20px; min-width: 20px;' data-theme='b'> </td>"));
+	    	row.append($("<td> <input name="+vFieldName+" id = 'radioTardy"+vCount+"' value='T' type='radio' style='margin-top: 1px; width: 20px; height: 20px; min-width: 20px; min-width: 20px;' checked='checked' data-theme='b'> </td>"));
+    	}
+	    else if("P" == vStatus)
+    	{
+	    	row.append($("<td> <input name="+vFieldName+" id = 'radioPresent"+vCount+"' value='P' type='radio' style='margin-top: 1px; width: 20px; height: 20px; min-width: 20px; min-width: 20px;' checked='checked' data-theme='b'> </td>"));
+	    	row.append($("<td> <input name="+vFieldName+" id = 'radioAbsent"+vCount+"' value='A' type='radio' style='margin-top: 1px; width: 20px; height: 20px; min-width: 20px; min-width: 20px;' data-theme='b'> </td>"));
+	    	row.append($("<td> <input name="+vFieldName+" id = 'radioTardy"+vCount+"' value='T' type='radio' style='margin-top: 1px; width: 20px; height: 20px; min-width: 20px; min-width: 20px;' data-theme='b'> </td>"));
+    	}
+	    else
+    	{
+	    	row.append($("<td> <input name="+vFieldName+" id = 'radioPresent"+vCount+"' value='P' type='radio' style='margin-top: 1px; width: 20px; height: 20px; min-width: 20px; min-width: 20px;' data-theme='b'> </td>"));
+	    	row.append($("<td> <input name="+vFieldName+" id = 'radioAbsent"+vCount+"' value='A' type='radio' style='margin-top: 1px; width: 20px; height: 20px; min-width: 20px; min-width: 20px;' data-theme='b'> </td>"));
+	    	row.append($("<td> <input name="+vFieldName+" id = 'radioTardy"+vCount+"' value='T' type='radio' style='margin-top: 1px; width: 20px; height: 20px; min-width: 20px; min-width: 20px;' data-theme='b'> </td>"));
+    	}
+	    row.append($("<td style='display:none;'>" + vAttendanceID +"</td>"));
+	    row.append($("<td style='display:none;'>" + vStudentID +"</td>"));
+	    vCount++;
+	});
+	
+	 $("#table-Attendance").table( "refresh" );  
+}
+
+function fnTeacherSubmitAttendance() {
+	//alert("fnTeacherSubmitAttendance..");
+	//var sendData = [];
+	var vCount = 0;
+	//var obj = {};
+	serviceKey = localStorage.getItem('serviceKey');
+	if(null == serviceKey || "" == serviceKey)
+	{
+		alert("Invalid session. Please login again.");
+		window.location = "login.html";
+	}
+	
+	/* obj['encString'] = serviceKey;
+	sendData.push(obj);
+	obj = {};
+	obj['createdOn'] =  document.getElementById("idAttendanceDt").value ;
+	sendData.push(obj); */	
+	
+	var dataArray = [];
+	
+	
+	$('#table-Attendance tbody tr').each(function(i, el){
+		var vFieldName = "radio"+vCount;
+		var valStatus = $('input[name='+vFieldName+']:checked').val();
+	    var valID = $.trim($(this).find('td:eq(0)').text()),
+	        valStudentName = $.trim($(this).find('td:eq(1)').text()),
+	        valAttendanceID = $.trim($(this).find('td:eq(5)').text()),
+	        valStudentID = $.trim($(this).find('td:eq(6)').text());
+	    //obj = {};
+	    var tableString = "";
+	
+		//alert("valID: "+valID+", valStudentName: "+valStudentName+", valStatus: "+$('input[name='+vFieldName+']:checked').val() +", valAttendanceID: "+valAttendanceID +", valStudentID: "+valStudentID);
+	    
+	  	//insert string
+		if("" == valAttendanceID)
+		{
+			/* obj['appClass'] = "{'id':'"+document.getElementById("idAttendanceClassDropDown").value+"'}";
+			obj['appStudent'] = "{'id':'"+valStudentID+"'}";
+			obj['presentStatus'] = $('input[name='+vFieldName+']:checked').val(); */
+			
+			tableString = "{'presentStatus':'" + $('input[name='+vFieldName+']:checked').val() 
+			+ "', 'createdOn':'" + document.getElementById("idAttendanceDt").value 
+			+ "', 'encString':'" + serviceKey
+			+ "', 'appStudent':{'id':'"+ valStudentID +"'}"
+			+ ", 'appClass':{'id':'"+ document.getElementById("idAttendanceClassDropDown").value +"'}}";
+		}
+		//update string
+		else
+		{
+			/* obj['appClass'] = "'id':'"+document.getElementById("idAttendanceClassDropDown").value+"'";
+			obj['id'] = valAttendanceID;
+			obj['presentStatus'] = $('input[name='+vFieldName+']:checked').val(); */
+			
+			tableString = "{'presentStatus':'" + $('input[name='+vFieldName+']:checked').val() 
+			+ "', 'createdOn':'" + document.getElementById("idAttendanceDt").value 
+			+ "', 'encString':'" + serviceKey 
+			+ "', 'id':'"+ valAttendanceID 
+			+ "', 'appClass':{'id':'"+ document.getElementById("idAttendanceClassDropDown").value +"'}}";
+		}
+		
+	    alert("tableString: "+tableString);
+	    dataArray.push(tableString);
+	    vCount++;
+	});
+	//alert("JSON-sendData: "+sendData);
+	//alert("JSON-stringify-dataArray: "+JSON.stringify(dataArray));
+	//fnAttendanceJSONSubmit(JSON.stringify(sendData));
+	//fnAttendanceJSONSubmit(JSON.stringify(dataArray));
+	fnAttendanceJSONSubmit("["+dataArray.toString()+"]");
+}
+
+function fnAttendanceJSONSubmit(vString) {
+	var saveAttendanceURL = serviceContextURL+"/rest/attendance/saveAttendance";
+	alert("vString: "+vString);
+	
+	var ajax2 = new XMLHttpRequest();
+	ajax2.open("POST",saveAttendanceURL,true);
+	ajax2.send(vString);
+
+	ajax2.onreadystatechange=function(){
+	   if (ajax2.readyState === 4) {
+	     if (ajax2.status === 200 || ajax.status === 0) {
+	    	 alert(ajax2.responseText);
+	    	 if(ajax2.responseText == "Invalid UserId")
+    		 {
+	    		 alert("Invalid session. Please login again.");
+	    		 window.location = "login.html";
+    		 }
+	    	 else
+    		 {
+	    		 alert("success message to user: "+ajax2.responseText);
+	    		 navigator.notification.alert(
+		            'Attendance details created successfully.',  // message
+		            alertAttendanceDismiss,         // callback
+		            'Success',            // title
+		            'OK'                  // buttonName
+		         );
+    		 }
+	       } else {
+	    	 alert("Ajax error in fnAttendanceJSONSubmit: "+ajax2.status);
+	     }
+	   }
+	}
+}
+
+function alertAttendanceDismiss() {
+	//$.mobile.changePage("#eDiaryViewHW");
+}
+</script>
+        
+  <!-- Uncomment the following to include cordova in your android project -->
+  <!--<script src="http://jqmdesigner.appspot.com/platforms/android/cordova.js"></script>-->
+  <!-- GK Loader use RequireJS to load module -->
+  <script src="http://requirejs.org/docs/release/2.1.11/minified/require.js"></script>
+  <!--Plug in GK-->
+    <title>Parent Connect Mobile App</title>
+</head>
+<body gk-app>
+
+<div id="landingpage" data-role="page">
+  <div data-role="header" data-position="fixed" data-theme="b">
+    <h3>Parent Connect</h3>
+    <a href="#" class="ui-btn ui-btn-right ui-corner-all SignOutBtn" style="margin-top:0;">Sign out</a>
+  </div>
+  <div role="main" class="ui-content" style="margin-top:40px;">
+
+    <div class="ui-grid-b" style="height:110px" id="idRow0">
+      <div class="ui-block-a" style="height:100%">
+        <div is="icon" style="width:85px; height:90px; position:relative">
+           <span class="ui-li-count" style="position:absolute; display:none; z-index:1; right:0; top:6px;"></span>
+           <a href="#principalPage" class="ui-btn ui-mini ui-corner-all ui-shadow" data-transition="flip" style="display:block;margin:5px;height:50%;background-image: url(images/podcast_icon.png); background-size: 95% 80%; background-position: 50% 50%; background-repeat: no-repeat no-repeat;"></a>
+           <div style="text-align:center; margin-top:-5px; color:black; text-shadow:none;">Principal<br>Page</div>
+        </div>
+        
+      </div>
+      <div class="ui-block-b" style="height:100%">
+        <div is="icon" style="width:85px; height:90px; position:relative">
+          <span class="ui-li-count" style="position:absolute; display:none; z-index:1; right:0; top:6px;"></span>
+          <a href="#fameListPage" class="ui-btn ui-mini ui-corner-all ui-shadow" data-transition="flip" data-direction="reverse" id="idWallofFame"
+           style="display:block;margin:5px;height:50%;background-image: url(images/walloffame.png); background-size: 95% 80%;
+           background-position: 50% 50%; background-repeat: no-repeat no-repeat;"></a>
+           <div style="text-align:center; margin-top:-5px; color:black; text-shadow:none;">Wall of<br> Fame</div>
+        </div>
+      </div>
+      <div class="ui-block-c" style="height:100%">
+       <div is="icon" style="width:85px; height:90px; position:relative">
+                <span class="ui-li-count" style="position:absolute; display:none; z-index:1; right:0; top:6px;"></span>
+                <a href="#extras" class="ui-btn ui-mini ui-corner-all ui-shadow" data-transition="flip" style="display:block;margin:5px;height:50%;background-image: url(images/extras.png); background-size: 95% 80%; background-position: 50% 50%; background-repeat: no-repeat no-repeat;"></a>
+                <div style="text-align:center; color:black; text-shadow:none;">Extras</div>
+          </div>
+      </div>
+    </div>
+
+    <div class="ui-grid-b" style="height:95px" id="idRow1">
+      <div class="ui-block-a" style="height:100%">
+       <div is="icon" style="width:85px; height:90px; position:relative">
+                <span class="ui-li-count" style="position:absolute; display:none; z-index:1; right:0; top:6px;"></span>
+                <!-- <a href="#holidays" class="ui-btn ui-mini ui-corner-all ui-shadow" data-transition="flip" style="display:block;margin:5px;height:50%;background-image: url(images/calendar_icon.png); background-size: 95% 80%; background-position: 50% 50%; background-repeat: no-repeat no-repeat;"></a>
+                 --><a href="#" id="idHolidays" class="ui-btn ui-mini ui-corner-all ui-shadow" data-transition="flip" style="display:block;margin:5px;height:50%;background-image: url(images/calendar_icon.png); background-size: 95% 80%; background-position: 50% 50%; background-repeat: no-repeat no-repeat;"></a>
+                <div style="text-align:center; color:black; text-shadow:none;">Holidays</div>
+        </div>
+      </div>
+      <div class="ui-block-b" style="height:100%">
+       <div is="icon" style="width:85px; height:90px; position:relative">
+	              <span class="ui-li-count" style="position:absolute; display:none; z-index:1; right:0; top:6px;"></span>
+	              <a href="#notificationsView" class="ui-btn ui-mini ui-corner-all ui-shadow" data-transition="flip" style="display:block;margin:5px;height:50%;background-image: url(images/announcements.png); background-size: 95% 80%; background-position: 50% 50%; background-repeat: no-repeat no-repeat;"></a>
+	              <div style="text-align:center; color:black; text-shadow:none;">Notifications</div>
+	      </div>
+      </div>
+      <div class="ui-block-c" style="height:100%">
+       <div is="icon" style="width:85px; height:90px; position:relative">
+          <span class="ui-li-count" style="position:absolute; display:none; z-index:1; right:0; top:6px;"></span>
+          <a href="#circularsListPage" class="ui-btn ui-mini ui-corner-all ui-shadow" data-transition="flip" data-direction="reverse"
+          style="display:block;margin:5px;height:50%;background-image: url(images/circulars.png); background-size: 95% 80%;
+          background-position: 50% 50%; background-repeat: no-repeat no-repeat;"></a>
+          <div style="text-align:center; color:black; text-shadow:none;">Circulars</div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="ui-grid-b" style="height:95px" id="idRow2">
+      <div class="ui-block-a" style="height:100%">
+       <div is="icon" style="width:85px; height:90px; position:relative">
+                <span class="ui-li-count" style="position:absolute; display:none; z-index:1; right:0; top:6px;"></span>
+                <a href="#reports" class="ui-btn ui-mini ui-corner-all ui-shadow" data-transition="flip" style="display:block;margin:5px;height:50%;background-image: url(images/graph.png); background-size: 95% 80%; background-position: 50% 50%; background-repeat: no-repeat no-repeat;"></a>
+                <div style="text-align:center; color:black; text-shadow:none;">Reports</div>
+        </div>
+      </div>
+      <div class="ui-block-b" style="height:100%">
+       <div is="icon" style="width:85px; height:90px; position:relative">
+                <span class="ui-li-count" style="position:absolute; display:none; z-index:1; right:0; top:6px;"></span>
+                <a href="#eDiary" class="ui-btn ui-mini ui-corner-all ui-shadow" data-transition="flip" style="display:block;margin:5px;height:50%;background-image: url(images/Diary.png); background-size: 95% 80%; background-position: 50% 50%; background-repeat: no-repeat no-repeat;"></a>
+                <div style="text-align:center; color:black; text-shadow:none;">E-Diary</div>
+          </div>
+	</div>
+      <div class="ui-block-c" style="height:100%">
+       <div is="icon" style="width:85px; height:90px; position:relative">
+                <span class="ui-li-count" style="position:absolute; display:none; z-index:1; right:0; top:6px;"></span>
+                <a href="#pdfforms" id="idDownload" class="ui-btn ui-mini ui-corner-all ui-shadow" data-transition="flip" style="display:block;margin:5px;height:50%;background-image: url(images/forms.png); background-size: 95% 80%; background-position: 50% 50%; background-repeat: no-repeat no-repeat;"></a>
+                 <div style="text-align:center; color:black; text-shadow:none;">PDF Forms download</div>
+        </div>
+      </div>
+    </div>
+
+
+     <div class="ui-grid-b" style="height:110px" id="idRow3">
+      <div class="ui-block-a" style="height:100%">
+       <div is="icon" style="width:85px; height:90px; position:relative">
+                <span class="ui-li-count" style="position:absolute; display:none; z-index:1; right:0; top:6px;"></span>
+                <a href="#" onclick="draftEmail();" class="ui-btn ui-mini ui-corner-all ui-shadow" data-transition="flip" style="display:block;margin:5px;height:50%;background-image: url(images/email.png); background-size: 95% 80%; background-position: 50% 50%; background-repeat: no-repeat no-repeat;"></a>
+                <div style="text-align:center; color:black; text-shadow:none;">Email</div>
+        </div>
+      </div>
+     <div class="ui-block-b" style="height:100%">
+       <div is="icon" style="width:85px; height:90px; position:relative">
+             <span class="ui-li-count" style="position:absolute; display:none; z-index:1; right:0; top:6px;"></span>
+             <a href="#stopwatch" id="idTracker" class="ui-btn ui-mini ui-corner-all ui-shadow" data-transition="flip" style="display:block;margin:5px;height:50%;background-image: url(images/tracker.png); background-size: 95% 80%; background-position: 50% 50%; background-repeat: no-repeat no-repeat;"></a>
+              <div style="text-align:center;margin-top:-5px; color:black; text-shadow:none;">Study <br>Tracker</div>
+        </div>
+	</div>
+    <div class="ui-block-c" style="height:100%">
+       <div is="icon" style="width:85px; height:90px; position:relative">
+                <span class="ui-li-count" style="position:absolute; display:none; z-index:1; right:0; top:6px;"></span>
+                <a href="#" id="idTimeTable" class="ui-btn ui-mini ui-corner-all ui-shadow" data-transition="flip" style="display:block;margin:5px;height:50%;background-image: url(images/timetable.png); background-size: 95% 80%; background-position: 50% 50%; background-repeat: no-repeat no-repeat;"></a>
+                <div style="text-align:center; color:black; text-shadow:none;">Time Table</div>
+          </div>
+	</div>
+    </div>
+    
+    
+    <div class="ui-grid-b" style="height:110px" id="idRow4">
+      <div class="ui-block-a" style="height:100%" id="idDivParentAttendancePage">
+       <div is="icon" style="width:85px; height:90px; position:relative">
+       		<span class="ui-li-count" style="position:absolute; display:none; z-index:1; right:0; top:6px;"></span>
+           	<a href="#view-calendar" id="idAttendance" class="ui-btn ui-mini ui-corner-all ui-shadow" data-transition="flip" style="display:block;margin:5px;height:50%;background-image: url(images/attendance.png); background-size: 95% 80%; background-position: 50% 50%; background-repeat: no-repeat no-repeat;"></a>
+         	<div style="text-align:center; color:black; text-shadow:none;">Attendance</div>
+        </div>
+      </div>
+      <div class="ui-block-a" style="height:100%" id="idDivTeacherAttendancePage">
+       <div is="icon" style="width:85px; height:90px; position:relative">
+       		<span class="ui-li-count" style="position:absolute; display:none; z-index:1; right:0; top:6px;"></span>
+           	<a href="#teacherAttendancePage" id="idAttendance" class="ui-btn ui-mini ui-corner-all ui-shadow" data-transition="flip" style="display:block;margin:5px;height:50%;background-image: url(images/attendance.png); background-size: 95% 80%; background-position: 50% 50%; background-repeat: no-repeat no-repeat;"></a>
+        <div style="text-align:center; color:black; text-shadow:none;">Attendance</div>
+        </div>
+     </div>
+     <div class="ui-block-b" style="height:100%">
+       <!-- <div is="icon" style="width:85px; height:90px; position:relative">
+             <span class="ui-li-count" style="position:absolute; display:none; z-index:1; right:0; top:6px;"></span>
+             <a href="#stopwatch" id="idTracker" class="ui-btn ui-mini ui-corner-all ui-shadow" data-transition="flip" style="display:block;margin:5px;height:50%;background-image: url(images/tracker.png); background-size: 95% 80%; background-position: 50% 50%; background-repeat: no-repeat no-repeat;"></a>
+              <div style="text-align:center;margin-top:-5px; color:black; text-shadow:none;">Study <br>Tracker</div>
+        </div> -->
+	</div>
+    <div class="ui-block-c" style="height:100%">
+       <!-- <div is="icon" style="width:85px; height:90px; position:relative">
+                <span class="ui-li-count" style="position:absolute; display:none; z-index:1; right:0; top:6px;"></span>
+                <a href="#" id="idTimeTable" class="ui-btn ui-mini ui-corner-all ui-shadow" data-transition="flip" style="display:block;margin:5px;height:50%;background-image: url(images/timetable.png); background-size: 95% 80%; background-position: 50% 50%; background-repeat: no-repeat no-repeat;"></a>
+                <div style="text-align:center; color:black; text-shadow:none;">Time Table</div>
+          </div> -->
+	</div>
+    </div>
+
+  </div>
+
+  <div data-role="footer" data-position="fixed" data-theme="b">
+      <h3>&copy; Datamits</h3>
+  </div>
+</div>
+
+<div data-role="page" id="view-calendar">
+	<div data-role="header" data-position="fixed" data-theme="b">
+	    <h3>Attendance</h3>
+	    <a href="#" class="ui-btn ui-btn-right ui-corner-all SignOutBtn" style="margin-top:0;">Sign out</a>
+	    <a href="#landingpage" class="ui-btn ui-btn-left ui-corner-all" style="margin-top:0;">Home</a>
+  	</div>
+	<div data-role="content">
+		<div id="calendar"></div>
+	</div>
+	<div data-role="footer" data-position="fixed" data-theme="b">
+      <h3>&copy; Datamits</h3>
+      <!-- <a href="#" class="ui-btn ui-btn-right ui-corner-all" style="margin-top:0;">Home</a> -->
+    </div>
+</div>
+
+<div id="extras" data-role="page" >
+
+	<div data-role="header" data-position="fixed" data-theme="b">
+	    <h3>Extras</h3>
+	    <a href="#" class="ui-btn ui-btn-right ui-corner-all SignOutBtn" style="margin-top:0;">Sign out</a>
+	    <a href="#landingpage" class="ui-btn ui-btn-left ui-corner-all" style="margin-top:0;">Home</a>
+  	</div>
+
+	<div data-role="content">
+      <div class="ui-grid-b" style="height:110px">
+	      <div class="ui-block-a" style="height:100%">
+	        <div is="icon" style="width:85px; height:90px; position:relative">
+	           <span class="ui-li-count" style="position:absolute; display:none; z-index:1; right:0; top:6px;"></span>
+	           <a href="#map" class="ui-btn ui-mini ui-corner-all ui-shadow" data-transition="flip" style="display:block;margin:5px;height:50%;background-image: url(images/location.png); background-size: 95% 80%; background-position: 50% 50%; background-repeat: no-repeat no-repeat;"></a>
+	           <div style="text-align:center; color:black; text-shadow:none;">Map</div>
+	        </div>
+	      </div>
+	      <div class="ui-block-b" style="height:100%">
+	        <div is="icon" style="width:85px; height:90px; position:relative">
+	          <span class="ui-li-count" style="position:absolute; display:none; z-index:1; right:0; top:6px;"></span>
+	          <a href="#changePasswordPage" class="ui-btn ui-mini ui-corner-all ui-shadow" data-transition="flip" data-direction="reverse" id="idWallofFame"
+	           style="display:block;margin:5px;height:50%;background-image: url(images/changePass1.png); background-size: 95% 80%;
+	           background-position: 50% 50%; background-repeat: no-repeat no-repeat;"></a>
+	           <div style="text-align:center; margin-top:-5px; color:black; text-shadow:none;">Change<br> Password</div>
+	        </div>
+	      </div>
+	      <div class="ui-block-c" style="height:100%">
+	       <div is="icon" style="width:85px; height:90px; position:relative">
+	           <span class="ui-li-count" style="position:absolute; display:none; z-index:1; right:0; top:6px;"></span>
+	           <a href="#" id="idWebsite" class="ui-btn ui-mini ui-corner-all ui-shadow" data-transition="flip" style="display:block;margin:5px;height:50%;background-image: url(images/website-icon.png); background-size: 95% 80%; background-position: 50% 50%; background-repeat: no-repeat no-repeat;"></a>
+	           <div style="text-align:center;margin-top:-5px; color:black; text-shadow:none;">School <br>Website</div>
+	        </div>
+	      </div>
+      </div>
+    </div>
+    
+    <div data-role="footer" data-position="fixed" data-theme="b">
+      <h3>&copy; Datamits</h3>
+      <!-- <a href="#" class="ui-btn ui-btn-right ui-corner-all" style="margin-top:0;">Home</a> -->
+    </div>
+
+</div>
+
+<!-- <div id="attendance" data-role="page" >
+	<div data-role="header" data-position="fixed" data-theme="b">
+	    <h3>Attendance</h3>
+	    <a href="#" class="ui-btn ui-btn-right ui-corner-all SignOutBtn" style="margin-top:0;">Sign out</a>
+	    <a href="#landingpage" class="ui-btn ui-btn-left ui-corner-all" style="margin-top:0;">Home</a>
+  	</div>
+
+	<div data-role="content">
+        <div id="calendar"></div>
+    </div>
+
+    <div data-role="footer" data-position="fixed" data-theme="b">
+      <h3>&copy; Datamits</h3>
+    </div>
+</div> -->
+
+<div id="changePasswordPage" data-role="page" >
+
+	<div data-role="header" data-position="fixed" data-theme="b">
+	    <h3>Change Password</h3>
+	    <a href="#" class="ui-btn ui-btn-right ui-corner-all SignOutBtn" style="margin-top:0;">Sign out</a>
+	    <a href="#landingpage" class="ui-btn ui-btn-left ui-corner-all" style="margin-top:0;">Home</a>
+  	</div>
+   <!-- <div class="ui-field-contain ui-body ui-br" data-role="fieldcontain">
+		<label for="idReminderDescription">Old Password:</label>
+		<div class="ui-select" style="width: 200px;">
+		<div>
+		<input type="password" name="currentPassword" id="idCurrentPassword">
+		</div>
+		</div>
+	</div> -->
+	
+	<div class="ui-field-contain ui-body ui-br" data-role="fieldcontain">
+		<label for="idReminderDescription">New Password:</label>
+		<div class="ui-select" style="width: 200px;">
+		<div>
+		<input type="password" name="newPassword" id="idNewPassword">
+		</div>
+		</div>
+	</div>
+	
+	<div class="ui-field-contain ui-body ui-br" data-role="fieldcontain">
+		<label for="idReminderDescription">Re-enter New Password:</label>
+		<div class="ui-select" style="width: 200px;">
+		<div>
+		<input type="password" name="reEnterNewPassword" id="idReEnterNewPassword">
+		</div>
+		</div>
+	</div>
+    
+    <div data-role="content" align="center">
+	 <div class="ui-block-b"><button data-theme="b" onclick="fnChangePasswordSubmit();" id="changePassSubmitButton">Submit</button></div>
+	 </div>
+	
+    <!-- <div data-role="footer" data-position="fixed" data-theme="b">
+      <h3>&copy; Datamits</h3>
+    </div> -->
+
+</div>
+
+<div id="fameListPage" data-role="page" >
+
+	<div data-role="header" data-position="fixed" data-theme="b">
+	    <h3>Wall Of Fame</h3>
+	    <a href="#" class="ui-btn ui-btn-right ui-corner-all SignOutBtn" style="margin-top:0;">Sign out</a>
+	    <a href="#landingpage" class="ui-btn ui-btn-left ui-corner-all" style="margin-top:0;">Home</a>
+  	</div>
+
+	<div data-role="content">
+         <ul id="fameList" data-role="listview" data-filter="true">
+         </ul>
+    </div>
+
+    <div data-role="footer" data-position="fixed" data-theme="b">
+      <h3>&copy; Datamits</h3>
+      <!-- <a href="#" class="ui-btn ui-btn-right ui-corner-all" style="margin-top:0;">Home</a> -->
+    </div>
+
+</div>
+
+<div id="detailsPage" data-role="page" data-add-back-btn="true">
+
+	<div data-role="header" data-position="fixed" data-theme="b">
+	    <h3>Wall Of Fame Details</h3>
+	    <a href="#" class="ui-btn ui-btn-right ui-corner-all SignOutBtn" style="margin-top:0;">Sign out</a>
+	    <a href="#landingpage" class="ui-btn ui-btn-left ui-corner-all" style="margin-top:0;">Home</a>
+  	</div>
+  <div data-role="content" align="center">
+	<b><p align="center" id="fameTitle"></p></b>
+  	<img id="famePic" align="center"/>
+	<div id="fameDetails">
+       <!-- <h3 id="fullName"></h3> -->
+       <p id="fameDesc"></p>
+   	</div>
+    <!-- <ul id="actionList" data-role="listview" data-inset="true"></ul> -->
+  </div>
+
+  <div data-role="footer" data-position="fixed" data-theme="b">
+     <h3>&copy; Datamits</h3>
+   </div>
+
+</div>
+
+
+<div id="principalPage" data-role="page" data-add-back-btn="true">
+
+	<div data-role="header" data-position="fixed" data-theme="b">
+	  <h3>Principal's Message</h3>
+	  <a href="#" class="ui-btn ui-btn-right ui-corner-all SignOutBtn" style="margin-top:0;">Sign out</a>
+	  <a href="#landingpage" class="ui-btn ui-btn-left ui-corner-all" style="margin-top:0;">Home</a>
+	</div>
+
+	<div data-role="content" align="center">
+		<b><p align="center" id="PrincipalMsgTitle"></p></b>
+	 	<img id="PrincipalMsgPic" align="center"/>
+		<div id="PrincipalMsgDetails">
+	    <p id="PrincipalMsgDesc"></p>
+	  	</div>
+	</div>
+
+	<div data-role="footer" data-position="fixed" data-theme="b">
+	  <h3>&copy; Datamits</h3>
+	</div>
+</div>
+
+
+<div data-role="page" id="eDiary">
+	<div data-role="header" data-position="fixed" data-theme="b">
+	  <h3>E-Diary</h3>
+	  <a href="#" class="ui-btn ui-btn-right ui-corner-all SignOutBtn" style="margin-top:0;">Sign out</a>
+	  <a href="#landingpage" class="ui-btn ui-btn-left ui-corner-all" style="margin-top:0;">Home</a>
+	</div>
+
+	<div class="ui-field-contain ui-body" data-role="fieldcontain">
+		<label for="idEDiaryDt" class="select ui-select">Date:</label>
+		<div class="ui-select">
+		<div style="width: 200px;">
+		<input align="center" name="eDiaryDt" id="idEDiaryDt" style="text-align:center;" type="text" data-role="datebox" data-options='{"mode":"flipbox","overrideDateFormat":"%Y-%m-%d","useFocus":true,"overrideDateFieldOrder": "ymd"}' placeholder="Date here"/>
+	    </select>
+		</div>
+		</div>
+	</div>
+	
+	<div class="ui-field-contain ui-body" data-role="fieldcontain" id="idEDiaryClassDropDownContainer">
+		<label for="idEDiaryClassDropDown" class="select ui-select">Class:</label>
+		<div class="ui-select">
+		<div style="width: 200px;">
+		<select name="eDiaryClass" id="idEDiaryClassDropDown" data-mini="true">
+	    </select>
+		</div>
+		</div>
+	</div>
+	
+	<div data-role="content" align="center" style="margin: 0 auto;">
+		 <div class="ui-block-b"  style="margin: 0 auto;">
+		 <button data-theme="b" onclick="fnEDiaryHW();" id="eDiaryHWBtn" data-transition="flip" data-direction="reverse">Home Work</button>
+		 <button data-theme="b" onclick="fnComments();" id="commentsBtn" data-transition="flip" data-direction="reverse">Comments</button>
+		 </div>
+	</div>
+
+	<div data-role="footer" data-position="fixed" data-theme="b">
+	  <h3>&copy; Datamits</h3>
+	</div>
+</div>
+
+<div data-role="page" id="eDiaryViewHW">
+	<div data-role="header" data-position="fixed" data-theme="b">
+	    <h3>Home Work</h3>
+	    <a href="#" class="ui-btn ui-btn-right ui-corner-all SignOutBtn" style="margin-top:0;">Sign out</a>
+	    <a href="#landingpage" class="ui-btn ui-btn-left ui-corner-all" style="margin-top:0;">Home</a>
+  	</div>
+	
+	<div data-role="collapsible-set" data-content-theme="a" data-iconpos="right" id="HomeWorkset">
+	</div>
+	
+	<div data-role="content" align="center" id="addHomeWorkBtnContent">
+	<div class="ui-block-b">
+		 <button data-theme="b" id="addHomeWorkBtn" data-transition="flip" data-direction="reverse">Add Home Work</button>
+	</div>
+	</div>
+
+		
+	<div data-role="footer" data-position="fixed" data-theme="b">
+      <h3>&copy; Datamits</h3>
+    </div>
+</div>
+
+<div id="editHWDetails" data-role="page" >
+
+	<div data-role="header" data-position="fixed" data-theme="b">
+	    <h3>Edit Home Work</h3>
+	    <a href="#" class="ui-btn ui-btn-right ui-corner-all SignOutBtn" style="margin-top:0;">Sign out</a>
+	    <a href="#landingpage" class="ui-btn ui-btn-left ui-corner-all" style="margin-top:0;">Home</a>
+  	</div>
+   <div class="ui-field-contain ui-body ui-br" data-role="fieldcontain">
+		<label for="idEDiaryEditDescription">Description / detail:</label>
+		<div class="ui-select">
+		<div>
+		<textarea rows="5" cols="5" name="eDiaryEditDescription" id="idEDiaryEditDescription" data-mini="true"></textarea>
+		</div>
+		</div>
+	</div>
+    
+    <div data-role="content" align="center">
+	 <div class="ui-block-b"><button data-theme="b" onclick="fnEDiaryEditSubmit();" id="idEDiaryEditSubmit">Submit</button></div>
+	 </div>
+	
+    <!-- <div data-role="footer" data-position="fixed" data-theme="b">
+      <h3>&copy; Datamits</h3>
+    </div> -->
+
+</div>
+
+<div data-role="page" id="eDiaryAddHW">
+		<div data-role="header" data-position="fixed" data-theme="b">
+	    <h3>Add Home Work</h3>
+	    <a href="#" class="ui-btn ui-btn-right ui-corner-all SignOutBtn" style="margin-top:0;">Sign out</a>
+	    <a href="#landingpage" class="ui-btn ui-btn-left ui-corner-all" style="margin-top:0;">Home</a>
+  	</div>
+   <div class="ui-field-contain ui-body" data-role="fieldcontain">
+		<label for="idEDiaryAddClassDropDown" class="select ui-select">Choose Class:</label>
+		<div class="ui-select">
+		<div style="width: 200px;">
+		<select name="eDiaryClass" id="idEDiaryAddClassDropDown" onchange="loadEDiarySubject();" data-mini="true">
+	    </select>
+		</div>
+		</div>
+	</div>
+	
+	<div class="ui-field-contain ui-body" data-role="fieldcontain">
+		<label for="idEDiarySubject" class="select ui-select">Choose Subject:</label>
+		<div class="ui-select">
+		<div style="width: 200px;">
+		<select name="eDiarysubject" id="idEDiarySubject" data-mini="true"></select>
+		</div>
+		</div>
+	</div>
+	
+	<div class="ui-field-contain ui-body ui-br" data-role="fieldcontain">
+		<label for="idEDiaryDescription">Description / detail:</label>
+		<div class="ui-select">
+		<div>
+		<textarea rows="5" cols="5" name="eDiaryDescription" id="idEDiaryDescription" data-mini="true"></textarea>
+		</div>
+		</div>
+	</div>
+    
+    <div data-role="content" align="center">
+	 <div class="ui-block-b"><button data-theme="b" onclick="fnEDiarySubmit();" id="idEDiarySubmit">Submit</button></div>
+	 </div>
+	
+    <!-- <div data-role="footer" data-position="fixed" data-theme="b">
+      <h3>&copy; Datamits</h3>
+    </div> -->
+
+</div>
+
+<div id="circularsListPage" data-role="page" >
+
+	<div data-role="header" data-position="fixed" data-theme="b">
+	    <h3>Circulars</h3>
+	    <a href="#" class="ui-btn ui-btn-right ui-corner-all SignOutBtn" style="margin-top:0;">Sign out</a>
+	    <a href="#landingpage" class="ui-btn ui-btn-left ui-corner-all" style="margin-top:0;">Home</a>
+  	</div>
+
+	<div data-role="content">
+         <ul id="circularList" data-role="listview" data-filter="true"></ul>
+    </div>
+
+    <div data-role="footer" data-position="fixed" data-theme="b">
+      <h3>&copy; Datamits</h3>
+    </div>
+
+</div>
+
+<div id="notificationsView" data-role="page" >
+	<div data-role="header" data-position="fixed" data-theme="b">
+	    <h3>Notifications</h3>
+	    <a href="#" class="ui-btn ui-btn-right ui-corner-all SignOutBtn" style="margin-top:0;">Sign out</a>
+	    <a href="#landingpage" class="ui-btn ui-btn-left ui-corner-all" style="margin-top:0;">Home</a>
+  	</div>
+	
+	<div data-role="collapsible-set" data-content-theme="a" data-iconpos="right" id="set">
+	</div>
+	
+	<div data-role="content" align="center" id="addRemindersBtnContent">
+	<div class="ui-block-b">
+		 <button data-theme="b" id="addRemindersBtn" data-transition="flip" data-direction="reverse">Add Reminders</button>
+	</div>
+	</div>
+
+		
+	<div data-role="footer" data-position="fixed" data-theme="b">
+      <h3>&copy; Datamits</h3>
+    </div>
+</div>
+
+<div id="addNotifications" data-role="page" >
+
+	<div data-role="header" data-position="fixed" data-theme="b">
+	    <h3>Add Notification</h3>
+	    <a href="#" class="ui-btn ui-btn-right ui-corner-all SignOutBtn" style="margin-top:0;">Sign out</a>
+	    <a href="#landingpage" class="ui-btn ui-btn-left ui-corner-all" style="margin-top:0;">Home</a>
+  	</div>
+   <div class="ui-field-contain ui-body" data-role="fieldcontain">
+		<label for="idClassDropDown">Choose Class:</label>
+		<div class="ui-select">
+		<div style="width: 200px;">
+		<select name="Class" id="idClassDropDown" data-mini="true">
+	    </select>
+		</div>
+		</div>
+	</div>
+	
+	<div class="ui-field-contain ui-body" data-role="fieldcontain">
+		<label for="idReminderDt">Reminder expiry dt:</label>
+		<div class="ui-select">
+		<div style="width:140px;">
+		<input align="center" name="reminderDt" id="idReminderDt" style="text-align:center;" type="text" data-role="datebox" data-options='{"mode":"flipbox","overrideDateFormat":"%Y-%m-%d","useFocus":true,"overrideDateFieldOrder": "ymd"}' placeholder="Expiry Date"/>
+		</div>
+		</div>
+	</div>
+	
+	<div class="ui-field-contain ui-body ui-br" data-role="fieldcontain">
+		<label for="idRemindertitle">Reminder title:</label>
+		<div class="ui-select" style="width: 200px;">
+		<div>
+		<input type="text" name="remindertitle" id="idRemindertitle" placeholder="Reminder title">
+		</div>
+		</div>
+	</div>
+	
+	<div class="ui-field-contain ui-body ui-br" data-role="fieldcontain">
+		<label for="idReminderDescription">Reminder description / detail:</label>
+		<div class="ui-select">
+		<div>
+		<textarea rows="5" cols="5" name="reminderDescription" id="idReminderDescription" data-mini="true" placeholder="Reminder Description"></textarea>
+		</div>
+		</div>
+	</div>
+    
+    <div data-role="content" align="center">
+	 <div class="ui-block-b"><button data-theme="b" onclick="fnNotificationSubmit();">Submit</button></div>
+	 </div>
+	
+    <!-- <div data-role="footer" data-position="fixed" data-theme="b">
+      <h3>&copy; Datamits</h3>
+    </div> -->
+
+</div>
+
+<div id="editnotifications" data-role="page" >
+
+	<div data-role="header" data-position="fixed" data-theme="b">
+	    <h3>Edit Notification</h3>
+	    <a href="#" class="ui-btn ui-btn-right ui-corner-all SignOutBtn" style="margin-top:0;">Sign out</a>
+	    <a href="#landingpage" class="ui-btn ui-btn-left ui-corner-all" style="margin-top:0;">Home</a>
+  	</div>
+   <div class="ui-field-contain ui-body" data-role="fieldcontain">
+		<label for="idEditClassDropDown" class="select ui-select">Choose Class:</label>
+		<div class="ui-select">
+		<div style="width: 200px;">
+		<select name="Class" id="idEditClassDropDown" data-mini="true">
+	    </select>
+		</div>
+		</div>
+	</div>
+	
+	<div class="ui-field-contain ui-body" data-role="fieldcontain">
+		<label for="idEditReminderDt">Reminder expiry dt:</label>
+		<div class="ui-select">
+		<div style="width:140px;">
+		<input align="center" name="reminderDt" id="idEditReminderDt" style="text-align:center;" type="text" data-role="datebox" data-options='{"mode":"flipbox","afterToday":"true","overrideDateFormat":"%Y-%m-%d","useFocus":true,"overrideDateFieldOrder": "ymd"}' placeholder="Expiry Date"/>
+		</div>
+		</div>
+	</div>
+	
+	<div class="ui-field-contain ui-body ui-br" data-role="fieldcontain">
+		<label for="idEditRemindertitle">Reminder title:</label>
+		<div class="ui-select" style="width: 200px;">
+		<div>
+		<input type="text" name="remindertitle" id="idEditRemindertitle">
+		</div>
+		</div>
+	</div>
+	
+	<div class="ui-field-contain ui-body ui-br" data-role="fieldcontain">
+		<label for="idEditReminderDescription">Reminder description / detail:</label>
+		<div class="ui-select">
+		<div>
+		<textarea rows="5" cols="5" name="reminderDescription" id="idEditReminderDescription" data-mini="true"></textarea>
+		</div>
+		</div>
+	</div>
+    
+    <div data-role="content" align="center">
+	 <div class="ui-block-b"><button data-theme="b" onclick="fnEditNotificationSubmit();">Submit</button></div>
+	 </div>
+	
+    <!-- <div data-role="footer" data-position="fixed" data-theme="b">
+      <h3>&copy; Datamits</h3>
+    </div> -->
+
+</div>
+
+<div id="reports" data-role="page" >
+
+	<div data-role="header" data-position="fixed" data-theme="b">
+	    <h3>Reports</h3>
+	    <a href="#" class="ui-btn ui-btn-right ui-corner-all SignOutBtn" style="margin-top:0;">Sign out</a>
+	    <a href="#landingpage" class="ui-btn ui-btn-left ui-corner-all" style="margin-top:0;">Home</a>
+  	</div>
+
+	<div data-role="content">
+         <!-- <ul id="circularList" data-role="listview" data-filter="true"></ul> -->
+    </div>
+
+    <div data-role="footer" data-position="fixed" data-theme="b">
+      <h3>&copy; Datamits</h3>
+    </div>
+
+</div>
+
+
+<div id="map" data-role="page" >
+
+	<div data-role="header" data-position="fixed" data-theme="b">
+	    <h3>Map</h3>
+	    <a href="#" class="ui-btn ui-btn-right ui-corner-all SignOutBtn" style="margin-top:0;">Sign out</a>
+	    <a href="#landingpage" class="ui-btn ui-btn-left ui-corner-all" style="margin-top:0;">Home</a>
+  	</div>
+
+	<div data-role="content" class="ui-content" id="map-canvas">
+        <!-- map loads here... -->
+    </div>
+
+    <div data-role="footer" data-position="fixed" data-theme="b">
+      <h3>&copy; Datamits</h3>
+    </div>
+
+</div>
+
+
+<div id="timeTable" data-role="page" >
+
+	<div data-role="header" data-position="fixed" data-theme="b">
+	    <h3>TimeTable</h3>
+	    <a href="#" class="ui-btn ui-btn-right ui-corner-all SignOutBtn" style="margin-top:0;">Sign out</a>
+	    <a href="#landingpage" class="ui-btn ui-btn-left ui-corner-all" style="margin-top:0;">Home</a>
+  	</div>
+
+	<div data-role="content">
+         <!-- <ul id="circularList" data-role="listview" data-filter="true"></ul> -->
+    </div>
+
+    <div data-role="footer" data-position="fixed" data-theme="b">
+      <h3>&copy; Datamits</h3>
+    </div>
+
+</div>
+
+
+<div id="pdfforms" data-role="page" >
+
+	<div data-role="header" data-position="fixed" data-theme="b">
+	    <h3>PDF forms</h3>
+	    <a href="#" class="ui-btn ui-btn-right ui-corner-all SignOutBtn" style="margin-top:0;">Sign out</a>
+	    <a href="#landingpage" class="ui-btn ui-btn-left ui-corner-all" style="margin-top:0;">Home</a>
+  	</div>
+
+	<div data-role="content">
+         <ul id="formList" data-role="listview" data-filter="true"></ul>
+     </div>
+         <!-- <a href="#" onclick="draftEmail()">Mail me</a> -->
+    <div data-role="footer" data-position="fixed" data-theme="b">
+      <h3>&copy; Datamits</h3>
+    </div>
+
+</div>
+
+<div data-role="page" id="weeklytrackerReports">
+     <div data-role="header" data-position="fixed" data-theme="b">
+	    <h3>Study Tracker Reports</h3>
+	    <a href="#" class="ui-btn ui-btn-right ui-corner-all SignOutBtn" style="margin-top:0;">Sign out</a>
+	    <a href="#landingpage" class="ui-btn ui-btn-left ui-corner-all" style="margin-top:0;">Home</a>
+  	</div>
+
+     <div data-role="content">
+         <div id="container" style="height: 450px;"></div>
+         <canvas id="canvas" height="450" width="600"></canvas>
+     </div>
+</div>     
+
+<div data-role="page" id="monthlytrackerReports">
+     <div data-role="header" data-position="fixed" data-theme="b">
+	    <h3>Study Tracker Reports</h3>
+	    <a href="#" class="ui-btn ui-btn-right ui-corner-all SignOutBtn" style="margin-top:0;">Sign out</a>
+	    <a href="#landingpage" class="ui-btn ui-btn-left ui-corner-all" style="margin-top:0;">Home</a>
+  	</div>
+
+     <div data-role="content">
+         <div id="containerYear" style="min-width: 400px; height: 450px; margin: 0 auto"></div>
+     </div>
+</div>
+    
+<div data-role="page" id="stopwatch">
+     <div data-role="header" data-position="fixed" data-theme="b">
+	    <h3>Study Tracker</h3>
+	    <a href="#" class="ui-btn ui-btn-right ui-corner-all SignOutBtn" style="margin-top:0;">Sign out</a>
+	    <a href="#landingpage" class="ui-btn ui-btn-left ui-corner-all" style="margin-top:0;">Home</a>
+  	</div>
+		<!-- <div style="width:200px; margin: 0 auto;">
+		<br>
+		    <label for="idSubject" style="text-align: center;">Subject:</label>
+		    <select name="subject" id="idSubject" data-mini="true"></select>
+		</div> -->
+		
+		<div class="ui-field-contain ui-body" data-role="fieldcontain">
+		<label for="idSubject">Subject:</label>
+		<div class="ui-select">
+		<div style="width:200px;">
+		<select name="subject" id="idSubject" data-mini="true"></select>
+		</div>
+		</div>
+		</div>
+	
+		<!-- <br>
+        <div style="width:250px; margin: 0 auto; border: 2px; border-color: black;">
+        <label for="timer" style="text-align: center;">Timer:</label>
+        <div id="timer" style="margin: 0 auto; text-align:center; ">
+            <img src="images/figure-0.png" class="figure" />
+            <img src="images/figure-0.png" class="figure" />
+            <img src="images/figure-colon.png" class="colon" />
+            <img src="images/figure-0.png" class="figure" />
+            <img src="images/figure-0.png" class="figure" />
+            <img src="images/figure-colon.png" class="colon" />
+            <img src="images/figure-0.png" class="figure" />
+            <img src="images/figure-0.png" class="figure" />
+       	</div>
+       	</div> -->
+       	
+       	<div class="ui-field-contain ui-body" data-role="fieldcontain" id="timerContainer">
+		<label for="timer" id="timerLabel">Timer:</label>
+		<div class="ui-select">
+		<div id="timer" style="margin: 0 auto; text-align:center; ">
+            <img src="images/figure-0.png" class="figure" />
+            <img src="images/figure-0.png" class="figure" />
+            <img src="images/figure-colon.png" class="colon" />
+            <img src="images/figure-0.png" class="figure" />
+            <img src="images/figure-0.png" class="figure" />
+            <img src="images/figure-colon.png" class="colon" />
+            <img src="images/figure-0.png" class="figure" />
+            <img src="images/figure-0.png" class="figure" />
+       	</div>
+		</div>
+		</div>
+       	
+       	<div id="totalTime"></div>
+       	<br/>
+       	<br/>
+         <!-- <div data-role="content">-->
+		 <div class="ui-block-b"> 
+		 <button data-theme="b" onclick="fnStart();" id="StartBtn">Start</button>
+		 <button data-theme="b" onclick="fnStop();" id="StopBtn"  style="display: none;">Stop</button>
+		 <button data-theme="b" onclick="fnWeeklyReports();" id="weeklyReportsBtn">Weekly Reports</button>
+		 <button data-theme="b" onclick="fnMonthlyReports();" id="monthlyReportsBtn">Monthly Reports</button>
+		  </div>
+		 <!--</div>	 -->
+</div>
+
+<div data-role="page" id="weeklyReport">
+     <div data-role="header" data-position="fixed" data-theme="b">
+	    <h3>Weekly Reports</h3>
+	    <a href="#" class="ui-btn ui-btn-right ui-corner-all SignOutBtn" style="margin-top:0;">Sign out</a>
+	    <a href="#landingpage" class="ui-btn ui-btn-left ui-corner-all" style="margin-top:0;">Home</a>
+  	</div>
+  	
+  	<div class="ui-field-contain ui-body ui-br" data-role="fieldcontain">
+		<label for="idMonth">Month:</label>
+		<div class="ui-select" style="width: 150px;">
+		<div>
+		<select name="month" id="idMonth" data-mini="true">
+		    <option value="select" selected>Select</option>
+		    <option value="0">Jan</option>
+		    <option value="1">Feb</option>
+		    <option value="2">Mar</option>
+		    <option value="3">Apr</option>
+		    <option value="4">May</option>
+		    <option value="5">Jun</option>
+		    <option value="6">Jul</option>
+		    <option value="7">Aug</option>
+		    <option value="8">Sep</option>
+		    <option value="9">Oct</option>
+		    <option value="10">Nov</option>
+		    <option value="11">Dec</option>
+		</select>
+		</div>
+		</div>
+	</div>
+	
+	<div class="ui-field-contain ui-body ui-br" data-role="fieldcontain">
+		<label for="idWeek">Week:</label>
+		<div class="ui-select" style="width: 150px;">
+		<div>
+		<select name="week" id="idWeek" data-mini="true">
+		    <option value="select" selected>Select</option>
+		    <option value="1">Week-1</option>
+		    <option value="2">Week-2</option>
+		    <option value="3">Week-3</option>
+		    <option value="4">Week-4</option>
+		</select>
+		</div>
+		</div>
+	</div>
+		
+        <div data-role="content" align="center">
+		 <div class="ui-block-b">
+		 <button data-theme="b" onclick="fnWeeklyReportSubmit();" id="StartBtn">Submit</button>
+		 <!-- <button data-theme="b" onclick="fnStop();" id="StopBtn"  style="display: none;">Stop</button> -->
+		 </div>
+		 </div>	
+</div>
+ 
+<div id="commentsListPage" data-role="page" >
+
+	<div data-role="header" data-position="fixed" data-theme="b">
+	    <h3>Comments</h3>
+	    <a href="#" class="ui-btn ui-btn-right ui-corner-all SignOutBtn" style="margin-top:0;">Sign out</a>
+	    <a href="#landingpage" class="ui-btn ui-btn-left ui-corner-all" style="margin-top:0;">Home</a>
+  	</div>
+
+	<div data-role="content">
+         <ul id="commentsList" data-role="listview" data-filter="true">
+         </ul>
+    </div>
+    
+    <div data-role="content" align="center" id="addRemindersBtnContent">
+	<div class="ui-block-b">
+		 <button data-theme="b" id="addCommentsBtn" data-transition="flip" data-direction="reverse">Add Comment</button>
+	</div>
+	</div>
+
+    <div data-role="footer" data-position="fixed" data-theme="b">
+      <h3>&copy; Datamits</h3>
+      <!-- <a href="#" class="ui-btn ui-btn-right ui-corner-all" style="margin-top:0;">Home</a> -->
+    </div>
+
+</div>
+
+<div id="parentCommentDetailPage" data-role="page" >
+	<div data-role="header" data-position="fixed" data-theme="b">
+	    <h3>Comment details</h3>
+	    <a href="#" class="ui-btn ui-btn-right ui-corner-all SignOutBtn" style="margin-top:0;">Sign out</a>
+	    <a href="#landingpage" class="ui-btn ui-btn-left ui-corner-all" style="margin-top:0;">Home</a>
+  	</div>
+	
+	<div class="ui-field-contain ui-body ui-br" data-role="fieldcontain">
+		<label for="idParentCommentDetailPageDt">Comments created date:</label>
+		<div class="ui-select">
+		<div>
+		<h4 id="idParentCommentDetailPageCreatedDt"></h4>
+		</div>
+		</div>
+	</div>
+	
+	<div class="ui-field-contain ui-body ui-br" data-role="fieldcontain">
+		<label for="idParentCommentDetailPageDt">Comments created by:</label>
+		<div class="ui-select">
+		<div>
+		<h4 id="idParentCommentDetailPageCreatedBy"></h4>
+		</div>
+		</div>
+	</div>
+	
+	<div class="ui-field-contain ui-body ui-br" data-role="fieldcontain" id="idParentCommentsContainer">
+		<label for="idParentCommentsText" id="idParentCommentsLabel"></label>
+		<div class="ui-select">
+		<div>
+		<h4 id="idParentCommentsText"></h4>
+		</div>
+		</div>
+	</div>
+	
+	<div class="ui-field-contain ui-body ui-br" data-role="fieldcontain" id="idParentCommentsEditableReplyContainer">
+		<label for="idParentCommentsEditableReply">Your Comments:</label>
+		<div class="ui-select">
+		<div>
+		<textarea rows="5" cols="5" name="ParentCommentsEditableReply" id="idParentCommentsEditableReply" data-mini="true" placeholder="Comments"></textarea>
+		</div>
+		</div>
+	</div>
+	
+	<div class="ui-field-contain ui-body ui-br" data-role="fieldcontain" id="idParentCommentsReplyTextContainer">
+		<label for="idParentCommentsReplyText" id="idParentCommentsReplyTextLabel"></label>
+		<div class="ui-select">
+		<div>
+		<h4 id="idParentCommentsReplyText"></h4>
+		</div>
+		</div>
+	</div>
+	
+    <div data-role="content" align="center" id="idParentCommentsReplyBtnContainer">
+	<div class="ui-block-b">
+		 <button data-theme="b" id="idParentCommentsReplyBtn" data-transition="flip" onclick="fnCommentConfirmMsg();" data-direction="reverse">Reply / Acknowledge</button>
+	</div>
+	</div>
+
+    <!-- <div data-role="footer" data-position="fixed" data-theme="b">
+      <h3>&copy; Datamits</h3>
+      <a href="#" class="ui-btn ui-btn-right ui-corner-all" style="margin-top:0;">Home</a>
+    </div> -->
+</div>
+
+<div id="teacherCommentDetailPage" data-role="page" >
+	<div data-role="header" data-position="fixed" data-theme="b">
+	    <h3>Comment details</h3>
+	    <a href="#" class="ui-btn ui-btn-right ui-corner-all SignOutBtn" style="margin-top:0;">Sign out</a>
+	    <a href="#landingpage" class="ui-btn ui-btn-left ui-corner-all" style="margin-top:0;">Home</a>
+  	</div>
+
+	<div class="ui-field-contain ui-body ui-br" data-role="fieldcontain">
+		<label for="idTeacherCommentDetailPageDt">Comments created date:</label>
+		<div class="ui-select">
+		<div>
+		<h4 id="idTeacherCommentDetailPageCreatedDt"></h4>
+		</div>
+		</div>
+	</div>
+	
+	<div class="ui-field-contain ui-body ui-br" data-role="fieldcontain">
+		<label for="idTeacherCommentDetailPageDt">Comments created by:</label>
+		<div class="ui-select">
+		<div>
+		<h4 id="idTeacherCommentDetailPageCreatedBy"></h4>
+		</div>
+		</div>
+	</div>
+	
+	<div class="ui-field-contain ui-body ui-br" data-role="fieldcontain" id="idTeacherCommentsContainer">
+		<label for="idTeacherCommentsText" id="idTeacherCommentsLabel"></label>
+		<div class="ui-select">
+		<div>
+		<h4 id="idTeacherCommentsText"></h4>
+		</div>
+		</div>
+	</div>
+	
+	<div class="ui-field-contain ui-body ui-br" data-role="fieldcontain" id="idTeacherCommentsEditableReplyContainer">
+		<label for="idTeacherCommentsEditableReply">Your Comments:</label>
+		<div class="ui-select">
+		<div>
+		<textarea rows="5" cols="5" name="TeacherCommentsEditableReply" id="idTeacherCommentsEditableReply" data-mini="true" placeholder="Comments"></textarea>
+		</div>
+		</div>
+	</div>
+	
+	<div class="ui-field-contain ui-body ui-br" data-role="fieldcontain" id="idTeacherCommentsReplyTextContainer">
+		<label for="idTeacherCommentsReplyText" id="idTeacherCommentsReplyTextLabel"></label>
+		<div class="ui-select">
+		<div>
+		<h4 id="idTeacherCommentsReplyText"></h4>
+		</div>
+		</div>
+	</div>
+	
+    <div data-role="content" align="center" id="idTeacherCommentsReplyBtnContainer">
+	<div class="ui-block-b">
+		 <button data-theme="b" id="idTeacherCommentsReplyBtn" onclick="fnCommentConfirmMsg();" data-transition="flip" data-direction="reverse">Reply / Acknowledge</button>
+	</div>
+	</div>
+	
+    <!-- <div data-role="footer" data-position="fixed" data-theme="b">
+      <h3>&copy; Datamits</h3>
+      <a href="#" class="ui-btn ui-btn-right ui-corner-all" style="margin-top:0;">Home</a>
+    </div> -->
+
+</div>
+
+<div id="addParentCommentsPage" data-role="page" >
+	
+	<div data-role="header" data-position="fixed" data-theme="b">
+	    <h3>Add Comments</h3>
+	    <a href="#" class="ui-btn ui-btn-right ui-corner-all SignOutBtn" style="margin-top:0;">Sign out</a>
+	    <a href="#landingpage" class="ui-btn ui-btn-left ui-corner-all" style="margin-top:0;">Home</a>
+  	</div>
+   <div class="ui-field-contain ui-body" data-role="fieldcontain">
+		<label for="idAddParentCommentsSubjectDropDown">Choose subject:</label>
+		<div class="ui-select">
+		<div style="width: 200px;">
+		<select name="addParentCommentsSubject" id="idAddParentCommentsSubjectDropDown" data-mini="true" onchange="fnChangeAddParentCommentsSubjectDropDown();">
+	    </select>
+		</div>
+		</div>
+	</div>
+	
+	<div class="ui-field-contain ui-body ui-br" data-role="fieldcontain">
+		<label for="idAddParentComments">Comments:</label>
+		<div class="ui-select">
+		<div>
+		<textarea rows="5" cols="5" name="addParentComments" id="idAddParentComments" data-mini="true" placeholder="Comments"></textarea>
+		</div>
+		</div>
+	</div>
+    
+    <div data-role="content" align="center">
+	 <div class="ui-block-b"><button data-theme="b" onclick="fnAddParentCommentsSubmit();" id="idAddParentCommentsSubmit">Submit</button></div>
+	 </div>
+	
+    <!-- <div data-role="footer" data-position="fixed" data-theme="b">
+      <h3>&copy; Datamits</h3>
+    </div> -->
+
+</div>
+
+<div id="addTeacherCommentsPage" data-role="page" >
+
+	<div data-role="header" data-position="fixed" data-theme="b">
+	    <h3>Add Comments</h3>
+	    <a href="#" class="ui-btn ui-btn-right ui-corner-all SignOutBtn" style="margin-top:0;">Sign out</a>
+	    <a href="#landingpage" class="ui-btn ui-btn-left ui-corner-all" style="margin-top:0;">Home</a>
+  	</div>
+   <div class="ui-field-contain ui-body" data-role="fieldcontain">
+		<label for="idAddTeacherCommentsClassDropDown">Choose Class:</label>
+		<div class="ui-select">
+		<div style="width: 200px;">
+		<select name="addTeacherCommentsClass" id="idAddTeacherCommentsClassDropDown" data-mini="true" onchange="getEDiaryAddCommentsStudentList();">
+	    </select>
+		</div>
+		</div>
+	</div>
+	
+	<div class="ui-field-contain ui-body" data-role="fieldcontain">
+		<label for="idAddTeacherCommentsStudentDropDown">Choose Student:</label>
+		<div class="ui-select">
+		<div style="width: 200px;">
+		<select name="addTeacherCommentsstudent" id="idAddTeacherCommentsStudentDropDown" data-mini="true" data-native-menu="false" class="filterable-select"> 
+	    </select>
+		</div>
+		</div>
+	</div>
+	
+	<div class="ui-field-contain ui-body ui-br" data-role="fieldcontain">
+		<label for="idAddTeacherComments">Comments:</label>
+		<div class="ui-select">
+		<div>
+		<textarea rows="5" cols="5" name="reminderDescription" id="idAddTeacherComments" data-mini="true" placeholder="Comments"></textarea>
+		</div>
+		</div>
+	</div>
+    
+    <div data-role="content" align="center">
+	 <div class="ui-block-b"><button data-theme="b" onclick="fnAddTeacherCommentsSubmit();" id="idAddTeacherCommentsSubmit">Submit</button></div>
+	 </div>
+	
+    <!-- <div data-role="footer" data-position="fixed" data-theme="b">
+      <h3>&copy; Datamits</h3>
+    </div> -->
+
+</div>
+
+<div data-role="page" id="teacherAttendancePage">
+	<div data-role="header" data-position="fixed" data-theme="b">
+	  <h3>Attendance</h3>
+	  <a href="#" class="ui-btn ui-btn-right ui-corner-all SignOutBtn" style="margin-top:0;">Sign out</a>
+	  <a href="#landingpage" class="ui-btn ui-btn-left ui-corner-all" style="margin-top:0;">Home</a>
+	</div>
+
+	<div class="ui-field-contain ui-body" data-role="fieldcontain">
+		<label for="idAttendanceDt" class="select ui-select">Date:</label>
+		<div class="ui-select">
+		<div style="width: 200px;">
+		<input align="center" name="attendanceDt" id="idAttendanceDt" style="text-align:center;" type="text" data-role="datebox" data-options='{"mode":"flipbox","overrideDateFormat":"%Y-%m-%d","useFocus":true,"overrideDateFieldOrder": "ymd"}' placeholder="Date here"/>
+	    </select>
+		</div>
+		</div>
+	</div>
+	
+	<div class="ui-field-contain ui-body" data-role="fieldcontain" id="idAttendanceClassDropDownContainer">
+		<label for="idAttendanceClassDropDown" class="select ui-select">Class:</label>
+		<div class="ui-select">
+		<div style="width: 200px;">
+		<select name="attendanceClass" id="idAttendanceClassDropDown" data-mini="true">
+	    </select>
+		</div>
+		</div>
+	</div>
+	
+	<div data-role="content" align="center" style="margin: 0 auto;">
+		 <div class="ui-block-b"  style="margin: 0 auto;">
+		 <button data-theme="b" onclick="fnTeacherAttendance();" id="idAttendanceBtn" data-transition="flip" data-direction="reverse">View Attendance</button>
+		 </div>
+	</div>
+
+	<div data-role="footer" data-position="fixed" data-theme="b">
+	  <h3>&copy; Datamits</h3>
+	</div>
+</div>
+
+<div data-role="page" id="teacherViewAttendancePage">
+	<div data-role="header" data-position="fixed" data-theme="b">
+	  <h3>View Attendance</h3>
+	  <a href="#" class="ui-btn ui-btn-right ui-corner-all SignOutBtn" style="margin-top:0;">Sign out</a>
+	  <a href="#landingpage" class="ui-btn ui-btn-left ui-corner-all" style="margin-top:0;">Home</a>
+	</div>
+
+	<!-- <table id="personDataTable">
+    <tr>
+        <th>Id</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+    </tr>
+	</table> -->
+	<table data-role="table" id="table-Attendance" data-mode="columntoggle" class="ui-responsive table-stroke">
+     <thead>
+       <tr>
+         <th data-priority="2">Reg.No</th>
+         <th data-priority="1">Student Name</th>
+         <th>Present</th>
+         <th>Absent</th>
+         <th>Tardy</th>
+         <th style="display:none;">ID</th>
+         <th style="display:none;">StudentID</th>
+       </tr>
+     </thead>
+     <tbody>
+       <!-- <tr>
+         <th>2</th>
+         <td>Casablanca</td>
+         <td>
+		<select name="flip-2" id="flip-2" data-role="flipswitch" data-theme="c">
+	        <option value="Y">Yes</option>
+	        <option value="N" selected="selected">No</option>
+    	 </select>
+		</td>
+          <td>
+         	<input name="checkbox-2" type="checkbox" style="margin-top: 1px; ">
+		 </td>
+       </tr> 
+       <tr>
+         <th>3</th>
+         <td>The Godfather</td>
+         <td>
+         	<input name="radio-1" type="radio" style="margin-top: 1px;" width="20em" height="20em" checked="checked">
+		</td>
+         <td>
+         	<input name="radio-1" type="radio" style="margin-top: 1px; width: 20px; height: 20px; min-width: 20px; min-width: 20px;" >
+		 </td>
+       </tr> -->
+     </tbody>
+</table>
+	
+	<div data-role="content" align="center" style="margin: 0 auto;">
+		 <div class="ui-block-b"  style="margin: 0 auto;">
+		 <button data-theme="b" onclick="fnTeacherSubmitAttendance();" id="idSubmitAttendanceBtn" data-transition="flip" data-direction="reverse">Submit Attendance</button>
+		 </div>
+	</div>
+
+	<div data-role="footer" data-position="fixed" data-theme="b">
+	  <h3>&copy; Datamits</h3>
+	</div>
+</div>
+
+<div data-role="popup" id="validationMessage" style="background-color:black; display:none;" data-dismissible="false" class="ui-content" data-position-to="origin" >
+  <div data-role="header">
+    <h1><label style="font: bold; color: white;" id="validationMessageTitle"></label></h1>
+  </div>
+
+  <div data-role="main" style="background-color:black; display:none;" id="PopUpButton">
+    <h2><label style="color: white;" id="validationMessageContent"></label></h2>
+    <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b ui-icon-ok ui-btn-icon-center" data-rel="back">Okay</a>
+  </div>
+
+  <!-- <div data-role="footer">
+    <h1>Footer Text</h1>
+  </div> -->
+</div>
+
+</body>
+<script type="text/javascript">
+
+//Checking the user has valid login access to view the landing page, otherwise redirecting to login page
+$(document).on("pagebeforeshow","#landingpage",function(){
+	serviceKey = localStorage.getItem('serviceKey');
+	if(null == serviceKey || "" == serviceKey)
+	{
+		window.location = "login.html";
+	}
+	role = localStorage.getItem('role');
+	if(role != 'Teacher')
+	{
+		document.getElementById('idRow3').style.display = "block";
+		document.getElementById('idDivParentAttendancePage').style.display = "block";
+		document.getElementById('idDivTeacherAttendancePage').style.display = "none";
+	}
+	else
+	{
+		document.getElementById('idRow3').style.display = "none";
+		document.getElementById('idDivTeacherAttendancePage').style.display = "block";
+		document.getElementById('idDivParentAttendancePage').style.display = "none";
+	}
+});
+
+//back button EventListeners to route the user to the previous page of the flow on press of back button
+document.addEventListener("backbutton", onBackKeyDown, false);
+function onBackKeyDown() {
+	// Show Signout confirmation message if active page is landing page.
+    if($.mobile.activePage.is('#landingpage')){
+    	navigator.notification.confirm(
+		    'Do you want to Sign Out?', // message
+		     onConfirm,            		// callback to invoke with index of button pressed
+		    'Confirmation',        		// title
+		    ['Yes','No']           		// buttonLabels
+		);
+    }
+    else 
+    {
+    	//alert("backbutton pressed..");
+    	if($.mobile.activePage.is('#notificationsView')){
+    		$.mobile.changePage("#landingpage");
+    	}
+    	else if($.mobile.activePage.is('#addNotifications')){
+    		$.mobile.changePage("#notificationsView");
+    	}
+    	else if($.mobile.activePage.is('#editnotifications')){
+    		$.mobile.changePage("#notificationsView");
+    	}
+    	else if($.mobile.activePage.is('#eDiaryAddHW') || $.mobile.activePage.is('#editHWDetails')){
+    		$.mobile.changePage("#eDiaryViewHW");
+    	}
+    	else if($.mobile.activePage.is('#eDiaryViewHW')){
+    		$.mobile.changePage("#eDiary");
+    	}
+    	else if($.mobile.activePage.is('#eDiary')){
+    		$.mobile.changePage("#landingpage");
+    	}
+    	else{
+    		navigator.app.backHistory(); // Go back in history in any other case
+    	}
+    }
+}
+
+//on click of website icon opening the school website in native browser.
+$("#idWebsite").click(function () {
+	//window.open('http://www.datamits.com/', '_system');
+	window.open(vWebsiteURL, '_system');
+});
+
+//on click of holidays icon opening the holiday pdf kept in the school portal.
+$("#idHolidays").click(function () {
+	serviceKey = localStorage.getItem('serviceKey');
+	if(null == serviceKey || "" == serviceKey)
+	{
+		alert("Invalid session. Please login again.");
+		window.location = "login.html";
+	}
+	//alert("holidayURL: "+holidayURL);
+	window.open(holidayURL,'_system','location=yes');
+});
+
+//on click of TimeTable icon opening the TimeTable pdf kept in the school portal.
+$("#idTimeTable").click(function () {
+	serviceKey = localStorage.getItem('serviceKey');
+	if(null == serviceKey || "" == serviceKey)
+	{
+		alert("Invalid session. Please login again.");
+		window.location = "login.html";
+	}
+	getTimeTableDetails();
+});
+
+$(".SignOutBtn").click(function () {
+	navigator.notification.confirm(
+	    'Do you want to Sign Out?', // message
+	     onConfirm,            		// callback to invoke with index of button pressed
+	    'Confirmation',           	// title
+	    ['Yes','No']     			// buttonLabels
+	);
+});
+
+$(document).on("pagebeforeshow","#map",function(){
+	//alert ("pagebeforeshow-#map");
+    drawMap(vLatLng);
+
+    function drawMap(latlng) {
+        var myOptions = {
+            zoom: 10,
+            center: latlng,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        var map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
+        // Add an overlay to the map of current lat/lng
+        var marker = new google.maps.Marker({
+            position: latlng,
+            map: map,
+            title: "Greetings!"
+        });
+    }
+});
+
+$("#addRemindersBtn").click(function () {
+	$.mobile.changePage("#addNotifications");
+});
+
+$("#addHomeWorkBtn").click(function () {
+	$.mobile.changePage("#eDiaryAddHW");
+});
+
+$("#addCommentsBtn").click(function () {
+	role = localStorage.getItem('role');
+	if(role == 'Teacher')
+	{
+		$.mobile.changePage("#addTeacherCommentsPage");
+	}
+	else
+	{
+		$.mobile.changePage("#addParentCommentsPage");
+	}
+});
+
+
+( function( $ ) {
+	function pageIsSelectmenuDialog( page ) {
+	    var isDialog = false,
+	        id = page && page.attr( "id" );
+	    $( ".filterable-select" ).each( function() {
+	        if ( $( this ).attr( "id" ) + "-dialog" === id ) {
+	            isDialog = true;
+	            return false;
+	        }
+	    });
+	    return isDialog;
+	}
+	$.mobile.document
+	    // Upon creation of the select menu, we want to make use of the fact that the ID of the
+	    // listview it generates starts with the ID of the select menu itself, plus the suffix "-menu".
+	    // We retrieve the listview and insert a search input before it.
+	    .on( "selectmenucreate", ".filterable-select", function( event ) {
+	        var input,
+	            selectmenu = $( event.target ),
+	            list = $( "#" + selectmenu.attr( "id" ) + "-menu" ),
+	            form = list.jqmData( "filter-form" );
+	        // We store the generated form in a variable attached to the popup so we avoid creating a
+	        // second form/input field when the listview is destroyed/rebuilt during a refresh.
+	        if ( !form ) {
+	            input = $( "<input data-type='search'></input>" );
+	            form = $( "<form></form>" ).append( input );
+	            input.textinput();
+	            list
+	                .before( form )
+	                .jqmData( "filter-form", form ) ;
+	            form.jqmData( "listview", list );
+	        }
+	        // Instantiate a filterable widget on the newly created selectmenu widget and indicate that
+	        // the generated input form element is to be used for the filtering.
+	        selectmenu
+	            .filterable({
+	                input: input,
+	                children: "> option[value]"
+	            })
+	            // Rebuild the custom select menu's list items to reflect the results of the filtering
+	            // done on the select menu.
+	            .on( "filterablefilter", function() {
+	                selectmenu.selectmenu( "refresh" );
+	            });
+	    })
+	    // The custom select list may show up as either a popup or a dialog, depending on how much
+	    // vertical room there is on the screen. If it shows up as a dialog, then the form containing
+	    // the filter input field must be transferred to the dialog so that the user can continue to
+	    // use it for filtering list items.
+	    .on( "pagecontainerbeforeshow", function( event, data ) {
+	        var listview, form;
+	        // We only handle the appearance of a dialog generated by a filterable selectmenu
+	        if ( !pageIsSelectmenuDialog( data.toPage ) ) {
+	            return;
+	        }
+	        listview = data.toPage.find( "ul" );
+	        form = listview.jqmData( "filter-form" );
+	        // Attach a reference to the listview as a data item to the dialog, because during the
+	        // pagecontainerhide handler below the selectmenu widget will already have returned the
+	        // listview to the popup, so we won't be able to find it inside the dialog with a selector.
+	        data.toPage.jqmData( "listview", listview );
+	        // Place the form before the listview in the dialog.
+	        listview.before( form );
+	    })
+	    // After the dialog is closed, the form containing the filter input is returned to the popup.
+	    .on( "pagecontainerhide", function( event, data ) {
+	        var listview, form;
+	        // We only handle the disappearance of a dialog generated by a filterable selectmenu
+	        if ( !pageIsSelectmenuDialog( data.toPage ) ) {
+	            return;
+	        }
+	        listview = data.prevPage.jqmData( "listview" ),
+	        form = listview.jqmData( "filter-form" );
+	        // Put the form back in the popup. It goes ahead of the listview.
+	        listview.before( form );
+	    });
+	})( jQuery );
+
+</script>
+</html>
